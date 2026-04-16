@@ -3,83 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador Anato S.M.G.</title>
+    <title>S.M.G. Analizador Pro</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .brand { font-weight: bold; color: #333; font-size: 1.2em; }
-        .btn-dim { background: #ff6600; color: white; border: none; padding: 8px 12px; border-radius: 5px; text-decoration: none; font-size: 0.8em; font-weight: bold; }
+        /* EL ADN ORIGINAL QUE ME PASASTE */
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 10px; }
+        .monitor { border: 2px solid #39ff14; border-radius: 15px; padding: 15px; background: #050505; box-shadow: 0 0 15px #39ff14; max-width: 400px; margin: auto; position: relative; }
         
-        .nav-buttons { display: flex; gap: 5px; margin-bottom: 20px; }
-        .nav-buttons button { flex: 1; padding: 15px; border: none; background: #ddd; color: #555; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .nav-buttons button.active { background: #4CAF50; color: white; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; text-align: left; }
+        .brand { color: #39ff14; text-shadow: 0 0 5px #39ff14; font-weight: bold; font-size: 1.2em; margin: 10px 0; }
+        
+        /* BOTONES DE SELECCIÓN ORIGINALES */
+        .nav-grid { display: flex; gap: 5px; margin-bottom: 15px; }
+        .nav-btn { flex: 1; padding: 10px; border: 1px solid #39ff14; background: transparent; color: #39ff14; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .nav-btn.active { background: #39ff14; color: #000; }
 
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 0.9em; color: #666; margin-bottom: 5px; }
-        input { width: 100%; padding: 15px; font-size: 1.5em; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; text-align: center; }
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .val-box { border: 1px solid #39ff14; padding: 10px; border-radius: 10px; background: #111; }
+        .label { font-size: 0.7em; color: #39ff14; margin-bottom: 5px; font-weight: bold; }
+        
+        /* INPUTS EDITABLES (PARA TU TECLADO) */
+        input { background: transparent; border: none; color: #fff; font-size: 2em; font-weight: bold; width: 100%; text-align: center; outline: none; }
 
-        .test-box { background: #e8f5e9; border: 1px solid #4CAF50; padding: 15px; border-radius: 10px; }
-        .meta-text { font-size: 0.9em; font-weight: bold; color: #2e7d32; }
-        .timer-text { font-size: 2.5em; font-weight: bold; margin: 10px 0; color: #333; }
-        .btn-start { background: #4CAF50; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1em; }
+        /* TEST DE REPOSO (LA EXTENSIÓN) */
+        .test-area { border: 2px dashed #39ff14; border-radius: 10px; padding: 15px; margin-top: 20px; }
+        .timer { font-size: 2.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px #39ff14; margin: 5px 0; }
+        .btn-test { background: #39ff14; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .msg { font-size: 0.8em; color: #39ff14; margin-top: 10px; min-height: 1.2em; }
+
+        /* BOTÓN DIMENSIONES */
+        .btn-dim { background: #ff6600; color: #fff; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.7em; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="monitor">
     <div class="header">
-        <div class="brand">ANATO S.M.G.</div>
+        <div style="font-size: 0.7em;">
+            <span id="txt-temp">27°C</span> Valencia-Los Guayos<br>
+            <span id="txt-hora">--:--</span>
+        </div>
         <a href="dimensiones.html" class="btn-dim">📏 DIMENSIONES</a>
     </div>
 
-    <div class="nav-buttons">
-        <button class="active">AIRES</button>
-        <button>NEVERAS</button>
-        <button>AUTO</button>
+    <div class="brand">MULTISERVICIOS ANATO S.M.G.</div>
+
+    <div class="nav-grid">
+        <button class="nav-btn active">AIRES</button>
+        <button class="nav-btn">NEVERAS</button>
+        <button class="nav-btn">AUTO</button>
     </div>
 
-    <div class="input-group">
-        <label>PRESIÓN DE BAJA (PSI)</label>
-        <input type="number" id="baja" value="65">
+    <div class="data-grid">
+        <div class="val-box">
+            <div class="label">BAJA (PSI)</div>
+            <input type="number" id="psi-baja" value="65">
+        </div>
+        <div class="val-box">
+            <div class="label">ALTA (PSI)</div>
+            <input type="number" id="psi-alta" value="250">
+        </div>
     </div>
 
-    <div class="input-group">
-        <label>PRESIÓN DE ALTA (PSI)</label>
-        <input type="number" id="alta" value="250">
-    </div>
-
-    <div class="test-box">
-        <div class="meta-text">TEST DE REPOSO (META: 175 PSI)</div>
-        <div id="reloj" class="timer-text">00:00</div>
-        <button class="btn-start" onclick="toggleReloj()" id="btn-control">INICIAR CRONÓMETRO</button>
+    <div class="test-area">
+        <div class="label">TEST DE FLUJO / REPOSO</div>
+        <div id="reloj" class="timer">00:00</div>
+        <button class="btn-test" id="btn-master" onclick="iniciarPrueba()">INICIAR CRONÓMETRO</button>
+        <div id="aviso" class="msg"></div>
     </div>
 </div>
 
 <script>
     let segs = 0;
     let activo = false;
-    let id;
+    let control;
 
-    function toggleReloj() {
-        const btn = document.getElementById('btn-control');
+    function iniciarPrueba() {
+        const btn = document.getElementById('btn-master');
+        const aviso = document.getElementById('aviso');
+        const inicial = parseFloat(document.getElementById('psi-baja').value);
+
         if (!activo) {
             activo = true;
             btn.innerText = "PARAR PRUEBA";
-            btn.style.background = "#f44336";
-            id = setInterval(() => {
+            btn.style.background = "#ff3914";
+            aviso.innerText = "Analizando estabilidad desde " + inicial + " PSI...";
+            
+            control = setInterval(() => {
                 segs++;
                 let m = Math.floor(segs / 60).toString().padStart(2, '0');
                 let s = (segs % 60).toString().padStart(2, '0');
                 document.getElementById('reloj').innerText = `${m}:${s}`;
+                
+                if(segs > 10) aviso.innerText = "Flujo estabilizándose...";
             }, 1000);
         } else {
-            clearInterval(id);
+            clearInterval(control);
             activo = false;
-            btn.innerText = "REINICIAR";
-            btn.style.background = "#4CAF50";
+            btn.innerText = "TEST COMPLETADO";
+            btn.style.background = "#39ff14";
         }
     }
+
+    // Hora real
+    setInterval(() => {
+        const d = new Date();
+        document.getElementById('txt-hora').innerText = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }, 1000);
 </script>
 
 </body>
