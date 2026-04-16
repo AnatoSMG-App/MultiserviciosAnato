@@ -3,117 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.M.G. Analizador Pro</title>
+    <title>Analizador Anato S.M.G.</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 10px; }
-        .container { border: 2px solid #39ff14; border-radius: 15px; padding: 15px; background: #050505; box-shadow: 0 0 15px #39ff14; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .btn-dim { background: #39ff14; color: #000; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8em; }
-        .brand { color: #39ff14; text-shadow: 0 0 5px #39ff14; margin: 5px 0; }
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .brand { font-weight: bold; color: #333; font-size: 1.2em; }
+        .btn-dim { background: #ff6600; color: white; border: none; padding: 8px 12px; border-radius: 5px; text-decoration: none; font-size: 0.8em; font-weight: bold; }
         
-        /* Botones de Selección */
-        .selector-box { display: flex; gap: 5px; margin-bottom: 15px; }
-        .sel-btn { flex: 1; padding: 10px; border: 1px solid #39ff14; background: transparent; color: #39ff14; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .sel-btn.active { background: #39ff14; color: #000; }
+        .nav-buttons { display: flex; gap: 5px; margin-bottom: 20px; }
+        .nav-btn { flex: 1; padding: 15px; border: none; background: #ddd; color: #555; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .nav-btn.active { background: #4CAF50; color: white; }
 
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .val-box { border: 1px solid #39ff14; padding: 10px; border-radius: 10px; }
-        .val-num { font-size: 2em; font-weight: bold; color: #39ff14; }
-        
-        /* Prueba de Flujo */
-        .test-box { border: 1px dashed #39ff14; padding: 15px; border-radius: 10px; margin-top: 15px; }
-        .psi-dinamico { font-size: 2.5em; color: #39ff14; text-shadow: 0 0 10px #39ff14; margin: 10px 0; }
-        .btn-test { background: #39ff14; color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        input { width: 100%; padding: 15px; font-size: 1.5em; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; text-align: center; }
+
+        .test-box { background: #e8f5e9; border: 1px solid #4CAF50; padding: 15px; border-radius: 10px; }
+        .meta-text { font-size: 0.9em; font-weight: bold; color: #2e7d32; }
+        .timer-text { font-size: 2.5em; font-weight: bold; margin: 10px 0; color: #333; }
+        .btn-start { background: #4CAF50; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1em; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div style="text-align: left; font-size: 0.8em;">
-            <span id="temp">27°C</span> Valencia-Los Guayos<br>
-            <span id="hora">06:45 PM</span>
-        </div>
+        <div class="brand">ANATO S.M.G.</div>
         <a href="dimensiones.html" class="btn-dim">📏 DIMENSIONES</a>
     </div>
 
-    <h2 class="brand">MULTISERVICIOS ANATO S.M.G.</h2>
-    <p style="font-size: 0.7em; margin-top: -10px;">REFRIGERACIÓN & ELECTRICIDAD</p>
-
-    <div class="selector-box">
-        <button class="sel-btn active">AIRES</button>
-        <button class="sel-btn">NEVERAS</button>
-        <button class="sel-btn">AUTO</button>
+    <div class="nav-buttons">
+        <button class="nav-btn active">AIRES</button>
+        <button class="nav-btn">NEVERAS</button>
+        <button class="nav-btn">AUTO</button>
     </div>
 
-    <div style="margin-bottom: 10px;">
-        <select style="background: #000; color: #39ff14; border: 1px solid #39ff14; padding: 5px; width: 80%;">
-            <option>Gas Original: R22</option>
-            <option>Gas Original: R410A</option>
-            <option>Gas Original: R134a</option>
-        </select>
+    <div class="input-group">
+        <label>PRESIÓN DE BAJA (PSI)</label>
+        <input type="number" id="baja" value="65">
     </div>
 
-    <div class="data-grid">
-        <div class="val-box">
-            <div style="font-size: 0.8em;">BAJA (PSI)</div>
-            <div class="val-num" id="presion-baja">66</div>
-        </div>
-        <div class="val-box">
-            <div style="font-size: 0.8em;">ALTA (PSI)</div>
-            <div class="val-num">302</div>
-        </div>
+    <div class="input-group">
+        <label>PRESIÓN DE ALTA (PSI)</label>
+        <input type="number" id="alta" value="250">
     </div>
 
     <div class="test-box">
-        <div style="font-size: 0.9em; font-weight: bold;">TEST DE FLUJO S.M.G.</div>
-        <div style="font-size: 0.7em; color: #aaa;">META REPOSO: 174 PSI</div>
-        
-        <div class="psi-dinamico" id="contador-psi">66</div>
-        <div style="font-size: 1.5em; margin-bottom: 10px;" id="timer">00:00</div>
-        
-        <button class="btn-test" id="btn-iniciar" onclick="iniciarPrueba()">INICIAR PRUEBA</button>
+        <div class="meta-text">TEST DE REPOSO (META: 175 PSI)</div>
+        <div id="reloj" class="timer-text">00:00</div>
+        <button class="btn-start" onclick="toggleReloj()" id="btn-control">INICIAR CRONÓMETRO</button>
     </div>
 </div>
 
 <script>
-    let tiempo = 0;
-    let intervalo;
-    let psiActual = 66; // Empieza desde la presión de baja
-    const psiMeta = 174;
+    let segs = 0;
+    let activo = false;
+    let id;
 
-    function iniciarPrueba() {
-        const btn = document.getElementById('btn-iniciar');
-        if (btn.innerText === "INICIAR PRUEBA") {
-            btn.innerText = "LLEGÓ A LA META";
-            btn.style.background = "#ff3914"; // Rojo al iniciar
-            
-            intervalo = setInterval(() => {
-                tiempo++;
-                // Lógica para que los PSI suban visualmente
-                if (psiActual < psiMeta) {
-                    psiActual += Math.floor(Math.random() * 5) + 2; // Sube de 2 en 2 o más
-                    if (psiActual > psiMeta) psiActual = psiMeta;
-                    document.getElementById('contador-psi').innerText = psiActual;
-                }
-
-                let mins = Math.floor(tiempo / 60).toString().padStart(2, '0');
-                let secs = (tiempo % 60).toString().padStart(2, '0');
-                document.getElementById('timer').innerText = `${mins}:${secs}`;
+    function toggleReloj() {
+        const btn = document.getElementById('btn-control');
+        if (!activo) {
+            activo = true;
+            btn.innerText = "PARAR PRUEBA";
+            btn.style.background = "#f44336";
+            id = setInterval(() => {
+                segs++;
+                let m = Math.floor(segs / 60).toString().padStart(2, '0');
+                let s = (segs % 60).toString().padStart(2, '0');
+                document.getElementById('reloj').innerText = `${m}:${s}`;
             }, 1000);
         } else {
-            clearInterval(intervalo);
-            btn.innerText = "PRUEBA FINALIZADA";
-            btn.style.background = "#39ff14";
-            alert("Prueba completada en: " + document.getElementById('timer').innerText);
+            clearInterval(id);
+            activo = false;
+            btn.innerText = "REINICIAR";
+            btn.style.background = "#4CAF50";
         }
     }
-
-    // Actualizar hora cada minuto
-    setInterval(() => {
-        const ahora = new Date();
-        document.getElementById('hora').innerText = ahora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }, 1000);
 </script>
 
 </body>
