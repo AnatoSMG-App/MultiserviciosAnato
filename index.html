@@ -3,143 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anato S.M.G. Pro</title> <style>
-        body { background: radial-gradient(circle, #1a1a1a, #000); color: #0f0; font-family: 'Courier New', monospace; text-align: center; margin: 0; padding: 10px; }
-        .container { border: 2px solid #333; border-radius: 15px; padding: 15px; background: rgba(0,0,0,0.8); box-shadow: 0 0 20px #0f0; position: relative; max-width: 500px; margin: auto; }
-        .btn-unificar { position: absolute; top: 10px; right: 10px; background: rgba(0,255,0,0.2); color: #0f0; border: 1px solid #0f0; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.7em; }
-        .display { font-size: 2.2em; background: #000; border: 1px solid #0f0; margin: 10px 0; padding: 5px; color: #0f0; text-shadow: 0 0 10px #0f0; border-radius: 10px; }
-        .diagnostic-panel { margin-top: 20px; padding: 10px; border-top: 2px dashed #0f0; background: rgba(0, 50, 0, 0.2); border-radius: 10px; }
-        select, input { background: #222; color: #0f0; border: 1px solid #444; padding: 10px; margin: 5px; border-radius: 5px; font-size: 1em; }
-        .btn-action { padding: 12px; background: #0f0; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; }
-        #veredicto-alertas { color: #ffae00; font-weight: bold; min-height: 40px; margin: 10px 0; font-size: 0.9em; }
+    <title>S.M.G. Analizador Pro</title>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 10px; }
+        .container { border: 2px solid #39ff14; border-radius: 15px; padding: 15px; background: #050505; box-shadow: 0 0 15px #39ff14; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .btn-dim { background: #39ff14; color: #000; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8em; }
+        .brand { color: #39ff14; text-shadow: 0 0 5px #39ff14; margin: 5px 0; }
+        
+        /* Botones de Selección */
+        .selector-box { display: flex; gap: 5px; margin-bottom: 15px; }
+        .sel-btn { flex: 1; padding: 10px; border: 1px solid #39ff14; background: transparent; color: #39ff14; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .sel-btn.active { background: #39ff14; color: #000; }
+
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .val-box { border: 1px solid #39ff14; padding: 10px; border-radius: 10px; }
+        .val-num { font-size: 2em; font-weight: bold; color: #39ff14; }
+        
+        /* Prueba de Flujo */
+        .test-box { border: 1px dashed #39ff14; padding: 15px; border-radius: 10px; margin-top: 15px; }
+        .psi-dinamico { font-size: 2.5em; color: #39ff14; text-shadow: 0 0 10px #39ff14; margin: 10px 0; }
+        .btn-test { background: #39ff14; color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="btn-unificar" onclick="window.location.href='dimensiones.html'">📏 DIMENSIONES</button>
-    
-    <h2 style="color: white; margin-bottom: 5px; font-size: 1.4em;">MULTISERVICIOS ANATO S.M.G.</h2>
-    <p style="margin-top: 0; font-size: 0.8em; color: #aaa; letter-spacing: 2px;">REFRIGERACIÓN & ELECTRICIDAD</p>
-    
-    <div style="margin-top: 15px;">
-        Temp. Ambiente: <br>
-        <input type="number" id="temp-manual" value="30" style="font-size: 1.5em; width: 80px; text-align: center;"> °C
+    <div class="header">
+        <div style="text-align: left; font-size: 0.8em;">
+            <span id="temp">27°C</span> Valencia-Los Guayos<br>
+            <span id="hora">06:45 PM</span>
+        </div>
+        <a href="dimensiones.html" class="btn-dim">📏 DIMENSIONES</a>
     </div>
 
-    <div style="margin: 10px 0;">
-        <label style="font-size: 0.9em;"><input type="checkbox" id="check-gps" onclick="toggleGPS()"> 📍 GPS: ANATO S.M.G. (Los Guayos)</label>
+    <h2 class="brand">MULTISERVICIOS ANATO S.M.G.</h2>
+    <p style="font-size: 0.7em; margin-top: -10px;">REFRIGERACIÓN & ELECTRICIDAD</p>
+
+    <div class="selector-box">
+        <button class="sel-btn active">AIRES</button>
+        <button class="sel-btn">NEVERAS</button>
+        <button class="sel-btn">AUTO</button>
     </div>
 
-    <div style="display:flex; flex-direction: column; align-items: center;">
-        <select id="gas-select" onchange="calcularTodo()" style="width: 95%;">
-            <optgroup label="Aires AC">
-                <option value="R22">R22</option>
-                <option value="R410A">R410A</option>
-                <option value="R32">R32</option>
-                <option value="R290">R290</option>
-            </optgroup>
-            <optgroup label="Reemplazos R22">
-                <option value="MO29">MO29 (422D)</option>
-                <option value="MO99">MO99 (438A)</option>
-                <option value="417A">417A</option>
-            </optgroup>
-            <optgroup label="Neveras/Cavas">
-                <option value="R134a">R134a</option>
-                <option value="R600a">R600a</option>
-                <option value="R404A">R404A</option>
-            </optgroup>
-            <optgroup label="Automotriz">
-                <option value="R134a_Auto">R134a (Carro)</option>
-                <option value="YF1234">YF1234 (Nuevo)</option>
-            </optgroup>
+    <div style="margin-bottom: 10px;">
+        <select style="background: #000; color: #39ff14; border: 1px solid #39ff14; padding: 5px; width: 80%;">
+            <option>Gas Original: R22</option>
+            <option>Gas Original: R410A</option>
+            <option>Gas Original: R134a</option>
         </select>
     </div>
 
-    <div style="display:flex; justify-content:space-around; margin-top: 10px;">
-        <div>BAJA (PSI)<br><div id="baja-psi" class="display">65</div></div>
-        <div>ALTA (PSI)<br><div id="alta-psi" class="display">250</div></div>
+    <div class="data-grid">
+        <div class="val-box">
+            <div style="font-size: 0.8em;">BAJA (PSI)</div>
+            <div class="val-num" id="presion-baja">66</div>
+        </div>
+        <div class="val-box">
+            <div style="font-size: 0.8em;">ALTA (PSI)</div>
+            <div class="val-num">302</div>
+        </div>
     </div>
 
-    <div id="veredicto-alertas">S.M.G. | Diagnóstico listo...</div>
-
-    <div class="diagnostic-panel">
-        <h4 style="margin: 5px 0; color: #0f0;">TEST DE FLUJO S.M.G.</h4>
-        <div style="font-size: 0.8em;">Meta Reposo: <span id="reposo-meta" style="color:cyan">158</span> PSI</div>
-        <div id="cronometro" style="font-size:1.8em; margin:8px; color: white;">00:00</div>
-        <button id="btn-crono" class="btn-action" onclick="manejarCronometro()">INICIAR PRUEBA</button>
-        <div id="veredicto-flujo" style="margin-top:10px; font-size: 0.8em;"></div>
+    <div class="test-box">
+        <div style="font-size: 0.9em; font-weight: bold;">TEST DE FLUJO S.M.G.</div>
+        <div style="font-size: 0.7em; color: #aaa;">META REPOSO: 174 PSI</div>
+        
+        <div class="psi-dinamico" id="contador-psi">66</div>
+        <div style="font-size: 1.5em; margin-bottom: 10px;" id="timer">00:00</div>
+        
+        <button class="btn-test" id="btn-iniciar" onclick="iniciarPrueba()">INICIAR PRUEBA</button>
     </div>
 </div>
 
 <script>
-    let tempActual = 30;
-    let activoGPS = false;
-    let intervaloCrono;
-    let tiempoInicio;
+    let tiempo = 0;
+    let intervalo;
+    let psiActual = 66; // Empieza desde la presión de baja
+    const psiMeta = 174;
 
-    document.getElementById('temp-manual').addEventListener('input', function() {
-        if(!activoGPS) { tempActual = parseFloat(this.value) || 30; calcularTodo(); }
-    });
-
-    function toggleGPS() {
-        activoGPS = document.getElementById('check-gps').checked;
-        let inputTemp = document.getElementById('temp-manual');
-        if(activoGPS) { tempActual = 34; inputTemp.value = 34; inputTemp.disabled = true; } 
-        else { inputTemp.disabled = false; }
-        calcularTodo();
-    }
-
-    function calcularTodo() {
-        let t = tempActual;
-        let gas = document.getElementById('gas-select').value;
-        let b = 0, a = 0, r = 0;
-
-        // Fórmulas calibradas para el calor de Venezuela
-        switch(gas) {
-            case "R22": b = t+32; a = (t*5.5)+115; r = (t*4)+38; break;
-            case "R410A": b = t+85; a = (t*8.5)+180; r = (t*6)+60; break;
-            case "R32": b = t+88; a = (t*9)+190; r = (t*6.5)+65; break;
-            case "MO29": b = t+28; a = (t*5.2)+110; r = (t*3.8)+35; break;
-            case "MO99": b = t+30; a = (t*5.4)+112; r = (t*3.9)+36; break;
-            case "417A": b = t+26; a = (t*5.1)+108; r = (t*3.7)+34; break;
-            case "R134a": b = (t*0.4)+4; a = (t*3.5)+85; r = (t*2.1)+15; break;
-            case "R600a": b = (t*0.2)-2; a = (t*2)+45; r = (t*1.2)+5; break;
-            case "R404A": b = t+92; a = (t*9.2)+190; r = (t*7)+70; break;
-            case "R134a_Auto": b = 32; a = (t*6.2)+45; r = (t*3)+20; break;
-            case "YF1234": b = 30; a = (t*6)+42; r = (t*2.8)+18; break;
-            default: b = 60; a = 250; r = 150;
-        }
-
-        document.getElementById('baja-psi').innerText = Math.round(b);
-        document.getElementById('alta-psi').innerText = Math.round(a);
-        document.getElementById('reposo-meta').innerText = Math.round(r);
-        document.getElementById('veredicto-alertas').innerHTML = `Analizando ${gas}... <br>Valores optimizados para Anato S.M.G.`;
-    }
-
-    function manejarCronometro() {
-        let btn = document.getElementById('btn-crono');
-        if(btn.innerText === "INICIAR PRUEBA") {
-            tiempoInicio = Date.now();
+    function iniciarPrueba() {
+        const btn = document.getElementById('btn-iniciar');
+        if (btn.innerText === "INICIAR PRUEBA") {
             btn.innerText = "LLEGÓ A LA META";
-            btn.style.background = "orange";
-            intervaloCrono = setInterval(() => {
-                let seg = Math.floor((Date.now() - tiempoInicio) / 1000);
-                document.getElementById('cronometro').innerText = 
-                    `${Math.floor(seg/60).toString().padStart(2,'0')}:${(seg%60).toString().padStart(2,'0')}`;
+            btn.style.background = "#ff3914"; // Rojo al iniciar
+            
+            intervalo = setInterval(() => {
+                tiempo++;
+                // Lógica para que los PSI suban visualmente
+                if (psiActual < psiMeta) {
+                    psiActual += Math.floor(Math.random() * 5) + 2; // Sube de 2 en 2 o más
+                    if (psiActual > psiMeta) psiActual = psiMeta;
+                    document.getElementById('contador-psi').innerText = psiActual;
+                }
+
+                let mins = Math.floor(tiempo / 60).toString().padStart(2, '0');
+                let secs = (tiempo % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = `${mins}:${secs}`;
             }, 1000);
         } else {
-            clearInterval(intervaloCrono);
-            let s = Math.floor((Date.now() - tiempoInicio) / 1000);
-            let v = document.getElementById('veredicto-flujo');
-            if(s < 45) v.innerHTML = "🚨 <b>FALLO MECÁNICO:</b> Presión igualada demasiado rápido.";
-            else if(s <= 180) v.innerHTML = "✅ <b>EQUIPO SANO:</b> Tiempo de ecualización óptimo.";
-            else v.innerHTML = "🚨 <b>OBSTRUCCIÓN:</b> El capilar o filtro están frenando el paso.";
-            btn.innerText = "INICIAR PRUEBA";
-            btn.style.background = "#0f0";
+            clearInterval(intervalo);
+            btn.innerText = "PRUEBA FINALIZADA";
+            btn.style.background = "#39ff14";
+            alert("Prueba completada en: " + document.getElementById('timer').innerText);
         }
     }
-    calcularTodo();
+
+    // Actualizar hora cada minuto
+    setInterval(() => {
+        const ahora = new Date();
+        document.getElementById('hora').innerText = ahora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }, 1000);
 </script>
+
 </body>
 </html>
