@@ -1,152 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <title>S.M.G. Calculadora Profesional</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carga Térmica | Anato S.M.G.</title>
     <style>
-        body {
-            background: radial-gradient(circle, #001529, #000);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 15px;
-        }
-        .container {
-            border: 2px solid #00d2ff;
-            border-radius: 20px;
-            padding: 20px;
-            background: rgba(0, 10, 20, 0.9);
-            box-shadow: 0 0 25px #00d2ff, inset 0 0 10px #00d2ff;
-            max-width: 450px;
-            margin: auto;
-            position: relative;
-        }
-        .btn-volver {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 210, 255, 0.2);
-            color: #00d2ff;
-            border: 1px solid #00d2ff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.75em;
-            font-weight: bold;
-        }
-        /* Nombre en Azul Metálico */
-        .brand-title { 
-            color: #00d2ff; 
-            text-shadow: 2px 2px 4px #000, 0 0 10px #00d2ff; 
-            font-size: 1.8em;
-            margin-bottom: 5px;
-            font-weight: 800;
-        }
-        /* Título Blanco con Brillo */
-        .main-title {
-            color: #ffffff;
-            text-shadow: 0 0 15px #ffffff, 0 0 25px #ffffff;
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .slogan { 
-            color: #00d2ff; 
-            font-style: italic; 
-            font-size: 0.85em; 
-            margin-bottom: 20px;
-            opacity: 0.9;
-        }
-        .input-group { margin: 15px 0; text-align: left; }
-        label { display: block; margin-bottom: 5px; color: #00d2ff; font-weight: bold; font-size: 0.9em; }
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #001a33;
-            border: 1px solid #00d2ff;
-            color: white;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1.1em;
-        }
-        /* Verde Neón Recargado */
-        .resultado-btu {
-            font-size: 2.8em;
-            color: #39ff14; 
-            text-shadow: 0 0 20px #39ff14;
-            margin: 15px 0;
-            font-weight: bold;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .btn-generar {
-            background: #39ff14;
-            color: #000;
-            border: none;
-            padding: 16px;
-            width: 100%;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.1em;
-            cursor: pointer;
-            box-shadow: 0 0 20px #39ff14;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-        .btn-generar:hover { background: #32cd32; transform: translateY(-2px); }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: white; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        
+        /* Barra de Navegación Superior */
+        .nav-top { width: 100%; max-width: 450px; display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; }
+        .nav-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #0080ff; background: #111; color: #0080ff; font-weight: bold; cursor: pointer; font-size: 0.8em; text-transform: uppercase; }
+        .nav-btn.active { background: #0080ff; color: #fff; border: none; box-shadow: 0 0 10px #0080ff; }
+
+        .card { background: #0a0a0a; padding: 25px; border-radius: 25px; border: 3px solid #0080ff; width: 100%; max-width: 450px; box-shadow: 0 0 25px rgba(0, 128, 255, 0.4); box-sizing: border-box; }
+        
+        h1 { color: #0080ff; text-align: center; margin-bottom: 5px; font-size: 1.6em; text-transform: uppercase; text-shadow: 0 0 10px #0080ff; }
+        h2 { color: #fff; text-align: center; margin-top: 0; font-size: 1em; letter-spacing: 1px; font-weight: bold; text-shadow: 0 0 5px #fff; }
+        
+        .display { background: #000; color: #00ff41; padding: 20px; border-radius: 15px; text-align: center; font-size: 2.5em; font-family: monospace; border: 2px solid #00ff41; margin: 20px 0; box-shadow: inset 0 0 15px rgba(0,255,65,0.3); font-weight: bold; }
+        
+        label { display: block; margin-top: 15px; color: #0080ff; font-size: 0.9em; font-weight: bold; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 1px solid #333; background: #111; color: white; box-sizing: border-box; font-size: 1.1em; outline: none; }
+        input:focus { border-color: #00ff41; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .btn-calc { width: 100%; background: #0080ff; color: #fff; padding: 20px; border: none; border-radius: 15px; margin-top: 30px; font-weight: bold; font-size: 1.3em; cursor: pointer; box-shadow: 0 5px 15px rgba(0,128,255,0.4); transition: 0.3s; text-transform: uppercase; }
+        .btn-calc:active { transform: scale(0.95); background: #005bb7; }
+        
+        .footer { text-align: center; margin-top: 25px; font-size: 0.85em; color: #fff; border-top: 1px solid #333; padding-top: 15px; font-weight: bold; }
+        .murasi { color: #00ffff; text-shadow: 0 0 8px #00ffff; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="btn-volver">⬅ ANALIZADOR</a>
+<div class="nav-top">
+    <button class="nav-btn" onclick="window.location.href='index.html'">⬅️ Analizador</button>
+    <button class="nav-btn active" onclick="window.location.href='reposo.html'">🧪 Reposo S.M.G.</button>
+</div>
+
+<div class="card">
+    <h1>MULTISERVICIOS ANATO S.M.G.</h1>
+    <h2>Carga Térmica Profesional</h2>
     
-    <div class="brand-title">ANATO S.M.G.</div>
-    <span class="main-title">CÁLCULO DE CARGA TÉRMICA PROFESIONAL</span>
-    <div class="slogan">"Calidad y Precisión en Refrigeración"</div>
-
-    <div class="input-group">
-        <label>Largo del área (Metros):</label>
-        <input type="number" id="largo" placeholder="0" oninput="calcularBTU()">
-    </div>
-    <div class="input-group">
-        <label>Ancho del área (Metros):</label>
-        <input type="number" id="ancho" placeholder="0" oninput="calcularBTU()">
-    </div>
-    <div class="input-group">
-        <label>Personas / Equipos:</label>
-        <input type="number" id="personas" value="2" oninput="calcularBTU()">
-    </div>
-
-    <div style="color: #00d2ff; margin-top: 20px; font-weight: bold; letter-spacing: 1px;">CAPACIDAD REQUERIDA:</div>
-    <div class="resultado-btu" id="total-btu">0 BTU</div>
-
-    <button class="btn-generar" onclick="calcularBTU()">REGENERAR REQUERIMIENTO</button>
+    <div id="pantalla" class="display">0 BTU/h</div>
     
-    <p style="font-size: 0.7em; color: #00d2ff; margin-top: 20px; opacity: 0.6;">
-        S.M.G. Technology & Services | Los Guayos, Venezuela
-    </p>
+    <div class="grid">
+        <div>
+            <label>LARGO (Mts):</label>
+            <input type="number" id="l" value="2.30" step="0.01" inputmode="decimal">
+        </div>
+        <div>
+            <label>ANCHO (Mts):</label>
+            <input type="number" id="a" value="2.80" step="0.01" inputmode="decimal">
+        </div>
+    </div>
+    
+    <label>ALTO (Mts):</label>
+    <input type="number" id="h" value="2.50" step="0.01" inputmode="decimal">
+
+    <label>FACTOR AMBIENTAL:</label>
+    <select id="f">
+        <option value="600">600 BTU (Sombra / Fresco)</option>
+        <option value="800" selected>800 BTU (Sol de tarde)</option>
+        <option value="950">950 BTU (Zinc / Sol Extremo)</option>
+    </select>
+
+    <div class="grid">
+        <div>
+            <label>PERSONAS:</label>
+            <input type="number" id="pers" value="0" inputmode="numeric">
+        </div>
+        <div>
+            <label>VENTANAS:</label>
+            <input type="number" id="vent" value="0" inputmode="numeric">
+        </div>
+    </div>
+
+    <div class="grid">
+        <div>
+            <label>PUERTAS:</label>
+            <input type="number" id="puer" value="0" inputmode="numeric">
+        </div>
+        <div>
+            <label>EQUIPOS (PC/TV):</label>
+            <input type="number" id="elec" value="0" inputmode="numeric">
+        </div>
+    </div>
+
+    <button class="btn-calc" onclick="calcular()">Generar Requerimiento</button>
+    
+    <div class="footer">
+        Calidad y Precisión en Refrigeración 2026<br>
+        Multiservicios Anato S.M.G. | <span class="murasi">Proyecto Murasi</span>
+    </div>
 </div>
 
 <script>
-    function calcularBTU() {
-        let largo = parseFloat(document.getElementById('largo').value) || 0;
-        let ancho = parseFloat(document.getElementById('ancho').value) || 0;
-        let personas = parseFloat(document.getElementById('personas').value) || 0;
+function calcular() {
+    const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
 
-        // Fórmula optimizada: Área * 650 + (Personas * 500)
-        let area = largo * ancho;
-        let btu = (area * 650) + (personas * 500);
+    let l = getVal('l');
+    let a = getVal('a');
+    let h = getVal('h');
+    let f = getVal('f');
 
-        // Ajustar a múltiplos comerciales (12k, 18k, 24k...) si prefieres, 
-        // pero aquí lo dejamos exacto para mayor precisión técnica.
-        document.getElementById('total-btu').innerText = Math.round(btu).toLocaleString() + " BTU";
-    }
+    let c_pers = getVal('pers') * 450;
+    let c_vent = getVal('vent') * 500;
+    let c_puer = getVal('puer') * 300;
+    let c_elec = getVal('elec') * 600;
+
+    let volumen = l * a * h;
+    let btuBase = volumen * f;
+    let totalBtu = btuBase + c_pers + c_vent + c_puer + c_elec;
+
+    document.getElementById('pantalla').innerText = Math.round(totalBtu).toLocaleString() + " BTU/h";
+}
 </script>
 
 </body>
