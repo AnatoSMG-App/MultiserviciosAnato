@@ -1,41 +1,79 @@
-<style>
-    /* El nuevo estilo para el botón central */
-    .ideal-center-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: -10px 0; /* Para que se meta un poco entre los manómetros */
-        z-index: 10;
-    }
-    .ideal-btn {
-        background: #39ff14;
-        color: #000;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 50px; /* Forma de óvalo/pastilla */
-        font-weight: 900;
-        font-size: 14px;
-        box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
-        cursor: pointer;
-        text-transform: uppercase;
-    }
-</style>
+function calcularPresiones() {
+    // Tomamos la temperatura y el gas exactamente como están en tu HTML
+    const tempAmb = parseFloat(document.getElementById('temp-val').value) || 0;
+    const gas = document.getElementById('gas-orig').value;
+    
+    // LA LEY DEL SALTO TÉRMICO (+17°C)
+    // Esto asegura que el cálculo sea sobre la condensación real
+    const tempCond = tempAmb + 17; 
 
-<div class="gauges-wrapper">
-    <div class="gauges" style="padding-bottom: 5px;">
-        <div class="gauge g-baja">
-            <span style="font-size:11px; font-weight:900; color:#00e5ff;">BAJA</span>
-            <span class="g-val" id="val-baja">62</span>
-        </div>
-        <div class="gauge g-alta">
-            <span style="font-size:11px; font-weight:900; color:#ff5722;">ALTA</span>
-            <span class="g-val" id="val-alta">185</span>
-        </div>
-    </div>
+    let idealBaja = 0;
+    let idealAlta = 0;
 
-    <div class="ideal-center-container">
-        <button class="ideal-btn" onclick="calcularPresiones()">
-            📊 IDEAL: <span id="ideal-val">65 / 210</span>
-        </button>
-    </div>
-</div>
+    // MATRIZ TÉCNICA DE COEFICIENTES (Calibración S.M.G.)
+    switch(gas) {
+        // --- SECCIÓN AIRES ACONDICIONADOS ---
+        case "R22":
+            // Baja: Evaporación ideal ~5°C / Alta: Multiplicador 5.61
+            idealBaja = 65 + (tempAmb - 30) * 0.7; 
+            idealAlta = tempCond * 5.62; 
+            break;
+            
+        case "R410A":
+            // El factor 8.55 garantiza los ~418 PSI a 32°C ambiente
+            idealBaja = 118 + (tempAmb - 30) * 1.2;
+            idealAlta = tempCond * 8.55;
+            break;
+            
+        case "R32":
+            idealBaja = 120 + (tempAmb - 30) * 1.3;
+            idealAlta = tempCond * 8.85;
+            break;
+            
+        case "R290":
+            idealBaja = 68 + (tempAmb - 30) * 0.8;
+            idealAlta = tempCond * 5.38;
+            break;
+            
+        case "R407C":
+            idealBaja = 65 + (tempAmb - 30) * 0.7;
+            idealAlta = tempCond * 5.98;
+            break;
+
+        // --- SECCIÓN REFRIGERACIÓN (Neveras) ---
+        case "R134A":
+            // Baja controlada para frío doméstico / Alta suave
+            idealBaja = 8 + (tempAmb - 30) * 0.1; 
+            idealAlta = tempCond * 2.88; 
+            break;
+            
+        case "R600A":
+            // Gas de muy baja presión
+            idealBaja = 0.5; 
+            idealAlta = tempCond * 1.58;
+            break;
+            
+        case "R12":
+            idealBaja = 12 + (tempAmb - 30) * 0.2;
+            idealAlta = tempCond * 3.38;
+            break;
+
+        default:
+            idealBaja = 0;
+            idealAlta = 0;
+    }
+
+    // ACTUALIZACIÓN DE MANÓMETROS (Sin decimales para limpieza visual)
+    const bajaResult = Math.round(idealBaja);
+    const altaResult = Math.round(idealAlta);
+
+    // Inyectamos los valores en tus IDs originales
+    document.getElementById('ideal-baja').innerText = bajaResult;
+    document.getElementById('ideal-alta').innerText = altaResult;
+
+    // Si usas el botón central para mostrar ambos valores:
+    const displayCentral = document.getElementById('ideal-val');
+    if (displayCentral) {
+        displayCentral.innerText = bajaResult + " / " + altaResult;
+    }
+}
