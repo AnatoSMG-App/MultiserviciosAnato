@@ -5,96 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v23-header { width: 100%; max-width: 410px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px 12px 0 0; background: #000; }
+        .v24-header { width: 100%; max-width: 415px; margin: 0 auto; border: 1px solid #222; padding: 10px; border-radius: 12px 12px 0 0; background: #000; }
         
-        .empresa { text-align: center; font-size: 13px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        
-        .row-1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .ubicacion { color: #00e5ff; font-size: 13px; font-weight: 900; text-shadow: 0 0 8px #00e5ff66; }
-        .btu-btn { background: #ff5722; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; font-weight: 900; font-size: 12px; box-shadow: 0 4px #bf360c; cursor: pointer; text-decoration: none; }
+        /* EMPRESA Y RELOJ */
+        .top-info { text-align: center; margin-bottom: 10px; }
+        .empresa { font-size: 14px; color: #FFFFFF; font-weight: 900; letter-spacing: 1px; }
+        .status-msg { color: #00e5ff; font-size: 11px; font-weight: 900; margin: 4px 0; }
+        .clock-real { font-size: 18px; font-weight: 900; font-family: monospace; letter-spacing: 1px; }
 
-        .row-2 { display: flex; justify-content: space-between; align-items: center; }
-        
-        /* GPS ESTILO CHECKBOX */
-        .gps-area { display: flex; align-items: center; gap: 8px; color: #666; font-size: 11px; font-weight: 900; cursor: pointer; }
-        .gps-status-box { width: 16px; height: 16px; border: 2px solid #fff; background: #000; display: inline-block; position: relative; transition: 0.3s; }
-        
-        .gps-active { color: #fff !important; }
-        .gps-active .gps-status-box { background: #fff; }
-        .gps-active .gps-status-box::after { content: '✔'; color: #000; position: absolute; top: -3px; left: 1px; font-size: 14px; font-weight: 900; }
+        /* FILA DE CONTROLES */
+        .main-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 15px; }
 
-        /* CUADRO AMBIENTE DIGITAL / MANUAL */
-        .amb-digital { border: 2px solid #39ff14; border-radius: 4px; padding: 4px 10px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; cursor: pointer; }
-        .amb-label { font-size: 8px; color: #39ff14; display: block; margin-bottom: 2px; font-weight: 900; }
-        .amb-input { background: none; border: none; color: #39ff14; font-size: 24px; font-weight: 900; font-family: monospace; width: 60px; text-align: center; outline: none; }
+        /* GPS MANUAL */
+        .gps-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; min-width: 50px; }
+        .gps-box { width: 22px; height: 22px; border: 2px solid #fff; background: #000; display: flex; align-items: center; justify-content: center; }
+        .gps-active .gps-box { background: #fff; }
+        .gps-active .gps-box::after { content: '✔'; color: #000; font-size: 18px; font-weight: 900; }
+        .gps-lbl { font-size: 10px; font-weight: 900; }
+
+        /* TÍTULO CENTRAL CIAN */
+        .jha-brand { flex: 1; text-align: center; color: #00e5ff; font-size: 18px; font-weight: 900; line-height: 1; text-shadow: 0 0 10px #00e5ff44; }
+
+        /* AMBIENTE VERDE */
+        .amb-side { border: 2px solid #39ff14; border-radius: 8px; padding: 5px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; min-width: 65px; }
+        .amb-lbl { font-size: 8px; color: #39ff14; font-weight: 900; display: block; }
+        .amb-row { display: flex; align-items: center; justify-content: center; }
+        .amb-in { background: none; border: none; color: #39ff14; font-size: 22px; font-weight: 900; font-family: monospace; width: 40px; text-align: center; outline: none; }
+
+        /* BOTÓN BTU (FLOTANTE O EN ESQUINA) */
+        .btu-float { position: absolute; top: 20px; right: 20px; background: #ff5722; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 3px #bf360c; }
     </style>
 </head>
 <body>
 
-<div class="v23-header">
-    <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
-    
-    <div class="row-1">
-        <div class="ubicacion" id="loc-text">📍 BUSCANDO...</div>
-        <a href="calculadora_btu.html" class="btu-btn">BTU 📏</a>
+<div class="v24-header">
+    <a href="calculadora_btu.html" class="btu-float">BTU 📏</a>
+
+    <div class="top-info">
+        <div class="empresa">⚙️ MULTISERVICIOS ANATO S.M.G.</div>
+        <div id="gps-status" class="status-msg">📍 BUSCANDO SEÑAL...</div>
+        <div id="live-clock" class="clock-real">00:00:00 a. m.</div>
     </div>
 
-    <div class="row-2">
-        <div id="gps-wrap" class="gps-area" onclick="toggleGPS()">
-            <span class="gps-status-box"></span> GPS: <span id="gps-text">DESACTIVADO</span>
+    <div class="main-row">
+        <div id="gps-btn" class="gps-side" onclick="toggleGPS()">
+            <div class="gps-box"></div>
+            <span class="gps-lbl">GPS</span>
         </div>
 
-        <div class="amb-digital" onclick="modoManual()">
-            <span class="amb-label">AMBIENTE</span>
-            <input type="number" id="temp-val" class="amb-input" value="25" oninput="cambioManual()">
-            <span style="color:#39ff14; font-weight:900;">°C</span>
+        <div class="jha-brand">
+            ANALIZADOR DE<br>PRESIONES JHA
+        </div>
+
+        <div class="amb-side">
+            <span class="amb-lbl">AMB.</span>
+            <div class="amb-row">
+                <input type="number" id="temp-val" class="amb-in" value="30">
+                <span style="color:#39ff14; font-weight:900; font-size: 18px;">°C</span>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    let manualMode = false;
-
-    function activarGPS() {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                document.getElementById('gps-wrap').classList.add('gps-active');
-                document.getElementById('gps-text').innerText = 'ACTIVADO';
-                document.getElementById('loc-text').innerText = '📍 UBICACIÓN: CARABOBO'; 
-                document.getElementById('temp-val').value = 25; // Aquí iría la API del clima
-                document.getElementById('temp-val').readOnly = true;
-                manualMode = false;
-            });
-        }
+    // Reloj en tiempo real
+    function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        const ampm = h >= 12 ? 'p. m.' : 'a. m.';
+        h = h % 12 || 12;
+        document.getElementById('live-clock').innerText = `${h}:${m}:${s} ${ampm}`;
     }
+    setInterval(updateClock, 1000);
+    updateClock();
 
+    // GPS Manual
     function toggleGPS() {
-        let wrap = document.getElementById('gps-wrap');
-        if(wrap.classList.contains('gps-active')) {
-            // DESACTIVAR
-            wrap.classList.remove('gps-active');
-            document.getElementById('gps-text').innerText = 'DESACTIVADO';
-            document.getElementById('temp-val').readOnly = false;
-            document.getElementById('temp-val').focus();
-            manualMode = true;
+        const btn = document.getElementById('gps-btn');
+        const status = document.getElementById('gps-status');
+        const isAct = btn.classList.toggle('gps-active');
+        
+        if(isAct) {
+            status.innerText = "📍 GPS: CONECTADO";
+            status.style.color = "#00e5ff";
+            // Aquí podrías jalar ubicación real si quieres, pero lo dejo manual.
         } else {
-            activarGPS();
+            status.innerText = "📍 BUSCANDO SEÑAL...";
+            status.style.color = "#00e5ff";
         }
     }
-
-    function modoManual() {
-        if(!manualMode) {
-            if(confirm("¿Deseas desactivar GPS y ajustar temperatura manualmente?")) {
-                toggleGPS();
-            }
-        }
-    }
-
-    function cambioManual() {
-        console.log("Nueva temperatura manual: " + document.getElementById('temp-val').value);
-    }
-
-    window.onload = activarGPS;
 </script>
 
 </body>
