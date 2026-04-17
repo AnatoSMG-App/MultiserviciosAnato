@@ -3,140 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.H.A V2 PRO - ANTI-COLESTEROL</title>
+    <title>J.H.A ANALIZADOR V3</title>
     <style>
-        body { background-color: #0c0c0c; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 420px; border: 4px solid #39ff14; border-radius: 25px; padding: 15px; background: #141414; box-shadow: 0 0 25px rgba(57, 255, 20, 0.4); }
+        :root { --azul: #00f2ff; --rojo: #ff3131; --bg: #0a0a0a; --amarillo: #ffeb3b; --verde: #0f0; --gris: #333; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; justify-content: center; }
+        .container { background: #111; border: 2px solid var(--gris); border-radius: 15px; padding: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         
-        .header { text-align: center; margin-bottom: 15px; }
-        .gps-row { display: flex; justify-content: space-between; align-items: center; color: #00d4ff; font-size: 12px; margin-bottom: 8px; font-weight: bold; }
-        .btn-btu { background: #ff5722; color: white; border: none; padding: 6px 15px; border-radius: 10px; font-weight: bold; text-decoration: none; box-shadow: 0 4px #bf360c; }
-        
-        .dashboard { background: #222; border: 2px solid #444; border-radius: 15px; padding: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .temp-display { border: 2px solid #39ff14; border-radius: 10px; padding: 5px 12px; background: #000; text-align: center; cursor: pointer; }
-        
-        select { width: 100%; padding: 14px; background: #1a1a1a; color: #39ff14; border: 2px solid #39ff14; border-radius: 12px; margin-bottom: 12px; font-weight: bold; font-size: 16px; box-shadow: inset 0 0 10px rgba(57,255,20,0.2); }
-        
-        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
-        .p-box { border: 4px solid; border-radius: 20px; padding: 12px; text-align: center; background: #000; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .p-val { background: none; border: none; color: inherit; font-size: 36px; font-weight: bold; width: 100%; text-align: center; outline: none; font-family: monospace; }
+        /* ENCABEZADO ESTILO V36 */
+        .header { text-align: center; border-bottom: 1px solid var(--gris); padding-bottom: 5px; margin-bottom: 8px; }
+        .header h1 { font-size: 1.1rem; margin: 0; color: #fff; text-transform: uppercase; font-weight: 900; }
+        .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
+        #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
 
-        .reposo-v2 { border: 3px dashed #39ff14; border-radius: 20px; padding: 15px; background: #080808; margin-top: 10px; }
-        .timer-grid { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 10px; align-items: center; text-align: center; }
-        .val-timer { font-size: 26px; font-family: monospace; font-weight: bold; }
-        .btn-mando { width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
+        .app-title { color: var(--azul); font-weight: 900; font-size: 1.35rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
+        
+        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
+        .temp-label { font-size: 0.6rem; color: #aaa; display: block; margin-bottom: -5px; font-weight: bold; }
+
+        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
+        .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #000; }
+        .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
+
+        .gas-selection { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #333; margin-bottom: 10px; }
+        select { width: 100%; background: #222; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; }
+
+        .gauges { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .gauge-box { background: #000; padding: 10px 5px; border-radius: 12px; text-align: center; border: 2px solid #333; cursor: pointer; }
+        .p-val { font-size: 2.8rem; font-weight: bold; font-family: monospace; display: block; }
+        .baja { color: var(--azul); border-color: var(--azul); }
+        .alta { color: var(--rojo); border-color: var(--rojo); }
+
+        .display { background: #000; border-left: 5px solid var(--verde); padding: 15px; border-radius: 8px; margin-bottom: 10px; min-height: 80px; }
+        .msg { font-size: 1rem; font-weight: bold; line-height: 1.2; }
+
+        /* MODULO REPOSO V3 (NUEVO MOTOR) */
+        .reposo-box { background: #050505; border: 2px dashed var(--azul); border-radius: 15px; padding: 10px; margin-top: 10px; }
+        .timer-grid { display: grid; grid-template-columns: 1fr 70px 1fr; gap: 5px; text-align: center; align-items: center; }
+        .t-val { font-family: monospace; font-size: 1.4rem; font-weight: bold; }
+        .btn-mando { width: 45px; height: 45px; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; margin: 3px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+        .keypad { display: none; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #111; padding: 5px; border-radius: 8px; margin-top: 5px; }
+        .btn { background: #333; color: #fff; padding: 18px 0; font-size: 1.4rem; border-radius: 5px; font-weight: bold; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="gps-row">
-            <span id="gps" onclick="navigator.geolocation.getCurrentPosition(p=>this.innerText='📍 '+p.coords.latitude.toFixed(3)+','+p.coords.longitude.toFixed(3))">📍 ACTIVAR GPS</span>
-            <a href="#" class="btn-btu">📏 BTU</a>
-        </div>
-        <h1 style="font-size: 18px; margin: 5px 0; text-shadow: 0 0 10px #39ff14;">⚙️ ANALIZADOR J.H.A V2</h1>
+        <h1>⚙️ MULTISERVICIOS ANATO S.M.G.</h1>
+        <div id="loc" class="loc-info">📍 BUSCANDO SEÑAL...</div>
+        <div id="clock">--:--:--</div>
     </div>
 
-    <div class="dashboard">
-        <span style="color:#00d4ff; font-weight:bold;">MODO PRO: FLUJO</span>
-        <div class="temp-display" onclick="let n=prompt('Temp:',tAmb); if(n){tAmb=n; update()}">
-            <span style="font-size:10px; display:block; color:#aaa;">AMB.</span>
-            <span id="vTemp" style="font-size:22px; color:#39ff14; font-weight:bold;">30</span>°C
-        </div>
-    </div>
-
-    <select id="gas" onchange="update()">
-        <optgroup label="AIRES">
-            <option value="R22" data-f="3.8" data-oil="MINERAL">R22</option>
-            <option value="R410A" data-f="5.8" data-oil="POE">R410A</option>
-            <option value="R32" data-f="5.6" data-oil="POE">R32</option>
-            <option value="MO29" data-f="3.6" data-oil="MO29 (R422D)">MO29 (R422D)</option>
-            <option value="MO99" data-f="3.7" data-oil="MO99 (R438A)">MO99 (R438A)</option>
-        </optgroup>
-        <optgroup label="NEVERAS">
-            <option value="R134a" data-f="4.5" data-oil="POE">R134a</option>
-            <option value="R600a" data-f="3.1" data-oil="MINERAL">R600a</option>
-            <option value="R12" data-f="3.9" data-oil="MINERAL">R12</option>
-            <option value="MP39" data-f="4.0" data-oil="MP39 (401A)">MP39 (401A)</option>
-            <option value="R406A" data-f="3.8" data-oil="R406A">R406A</option>
-        </optgroup>
-        <optgroup label="AUTOS">
-            <option value="R134a" data-f="4.5" data-oil="PAG">R134a (Auto)</option>
-            <option value="R1234yf" data-f="4.6" data-oil="PAG">R1234yf</option>
-        </optgroup>
-    </select>
-
-    <div id="info" style="text-align:center; color:#39ff14; font-weight:bold; font-size:12px; margin-bottom:10px;">ACEITE: MINERAL</div>
-
-    <div class="press-grid">
-        <div class="p-box" style="border-color:#00d4ff; color:#00d4ff;">
-            <span style="font-size:11px;">BAJA</span>
-            <input type="number" id="b" class="p-val" oninput="recalc()">
-        </div>
-        <div class="p-box" style="border-color:#ff3131; color:#ff3131;">
-            <span style="font-size:11px;">ALTA</span>
-            <input type="number" id="a" class="p-val" oninput="recalc()">
+    <div class="status-row">
+        <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-weight: bold;">GPS</small></div>
+        <div class="app-title">ANALIZADOR JHA<br>VERSIÓN 3</div>
+        <div class="temp-box" onclick="setFoco('temp')">
+            <span class="temp-label">AMB.</span>
+            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
         </div>
     </div>
 
-    <div class="reposo-v2">
-        <div class="timer-grid">
-            <div class="col-ideal">
-                <div style="font-size:10px;">IDEAL</div>
-                <div id="cI" class="val-timer">05:00</div>
-                <div id="pI" style="font-size:15px;">-- PSI</div>
-                <div style="font-size:9px;">META: <span id="m">0.0</span></div>
-            </div>
-            <div>
-                <button class="btn-mando" style="background:#b71c1c; color:white; margin-bottom:12px;" onclick="stopR()">■</button>
-                <button class="btn-mando" style="background:#1b5e20; color:white;" onclick="startR()">▶</button>
-            </div>
-            <div class="col-real" id="boxR">
-                <div style="font-size:10px;">REAL</div>
-                <div id="cR" class="val-timer">00:00</div>
-                <div id="pR" style="font-size:15px;">-- PSI</div>
-                <div id="status" style="font-size:9px;">ESTADO</div>
-            </div>
-        </div>
-        <div id="msg" style="text-align:center; font-size:13px; margin-top:12px; font-weight:bold; color:#39ff14;">LISTO</div>
+    <div class="tabs">
+        <button class="tab active" onclick="setCat('aire', this)">AIRES</button>
+        <button class="tab" onclick="setCat('nevera', this)">NEVERAS</button>
+        <button class="tab" onclick="setCat('auto', this)">AUTO</button>
     </div>
-</div>
 
-<script>
-    let t, sR=0, sI=300, run=false, tAmb=30;
-    function update() {
-        const g = document.getElementById('gas').options[document.getElementById('gas').selectedIndex];
-        document.getElementById('vTemp').innerText = tAmb;
-        let vA = (tAmb * g.dataset.f) + 120;
-        let vB = (g.value.includes('R410') || g.value.includes('R32')) ? 115 : 65;
-        document.getElementById('a').value = Math.round(vA);
-        document.getElementById('b').value = vB;
-        document.getElementById('info').innerText = "ACEITE: " + g.dataset.oil;
-        recalc();
-    }
-    function recalc() {
-        let vb = parseFloat(document.getElementById('b').value)||0, va = parseFloat(document.getElementById('a').value)||0;
-        document.getElementById('m').innerText = ((vb+va)/2).toFixed(1);
-    }
-    function startR() {
-        if(run) return; run=true; sR=0; sI=300;
-        let b0=parseFloat(document.getElementById('b').value), m0=parseFloat(document.getElementById('m').innerText);
-        t = setInterval(() => {
-            sR++;
-            document.getElementById('cR').innerText = `${Math.floor(sR/60).toString().padStart(2,'0')}:${(sR%60).toString().padStart(2,'0')}`;
-            if(sR>300) document.getElementById('boxR').style.color="#ff3131";
-            document.getElementById('pR').innerText = (b0+((m0-b0)*(sR/300))).toFixed(1)+" PSI";
-            if(sI>0){
-                sI--;
-                document.getElementById('cI').innerText = `${Math.floor(sI/60).toString().padStart(2,'0')}:${(sI%60).toString().padStart(2,'0')}`;
-                document.getElementById('pI').innerText = (b0+((m0-b0)*((300-sI)/300))).toFixed(1)+" PSI";
-            }
-            if(sR===480) { document.getElementById('msg').innerText="⚠️ COLESTEROL ALTO - OBSTRUCCIÓN"; document.getElementById('msg').style.color="#ff3131"; }
-        }, 1000);
-    }
-    function stopR() { clearInterval(t); run=false; document.getElementById('msg').innerText="PRUEBA FINALIZADA"; }
-    window.onload = update;
-</script>
-</body>
-</html>
+    <div class="gas-selection">
+        <div><small style="color:var(--azul);">GAS</small><select id="g-ori" onchange="run
