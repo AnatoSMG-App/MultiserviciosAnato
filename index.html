@@ -4,28 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background-color: #000; color: #fff; font-family: 'Arial Black', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v23-header { width: 100%; max-width: 400px; margin: 0 auto; border: 1px solid #222; padding: 10px; border-radius: 10px 10px 0 0; }
+        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
+        .v23-header { width: 100%; max-width: 410px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px 12px 0 0; background: linear-gradient(180deg, #0a0a0a 0%, #000 100%); }
         
-        /* 1. Nombre de Empresa */
-        .empresa { text-align: center; font-size: 10px; color: #888; letter-spacing: 2px; margin-bottom: 10px; }
+        /* 1. Empresa en Blanco */
+        .empresa { text-align: center; font-size: 12px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         
-        /* 2. Fila GPS y BTU */
-        .nav-row { display: flex; justify-content: space-between; align-items: center; }
-        .gps-box { color: #00e5ff; font-size: 12px; font-weight: 900; display: flex; align-items: center; gap: 5px; }
-        .btu-orange { background: #ff5722; color: #fff; border: none; padding: 7px 15px; border-radius: 5px; font-weight: 900; font-size: 12px; box-shadow: 0 4px #bf360c; cursor: pointer; }
-        .btu-orange:active { transform: translateY(2px); box-shadow: 0 2px #bf360c; }
+        /* 2. Fila Ubicación y BTU */
+        .row-1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .ubicacion { color: #00e5ff; font-size: 13px; font-weight: 900; text-shadow: 0 0 8px #00e5ff66; }
+        .btu-btn { background: #ff5722; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; font-weight: 900; font-size: 12px; box-shadow: 0 4px #bf360c; cursor: pointer; }
+
+        /* 3. Fila GPS y Ambiente */
+        .row-2 { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Cuadrito blanco del GPS */
+        .gps-area { display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 11px; font-weight: 900; }
+        .gps-status-box { width: 14px; height: 14px; border: 2px solid #fff; background: #000; display: inline-block; position: relative; }
+        .gps-active .gps-status-box::after { content: '✔'; color: #fff; position: absolute; top: -3px; left: 1px; font-size: 12px; }
+
+        /* Cuadrito digital verde del Ambiente */
+        .amb-digital { border: 2px solid #39ff14; border-radius: 4px; padding: 4px 10px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; }
+        .amb-label { font-size: 8px; color: #39ff14; display: block; margin-bottom: 2px; }
+        .amb-val { font-size: 20px; color: #39ff14; font-weight: 900; font-family: monospace; }
     </style>
 </head>
 <body>
 
 <div class="v23-header">
     <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
-    <div class="nav-row">
-        <div class="gps-box">📍 GPS: CONECTADO [X]</div>
-        <button class="btu-orange">BTU 📏</button>
+    
+    <div class="row-1">
+        <div class="ubicacion">📍 UBICACIÓN: CARABOBO</div>
+        <button class="btu-btn">BTU 📏</button>
+    </div>
+
+    <div class="row-2">
+        <div id="gps-wrap" class="gps-area">
+            <span class="gps-status-box"></span> GPS: <span id="gps-text">BUSCANDO...</span>
+        </div>
+        <div class="amb-digital">
+            <span class="amb-label">AMBIENTE</span>
+            <span class="amb-val">25°C</span>
+        </div>
     </div>
 </div>
+
+<script>
+    // Simulación de activación de GPS
+    setTimeout(() => {
+        document.getElementById('gps-wrap').classList.add('gps-active');
+        document.getElementById('gps-text').innerText = 'ACTIVADO';
+        document.getElementById('gps-text').style.color = '#fff';
+    }, 1500);
+</script>
 
 </body>
 </html>
