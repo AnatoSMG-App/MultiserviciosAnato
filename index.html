@@ -3,168 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHA V36.2 CALCO TOTAL - V19</title>
+    <title>JHA V22 - DATA FULL PROFESIONAL</title>
     <style>
-        /* IMPORTANTE: FUENTE PESADA Y CONDENSADA ESTILO JHA */
-        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', 'Impact', sans-serif; margin: 0; padding: 5px; display: flex; flex-direction: column; align-items: center; text-transform: uppercase; }
-        .v36-container { width: 100%; max-width: 410px; border: 1px solid #111; padding-bottom: 25px; }
+        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 5px; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; }
+        .v22-frame { width: 100%; max-width: 410px; border: 1px solid #222; padding-bottom: 25px; }
 
-        /* CABECERA: EMPRESA Y GPS */
-        .top-brand { text-align: center; font-size: 11px; color: #555; padding: 5px; font-weight: 900; letter-spacing: 1px; }
-        .header-nav { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; margin-bottom: 10px; }
-        .gps-status { color: #00e5ff; font-size: 13px; font-weight: 900; text-shadow: 0 0 5px #00e5ff88; }
-        .btu-orange-btn { background: #ff5722; color: #fff; border: none; padding: 6px 15px; border-radius: 4px; font-weight: 900; box-shadow: 0 4px #bf360c; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px; }
+        .gps-txt { color: #00e5ff; font-size: 12px; font-weight: 900; }
+        .btu-btn { background: #ff5722; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: 900; box-shadow: 0 4px #bf360c; }
         
-        /* TEMP AMBIENTE */
-        .temp-row { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; margin-bottom: 15px; }
-        .amb-box { border: 3px solid #39ff14; border-radius: 8px; padding: 5px 12px; background: #000; box-shadow: 0 0 15px #39ff1466; text-align: center; }
+        .amb-box { border: 3px solid #39ff14; border-radius: 10px; padding: 5px 15px; background: #000; box-shadow: 0 0 15px #39ff1466; text-align: center; margin: 5px 15px 10px auto; width: fit-content; }
 
-        .app-title { text-align: center; font-size: 20px; font-weight: 900; margin: 15px 0; letter-spacing: -1px; }
+        .main-title { text-align: center; font-size: 19px; font-weight: 900; margin: 10px 0; letter-spacing: -1px; }
 
-        /* TABS CON BORDES DE COLOR */
-        .tabs-v36 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding: 0 10px; }
-        .tab-v36 { padding: 14px 0; text-align: center; font-size: 13px; font-weight: 900; background: #1a1a1a; border-radius: 5px; border-bottom: 5px solid #333; color: #555; }
-        .tab-v36.aire { border-color: #00e5ff; color: #00e5ff; background: #0b1618; }
-        .tab-v36.nev { border-color: #39ff14; color: #39ff14; background: #0b180b; }
-        .tab-v36.auto { border-color: #ff3131; color: #ff3131; background: #180b0b; }
+        /* TABS */
+        .tabs-v22 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding: 0 10px; }
+        .tab { padding: 15px 0; text-align: center; font-size: 13px; font-weight: 900; background: #151515; border-radius: 6px; border-bottom: 5px solid #333; cursor: pointer; color: #444; }
+        .tab.active-aire { border-color: #00e5ff; color: #00e5ff; background: #081214; }
+        .tab.active-nev { border-color: #39ff14; color: #39ff14; background: #081408; }
+        .tab.active-auto { border-color: #ff3131; color: #ff3131; background: #140808; }
 
-        /* SELECTORES Y GASES */
-        .panel-sel { background: #0a0a0a; margin: 15px 10px 20px 10px; padding: 15px; border: 1px solid #222; border-radius: 10px; }
-        .sel-flex { display: flex; align-items: center; gap: 8px; }
-        .sel-group { flex: 1; }
-        .sel-group label { display: block; font-size: 10px; color: #39ff14; font-weight: 900; margin-bottom: 5px; }
-        select { width: 100%; background: #000; color: #fff; border: 2px solid #333; padding: 10px; font-size: 17px; font-weight: 900; border-radius: 5px; }
-        .check-v36 { background: #0055ff; color: #fff; border: none; padding: 10px; border-radius: 5px; font-weight: 900; margin-top: 15px; }
+        /* PANEL */
+        .panel-v22 { background: #0a0a0a; margin: 15px 10px 20px 10px; padding: 15px; border: 1px solid #222; border-radius: 12px; }
+        .sel-row { display: flex; align-items: center; gap: 10px; }
+        .sel-col { flex: 1; }
+        .sel-col label { display: block; font-size: 10px; color: #39ff14; font-weight: 900; margin-bottom: 5px; }
+        select { width: 100%; background: #000; color: #fff; border: 2px solid #333; padding: 12px; font-size: 15px; font-weight: 900; border-radius: 6px; }
+        .chk-btn { background: #0055ff; color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 900; margin-top: 18px; }
 
-        /* MANOMETROS: BORDES REDONDOS EXTREMOS (CALCO) */
-        .grid-manometros { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 10px; margin-bottom: 20px; }
-        .manometro { border: 4px solid; border-radius: 25px; padding: 25px 5px; text-align: center; background: #000; box-shadow: inset 0 0 15px rgba(0,0,0,1); }
-        .manometro span { display: block; font-size: 13px; font-weight: 900; margin-bottom: 12px; }
-        .num-in { background: none; border: none; color: inherit; font-size: 55px; font-weight: 900; width: 100%; text-align: center; font-family: 'Impact', sans-serif; outline: none; }
+        /* MANOMETROS REDONDOS */
+        .manometros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 10px; margin-bottom: 20px; }
+        .manometro-circ { border: 5px solid; border-radius: 50px; padding: 30px 5px; text-align: center; background: #000; }
+        .val-v22 { background: none; border: none; color: inherit; font-size: 50px; font-weight: 900; width: 100%; text-align: center; outline: none; font-family: 'Impact', sans-serif; }
 
-        /* FRANJA DE INFO */
-        .strip-v36 { background: #081408; border-left: 10px solid #39ff14; padding: 15px; margin: 0 10px 20px 10px; }
-        .strip-v36 div { font-size: 12px; font-weight: 900; color: #39ff14; margin-bottom: 5px; }
+        .strip-v22 { background: #081408; border-left: 10px solid #39ff14; padding: 15px; margin: 0 10px 20px 10px; }
+        .strip-v22 div { font-size: 11px; font-weight: 900; color: #39ff14; }
 
-        /* REPOSO: DOBLE BOTÓN REDONDO (CALCO) */
-        .reposo-pro { border: 3px dashed #39ff14; margin: 0 10px; padding: 15px; border-radius: 20px; background: #050505; }
-        .clock-display { display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; text-align: center; }
-        .num-clock { font-size: 32px; font-weight: 900; font-family: monospace; }
-        
-        .btn-controls { display: flex; flex-direction: column; gap: 8px; align-items: center; }
-        .btn-play { width: 50px; height: 50px; border-radius: 50%; border: none; background: #1b5e20; color: white; font-size: 24px; box-shadow: 0 0 15px #39ff1466; }
-        .btn-stop { width: 40px; height: 40px; border-radius: 50%; border: none; background: #8b0000; color: white; font-size: 20px; }
+        .reposo-v22 { border: 2px dashed #39ff14; margin: 0 10px; padding: 15px; border-radius: 20px; }
+        .timer-grid { display: grid; grid-template-columns: 1fr 100px 1fr; align-items: center; text-align: center; }
+        .clock-v22 { font-size: 28px; font-weight: 900; font-family: monospace; }
+        .play-v22 { width: 50px; height: 50px; border-radius: 50%; border: none; background: #1b5e20; color: #fff; font-size: 22px; }
     </style>
 </head>
 <body>
 
-<div class="v36-container">
-    <div class="top-brand">MULTISERVICIOS ANATO S.M.G.</div>
-    
-    <div class="header-nav">
-        <div class="gps-status">📍 GPS: CONECTADO [X]</div>
-        <button class="btu-orange-btn">BTU 📏</button>
+<div class="v22-frame">
+    <div class="header-top">
+        <div class="gps-txt">📍 GPS: CONECTADO [OK]</div>
+        <button class="btu-btn">BTU 📏</button>
     </div>
 
-    <div class="temp-row">
-        <div style="font-size: 10px; color: #666;">ANALIZADOR PRO JHA</div>
-        <div class="amb-box">
-            <div style="font-size:10px; color:#39ff14; font-weight:900;">AMB.</div>
-            <div style="font-size:28px; font-weight:900; color:#39ff14;">25°C</div>
-        </div>
+    <div class="amb-box">
+        <div style="font-size:9px; color:#39ff14;">AMB.</div>
+        <div id="temp-val" style="font-size:26px; font-weight:900; color:#39ff14;">25°C</div>
     </div>
 
-    <div class="app-title">ANALIZADOR DE PRESIONES JHA</div>
+    <div class="main-title">MULTISERVICIOS ANATO S.M.G.</div>
 
-    <div class="tabs-v36">
-        <div class="tab-v36 aire">AIRES</div>
-        <div class="tab-v36 active-n">NEVERAS</div>
-        <div class="tab-v36 auto">AUTO</div>
+    <div class="tabs-v22">
+        <div id="tab-a" class="tab active-aire" onclick="switchTab('aire')">AIRES</div>
+        <div id="tab-n" class="tab" onclick="switchTab('nev')">NEVERAS</div>
+        <div id="tab-au" class="tab" onclick="switchTab('auto')">AUTO</div>
     </div>
 
-    <div class="panel-sel">
-        <div class="sel-flex">
-            <div class="sel-group">
+    <div class="panel-v22">
+        <div class="sel-row">
+            <div class="sel-col">
                 <label>GAS ORIG.</label>
-                <select id="gas" onchange="upd()">
-                    <option value="R134a" data-o="POE/PAG">R134a</option>
-                    <option value="R600a" data-o="MINERAL">R600a</option>
-                    <option value="R290" data-o="POE">R290</option>
-                    <option value="R410A" data-o="POE">R410A</option>
-                </select>
+                <select id="gas-select" onchange="updGas()">
+                    </select>
             </div>
-            <button class="check-v36">✔</button>
-            <div class="sel-group">
+            <button class="chk-btn">✔</button>
+            <div class="sel-col">
                 <label>REEMP.</label>
-                <select>
-                    <option>SIN REEMP.</option>
-                    <option>MO29 (422D)</option>
-                </select>
+                <select id="reemp-select">
+                    </select>
             </div>
         </div>
     </div>
 
-    <div class="grid-manometros">
-        <div class="manometro" style="border-color:#00e5ff; color:#00e5ff; box-shadow: 0 0 20px #00e5ff44;">
-            <span>BAJA (PSI)</span>
-            <input type="number" id="vb" class="num-in" value="110" oninput="meta()">
+    <div class="manometros-grid">
+        <div class="manometro-circ" style="border-color:#00e5ff; color:#00e5ff;">
+            <span style="font-size:10px;">BAJA (PSI)</span>
+            <input type="number" id="vb" class="val-v22" value="110" oninput="calcMeta()">
         </div>
-        <div class="manometro" style="border-color:#ff3131; color:#ff3131; box-shadow: 0 0 20px #ff313144;">
-            <span>ALTA (PSI)</span>
-            <input type="number" id="va" class="num-in" value="288" oninput="meta()">
+        <div class="manometro-circ" style="border-color:#ff3131; color:#ff3131;">
+            <span style="font-size:10px;">ALTA (PSI)</span>
+            <input type="number" id="va" class="val-v22" value="288" oninput="calcMeta()">
         </div>
     </div>
 
-    <div class="strip-v36">
-        <div id="it">CALCULANDO IDEAL PARA: R134a</div>
-        <div id="ot">● ACEITE: POE/PAG | ● CARGA: LÍQUIDA</div>
+    <div class="strip-v22">
+        <div id="ideal-info">CÁLCULO PROFESIONAL</div>
+        <div id="extra-info">ESPERANDO SELECCIÓN...</div>
     </div>
 
-    <div class="reposo-pro">
-        <div style="text-align: center; color: #39ff14; font-size: 11px; font-weight: 900; margin-bottom: 10px; letter-spacing: 2px;">SISTEMA DE REPOSO PROFESIONAL</div>
-        <div class="clock-display">
+    <div class="reposo-v22">
+        <div class="timer-grid">
             <div style="color:#00e5ff;">
-                <div style="font-size:11px; font-weight: 900;">IDEAL</div>
-                <div id="cI" class="num-clock">05:00</div>
-                <div id="pI" style="font-size:16px;">-- PSI</div>
-                <div style="font-size:10px; color:#fff;">META: <span id="mT">199.0</span></div>
+                <div style="font-size:10px;">IDEAL</div>
+                <div id="cI" class="clock-v22">05:00</div>
+                <div id="pI" style="font-size:15px;">-- PSI</div>
+                <div style="font-size:10px; color:#fff;">META: <span id="mT">--</span></div>
             </div>
-            <div class="btn-controls">
-                <button onclick="start()" class="btn-play">▶</button>
-                <button onclick="stop()" class="btn-stop">■</button>
-            </div>
+            <button onclick="startT()" class="play-v22">▶</button>
             <div style="color:#39ff14;">
-                <div style="font-size:11px; font-weight: 900;">REAL</div>
-                <div id="cR" class="num-clock">00:00</div>
-                <div id="pR" style="font-size:16px;">-- PSI</div>
-                <div id="st" style="font-size:10px;">READY</div>
+                <div style="font-size:10px;">REAL</div>
+                <div id="cR" class="clock-v22">00:00</div>
+                <div id="pR" style="font-size:15px;">-- PSI</div>
+                <div style="font-size:10px;">READY</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    const data = {
+        aire: [
+            {n:'R410A', o:'POE', c:'LÍQUIDA', r:['SIN REEMP.']},
+            {n:'R22', o:'MINERAL', c:'GASEOSA', r:['MO29 (422D)', 'MO99 (438A)', 'MO70 (422C)', 'R427A']},
+            {n:'R407C', o:'POE', c:'LÍQUIDA', r:['SIN REEMP.']},
+            {n:'R404A', o:'POE', c:'LÍQUIDA', r:['SIN REEMP.']},
+            {n:'R32', o:'POE', c:'LÍQUIDA', r:['SIN REEMP.']}
+        ],
+        nev: [
+            {n:'R134a', o:'POE/PAG', c:'LÍQUIDA', r:['SIN REEMP.', 'R12']},
+            {n:'R600a', o:'MINERAL', c:'LÍQUIDA', r:['SIN REEMP.']},
+            {n:'R290', o:'POE', c:'LÍQUIDA', r:['SIN REEMP.']}
+        ],
+        auto: [
+            {n:'R134a AUTO', o:'PAG', c:'LÍQUIDA', r:['SIN REEMP.']},
+            {n:'R1234yf', o:'PAG', c:'LÍQUIDA', r:['SIN REEMP.']}
+        ]
+    };
+
+    let currentMode = 'aire';
     let t, sR=0, sI=300, run=false;
-    function meta(){
-        let b=parseFloat(document.getElementById('vb').value)||0, a=parseFloat(document.getElementById('va').value)||0;
-        document.getElementById('mT').innerText=((b+a)/2).toFixed(1);
+
+    function switchTab(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+        const id = mode==='aire'?'tab-a':mode==='nev'?'tab-n':'tab-au';
+        document.getElementById(id).classList.add('active-' + mode);
+        
+        let sel = document.getElementById('gas-select');
+        sel.innerHTML = data[mode].map(g => `<option value="${g.n}">${g.n}</option>`).join('');
+        updGas();
     }
-    function start(){
-        if(run)return; run=true; sR=0; sI=300; meta();
-        let b0=parseFloat(document.getElementById('vb').value), m0=parseFloat(document.getElementById('mT').innerText);
-        t=setInterval(()=>{
+
+    function updGas() {
+        let gasName = document.getElementById('gas-select').value;
+        let gas = data[currentMode].find(g => g.n === gasName);
+        document.getElementById('ideal-info').innerText = "GAS: " + gas.n;
+        document.getElementById('extra-info').innerText = `ACEITE: ${gas.o} | CARGA: ${gas.c}`;
+        let rSel = document.getElementById('reemp-select');
+        rSel.innerHTML = gas.r.map(r => `<option>${r}</option>`).join('');
+        calcMeta();
+    }
+
+    function calcMeta() {
+        let b = parseFloat(document.getElementById('vb').value)||0;
+        let a = parseFloat(document.getElementById('va').value)||0;
+        document.getElementById('mT').innerText = ((b + a) / 2).toFixed(1);
+    }
+
+    function startT() {
+        if(run) return; run = true; sR=0; sI=300;
+        let b0 = parseFloat(document.getElementById('vb').value);
+        let m0 = parseFloat(document.getElementById('mT').innerText);
+        t = setInterval(() => {
             sR++;
-            document.getElementById('cR').innerText=`${Math.floor(sR/60).toString().padStart(2,'0')}:${(sR%60).toString().padStart(2,'0')}`;
-            document.getElementById('pR').innerText=(b0+((m0-b0)*(sR/300))).toFixed(1);
-            if(sI>0){
+            document.getElementById('cR').innerText = `${Math.floor(sR/60).toString().padStart(2,'0')}:${(sR%60).toString().padStart(2,'0')}`;
+            document.getElementById('pR').innerText = (b0+((m0-b0)*(sR/300))).toFixed(1);
+            if(sI>0) {
                 sI--;
-                document.getElementById('cI').innerText=`${Math.floor(sI/60).toString().padStart(2,'0')}:${(sI%60).toString().padStart(2,'0')}`;
-                document.getElementById('pI').innerText=(b0+((m0-b0)*((300-sI)/300))).toFixed(1);
+                document.getElementById('cI').innerText = `${Math.floor(sI/60).toString().padStart(2,'0')}:${(sI%60).toString().padStart(2,'0')}`;
+                document.getElementById('pI').innerText = (b0+((m0-b0)*((300-sI)/300))).toFixed(1);
             }
-        },1000);
+        }, 1000);
     }
-    function stop(){ clearInterval(t); run=false; }
-    window.onload=meta;
+
+    window.onload = () => switchTab('aire');
 </script>
 </body>
 </html>
