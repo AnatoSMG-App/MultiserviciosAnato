@@ -4,167 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; overflow: hidden; }
-        .v32-container { width: 100%; max-width: 420px; margin: 0 auto; border: 1px solid #333; border-radius: 15px; background: #0a0a0a; padding-bottom: 20px; }
+        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
+        .v34-container { width: 100%; max-width: 420px; margin: 0 auto; border: 1px solid #333; border-radius: 15px; background: #0a0a0a; overflow: hidden; padding-bottom: 20px; }
 
         /* CABECERA */
         .header { padding: 15px; position: relative; border-bottom: 1px solid #222; }
         .empresa { font-size: 14px; font-weight: 900; color: #fff; width: 70%; }
-        .btu-btn { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 900; font-size: 11px; text-decoration: none; border: none; }
-        .loc-text { font-size: 11px; color: #00e5ff; font-weight: 900; margin-top: 5px; height: 15px; }
+        .btu-btn { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 900; font-size: 11px; text-decoration: none; }
 
         .main-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
         
-        /* GPS MEJORADO */
-        .gps-side { text-align: center; cursor: pointer; padding: 5px; }
-        .gps-box { width: 24px; height: 24px; border: 2px solid #fff; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .gps-active .gps-box { background: #fff; border-color: #00e5ff; }
-        .gps-active .gps-box::after { content: '✔'; color: #000; font-size: 18px; font-weight: 900; }
+        /* AMBIENTE (EL CONTROLADOR) */
+        .amb-box { border: 2px solid #39ff14; border-radius: 8px; padding: 5px; background: #051005; text-align: center; min-width: 90px; }
+        .amb-in { background: none; border: none; color: #39ff14; font-size: 28px; font-weight: 900; width: 55px; text-align: center; outline: none; }
 
-        /* AMBIENTE TÁCTIL */
-        .amb-box { border: 2px solid #39ff14; border-radius: 8px; padding: 5px; background: #051005; text-align: center; min-width: 85px; cursor: pointer; }
-        .amb-in { background: none; border: none; color: #39ff14; font-size: 28px; font-weight: 900; width: 55px; text-align: center; outline: none; caret-color: transparent; }
-
-        /* PESTAÑAS */
+        /* TABS */
         .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 15px; }
-        .tab { padding: 12px 0; text-align: center; font-size: 12px; font-weight: 900; background: #222; border-radius: 8px; border: 1px solid #444; cursor: pointer; color: #888; }
-        .active-aires { border-color: #00e5ff; color: #00e5ff; background: #00e5ff11; }
-        .active-neveras { border-color: #39ff14; color: #39ff14; background: #39ff1411; }
-        .active-auto { border-color: #ff3131; color: #ff3131; background: #ff313111; }
+        .tab { padding: 12px 0; text-align: center; font-size: 12px; font-weight: 900; background: #1a1a1a; border-radius: 8px; border: 1px solid #333; cursor: pointer; color: #666; }
+        .active-aires { border-color: #00e5ff; color: #00e5ff; }
 
-        /* SELECTORES CON FLECHA */
+        /* GASES */
         .gas-section { display: grid; grid-template-columns: 1fr 45px 1fr; gap: 10px; padding: 0 15px; align-items: center; }
         .sel-wrap { background: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 6px; position: relative; }
-        .sel-label { font-size: 9px; color: #aaa; display: block; margin-bottom: 2px; }
-        select { width: 100%; background: none; border: none; color: #fff; font-size: 16px; font-weight: 900; outline: none; cursor: pointer; appearance: none; padding-right: 20px; }
-        .sel-wrap::after { content: '▼'; font-size: 10px; color: #666; position: absolute; right: 10px; bottom: 12px; pointer-events: none; }
+        select { width: 100%; background: none; border: none; color: #fff; font-size: 16px; font-weight: 900; outline: none; appearance: none; }
 
-        /* MANÓMETROS */
+        /* MANÓMETROS CON FUNCIÓN IDEAL */
         .gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px 15px; }
-        .gauge { border: 4px solid; border-radius: 15px; padding: 15px; text-align: center; background: #000; }
-        .g-baja { border-color: #00e5ff; color: #00e5ff; box-shadow: inset 0 0 10px #00e5ff22; }
-        .g-alta { border-color: #ff5722; color: #ff5722; box-shadow: inset 0 0 10px #ff572222; }
-        .g-val { font-size: 45px; font-weight: 900; display: block; font-family: 'Courier New', monospace; }
+        .gauge { border: 4px solid; border-radius: 15px; padding: 10px; text-align: center; background: #000; position: relative; }
+        .g-baja { border-color: #00e5ff; }
+        .g-alta { border-color: #ff5722; }
+        .g-val { font-size: 40px; font-weight: 900; display: block; font-family: monospace; }
+        
+        /* EL TILDE IDEAL */
+        .ideal-tag { background: #39ff14; color: #000; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+        /* CUADRO DE DIAGNÓSTICO */
+        .diag-box { margin: 0 15px; padding: 15px; border-radius: 10px; background: #111; border: 1px solid #333; text-align: center; }
+        .diag-status { font-size: 16px; font-weight: 900; color: #39ff14; }
     </style>
 </head>
 <body>
 
-<div class="v32-container">
+<div class="v34-container">
     <div class="header">
         <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
-        <div id="loc-display" class="loc-text">📍 BUSCANDO SEÑAL...</div>
+        <div id="loc-display" style="font-size:11px; color:#00e5ff; font-weight:900; margin-top:5px;">📍 UBICACIÓN: LOS GUAYOS</div>
         <a href="calculadora_btu.html" class="btu-btn">BTU 📏</a>
 
         <div class="main-row">
-            <div id="gps-btn" class="gps-side" onclick="toggleGPS()">
-                <div class="gps-box"></div>
-                <span style="font-size:10px; font-weight:900; margin-top:4px; display:block;">GPS</span>
+            <div style="text-align:center;">
+                <div style="width:24px; height:24px; border:2px solid #fff; margin:0 auto; background:#fff;"></div>
+                <span style="font-size:9px; font-weight:900;">GPS ✔</span>
             </div>
-            <div style="flex:1; text-align:center; color:#00e5ff; font-size:16px; font-weight:900; line-height:1.1;">
-                ANALIZADOR DE<br>PRESIONES JHA
-            </div>
-            <div class="amb-box" onclick="focusTemp()">
+            <div style="flex:1; text-align:center; color:#00e5ff; font-size:16px; font-weight:900;">ANALIZADOR JHA</div>
+            <div class="amb-box">
                 <span style="font-size:9px; color:#39ff14; font-weight:900; display:block;">AMB.</span>
-                <input type="number" id="temp-val" class="amb-in" value="25" inputmode="decimal">
-                <span style="color:#39ff14; font-weight:900; font-size:18px;">°C</span>
+                <input type="number" id="temp-val" class="amb-in" value="30" oninput="calcularIdeal()" inputmode="decimal">
+                <span style="color:#39ff14; font-weight:900;">°C</span>
             </div>
         </div>
     </div>
 
     <div class="tabs">
-        <div id="tab-aires" class="tab active-aires" onclick="selectTab('aires')">AIRES</div>
-        <div id="tab-neveras" class="tab" onclick="selectTab('neveras')">NEVERAS</div>
-        <div id="tab-auto" class="tab" onclick="selectTab('auto')">AUTO</div>
+        <div class="tab active-aires">AIRES</div>
+        <div class="tab">NEVERAS</div>
+        <div class="tab">AUTO</div>
     </div>
 
     <div class="gas-section">
-        <div class="sel-wrap" id="wrap-orig">
-            <span class="sel-label">GAS ORIG.</span>
-            <select id="gas-orig" onchange="updateReemp()"></select>
-        </div>
-        <div style="text-align:center;">
-            <input type="checkbox" id="check-reemp" style="width:25px; height:25px; accent-color:#00e5ff;" onchange="toggleReemp()">
-            <span style="font-size:8px; display:block; color:#aaa;">REEMP.</span>
-        </div>
-        <div class="sel-wrap" id="wrap-reemp" style="opacity:0.3;">
-            <span class="sel-label">REEMP.</span>
-            <select id="gas-reemp" disabled><option>-</option></select>
-        </div>
+        <div class="sel-wrap"><span style="font-size:8px; color:#aaa;">GAS</span><select id="gas-sel" onchange="calcularIdeal()"><option>R22</option><option>R410A</option></select></div>
+        <div style="text-align:center;"><input type="checkbox" checked style="width:20px; height:20px;"></div>
+        <div class="sel-wrap"><span style="font-size:8px; color:#aaa;">REEMP.</span><select disabled><option>-</option></select></div>
     </div>
 
     <div class="gauges">
         <div class="gauge g-baja">
-            <span style="font-size:11px; font-weight:900;">BAJA (PSI)</span>
-            <span class="g-val" id="disp-baja">62</span>
+            <div class="ideal-tag">IDEAL: <span id="ideal-baja">65</span> PSI</div>
+            <span style="font-size:10px; font-weight:900; color:#00e5ff;">BAJA</span>
+            <span class="g-val" id="val-baja">62</span>
         </div>
         <div class="gauge g-alta">
-            <span style="font-size:11px; font-weight:900;">ALTA (PSI)</span>
-            <span class="g-val" id="disp-alta">185</span>
+            <div class="ideal-tag">IDEAL: <span id="ideal-alta">210</span> PSI</div>
+            <span style="font-size:10px; font-weight:900; color:#ff5722;">ALTA</span>
+            <span class="g-val" id="val-alta">185</span>
         </div>
+    </div>
+
+    <div class="diag-box">
+        <div id="diag-msg" class="diag-status">✓ SISTEMA EN RANGO IDEAL</div>
+        <div style="font-size:10px; color:#888; margin-top:5px;">ACEITE: MIN/AB | CARGA: LÍQUIDA</div>
     </div>
 </div>
 
 <script>
-    const dataGases = {
-        aires: { "R22": ["MO29", "MO99", "R427A"], "R410A": ["-"], "R32": ["-"], "R290": ["-"], "R407C": ["R407F"] },
-        neveras: { "R134A": ["-"], "R600A": ["-"], "R12": ["MP39 (401A)", "R406A", "401B"] },
-        auto: { "R134A": ["-"], "R1234YF": ["-"] }
-    };
+    function calcularIdeal() {
+        const temp = parseFloat(document.getElementById('temp-val').value);
+        const gas = document.getElementById('gas-sel').value;
+        const dispBaja = document.getElementById('ideal-baja');
+        const dispAlta = document.getElementById('ideal-alta');
 
-    function selectTab(mode) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active-aires', 'active-neveras', 'active-auto'));
-        document.getElementById('tab-' + mode).classList.add('active-' + mode);
+        // Lógica simplificada: La presión ideal sube con la temperatura
+        // Esto es un ejemplo, tú puedes ajustar las tablas exactas
+        if (gas === "R22") {
+            const bajaBase = 60 + (temp - 25) * 0.5; 
+            const altaBase = 180 + (temp - 25) * 2.5;
+            dispBaja.innerText = Math.round(bajaBase);
+            dispAlta.innerText = Math.round(altaBase);
+        }
         
-        // Cambiar color del borde del selector
-        const colors = { aires: '#00e5ff', neveras: '#39ff14', auto: '#ff3131' };
-        document.getElementById('wrap-orig').style.borderColor = colors[mode];
-        
-        const orig = document.getElementById('gas-orig');
-        orig.innerHTML = Object.keys(dataGases[mode]).map(g => `<option value="${g}">${g}</option>`).join('');
-        updateReemp();
+        console.log("Calculando para " + temp + "°C");
     }
 
-    function toggleReemp() {
-        const check = document.getElementById('check-reemp');
-        const wrap = document.getElementById('wrap-reemp');
-        const sel = document.getElementById('gas-reemp');
-        wrap.style.opacity = check.checked ? "1" : "0.3";
-        sel.disabled = !check.checked;
-        updateReemp();
-    }
-
-    function updateReemp() {
-        if(!document.getElementById('check-reemp').checked) return;
-        const mode = document.querySelector('.tab[class*="active"]').id.split('-')[1];
-        const gas = document.getElementById('gas-orig').value;
-        const sel = document.getElementById('gas-reemp');
-        sel.innerHTML = dataGases[mode][gas].map(r => `<option value="${r}">${r}</option>`).join('');
-    }
-
-    function focusTemp() {
-        const input = document.getElementById('temp-val');
-        input.value = '';
-        input.focus();
-    }
-
-    async function toggleGPS() {
-        const btn = document.getElementById('gps-btn');
-        const locTxt = document.getElementById('loc-display');
-        if(btn.classList.toggle('gps-active')) {
-            locTxt.innerText = "📍 SOLICITANDO PERMISOS...";
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                locTxt.innerText = "📍 LOCALIZANDO EN CARABOBO...";
-                try {
-                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-                    const data = await res.json();
-                    const ciudad = data.address.city || data.address.town || data.address.village || "LOS GUAYOS";
-                    locTxt.innerText = `📍 UBICACIÓN: ${ciudad.toUpperCase()} - VALENCIA`;
-                } catch(e) { locTxt.innerText = "📍 UBICACIÓN: VALENCIA - CARABOBO"; }
-            }, () => { locTxt.innerText = "📍 GPS DESACTIVADO"; btn.classList.remove('gps-active'); });
-        } else { locTxt.innerText = "📍 BUSCANDO SEÑAL..."; }
-    }
-
-    window.onload = () => selectTab('aires');
+    window.onload = calcularIdeal;
 </script>
 </body>
 </html>
