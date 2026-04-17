@@ -3,51 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador J.H.A V40 - ADN 36.2</title>
+    <title>ANALIZADOR JHA V40 PRO - ANTI-COLESTEROL</title>
     <style>
-        body { background-color: #0c0c0c; color: white; font-family: sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 400px; border: 2px solid #39ff14; border-radius: 15px; padding: 10px; background: #1a1a1a; box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
+        :root { --azul: #00f2ff; --rojo: #ff3131; --bg: #0a0a0a; --amarillo: #ffeb3b; --verde: #0f0; --gris: #333; --naranja: #ff5722; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; justify-content: center; }
+        .container { background: #111; border: 2px solid var(--gris); border-radius: 15px; padding: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         
-        /* CABECERA ESTILO 36.2 */
-        .header { text-align: center; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px; }
-        .header h1 { font-size: 16px; margin: 5px 0; color: #fff; text-transform: uppercase; }
-        .gps-row { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; }
-        .time { font-size: 18px; color: #eee; font-weight: bold; }
+        .header { text-align: center; border-bottom: 1px solid var(--gris); padding-bottom: 5px; margin-bottom: 8px; position: relative; }
+        .header h1 { font-size: 1.1rem; margin: 0; color: #fff; text-transform: uppercase; font-weight: 900; }
+        .btn-btu { position: absolute; right: 0; top: 25px; background: var(--naranja); color: white; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; text-decoration: none; font-size: 0.7rem; box-shadow: 0 3px #bf360c; }
+        .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
+        #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
+
+        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
+        .app-title { color: var(--azul); font-weight: 900; font-size: 1.2rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
+        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
+
+        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
+        .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; }
+        .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
+
+        .gas-selection { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #333; margin-bottom: 10px; }
+        select { width: 100%; background: #222; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 6px; font-weight: bold; }
+
+        .gauges { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .gauge-box { background: #000; padding: 10px 5px; border-radius: 12px; text-align: center; border: 2px solid #333; cursor: pointer; }
+        .p-val { font-size: 2.5rem; font-weight: bold; font-family: monospace; display: block; }
+        .baja { color: var(--azul); border-color: var(--azul); }
+        .alta { color: var(--rojo); border-color: var(--rojo); }
+
+        .display { background: #000; border-left: 5px solid var(--verde); padding: 15px; border-radius: 8px; margin-bottom: 10px; min-height: 60px; }
+        .msg { font-size: 1rem; font-weight: bold; }
+
+        /* NUEVO MODULO DE REPOSO DOBLE RELOJ */
+        .reposo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; padding: 10px; border: 2px dashed #444; border-radius: 15px; background: #050505; }
+        .col-ideal { border-right: 1px solid #333; padding-right: 5px; text-align: center; }
+        .col-real { padding-left: 5px; text-align: center; }
+        .timer-big { font-size: 2.2rem; font-family: monospace; font-weight: bold; line-height: 1; }
+        .psi-mini { font-size: 1.2rem; font-weight: bold; margin: 5px 0; }
+        .meta-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
         
-        .btn-btu { background: #ff5722; color: white; border: none; padding: 5px 12px; border-radius: 5px; font-weight: bold; text-decoration: none; font-size: 12px; }
+        .btn-reposo { width: 80%; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin: 5px auto; display: block; }
+        .btn-start { background: var(--verde); color: #000; }
+        .btn-stop { background: var(--rojo); color: #fff; }
 
-        /* EL TABLERO QUE TE GUSTA */
-        .dashboard { background: #252525; border-radius: 10px; padding: 15px; position: relative; border: 1px solid #444; margin-bottom: 10px; }
-        .gps-icon { background: white; width: 25px; height: 25px; border-radius: 4px; display: inline-block; position: absolute; left: 15px; top: 15px; }
-        .title-main { color: #00d4ff; font-weight: bold; font-size: 18px; text-align: center; margin: 0 40px; line-height: 1.2; }
-        
-        .temp-badge { position: absolute; right: 10px; top: 10px; border: 2px solid #39ff14; border-radius: 8px; padding: 4px 8px; text-align: center; background: #000; }
-        .temp-val { font-size: 22px; font-weight: bold; color: #39ff14; line-height: 1; }
-
-        /* SELECTORES */
-        .cat-row { display: flex; gap: 5px; margin: 10px 0; }
-        .btn-cat { flex: 1; background: #333; border: 1px solid #555; color: white; padding: 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
-        .btn-cat.active { background: rgba(0, 212, 255, 0.2); border-color: #00d4ff; color: #00d4ff; }
-
-        /* PRESIONES ESTILO 36.2 */
-        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .p-card { border: 2px solid; border-radius: 12px; padding: 10px; text-align: center; background: #000; }
-        .p-low { border-color: #00d4ff; }
-        .p-high { border-color: #ff5722; }
-        .p-label { font-size: 11px; font-weight: bold; display: block; margin-bottom: 5px; }
-        .p-input { background: none; border: none; color: inherit; font-size: 36px; font-weight: bold; width: 100%; text-align: center; outline: none; }
-
-        /* ALERTAS INTEGRADAS */
-        .alert-box { background: #111; border-left: 4px solid #39ff14; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 13px; }
-        .critico { color: #ff4d4d; font-weight: bold; }
-        .ok { color: #39ff14; }
-
-        /* TEST DE REPOSO */
-        .test-zone { border: 2px dashed #39ff14; border-radius: 12px; padding: 15px; text-align: center; background: #050505; }
-        .timer { font-size: 40px; font-family: monospace; color: #39ff14; margin: 5px 0; }
-        .btn-run { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .bg-green { background: #2e7d32; color: white; }
-        .bg-red { background: #c62828; color: white; }
+        .keypad { display: none; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #111; padding: 5px; border-radius: 8px; }
+        .btn-num { background: #333; color: #fff; padding: 15px 0; font-size: 1.2rem; border-radius: 5px; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -55,93 +56,153 @@
 <div class="container">
     <div class="header">
         <h1>⚙️ MULTISERVICIOS ANATO S.M.G.</h1>
-        <div class="gps-row">
-            <span style="color: #00d4ff;">📍 BUSCANDO SEÑAL...</span>
-            <a href="dimensiones.html" class="btn-btu">📏 BTU</a>
-        </div>
-        <div class="time" id="clock">00:00:00</div>
+        <a href="dimensiones.html" class="btn-btu">📏 BTU</a>
+        <div id="loc" class="loc-info">📍 BUSCANDO SEÑAL...</div>
+        <div id="clock">--:--:--</div>
     </div>
 
-    <div class="dashboard">
-        <div class="gps-icon"></div>
-        <div class="title-main">ANALIZADOR DE PRESIONES JHA</div>
-        <div class="temp-badge">
-            <div style="font-size: 9px;">AMB.</div>
-            <div class="temp-val">30<small>°c</small></div>
+    <div class="status-row">
+        <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-size:0.6rem; font-weight: bold;">GPS</small></div>
+        <div class="app-title">ANALIZADOR JHA<br>V40 PRO</div>
+        <div class="temp-box" onclick="setFoco('temp')">
+            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
         </div>
     </div>
 
-    <div class="cat-row">
-        <button class="btn-cat active">AIRES</button>
-        <button class="btn-cat">NEVERAS</button>
-        <button class="btn-cat">AUTO</button>
+    <div class="tabs">
+        <button class="tab active" onclick="setCat('aire', this)">AIRES</button>
+        <button class="tab" onclick="setCat('nevera', this)">NEVERAS</button>
+        <button class="tab" onclick="setCat('auto', this)">AUTO</button>
     </div>
 
-    <div style="margin: 10px 0;">
-        <select id="gas" onchange="update()" style="width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #39ff14; border-radius: 5px;">
-            <option value="R22" data-b="65" data-a="250" data-oil="MINERAL/AB">R22</option>
-            <option value="R410A" data-b="118" data-a="380" data-oil="POE">R410A</option>
-            <option value="R134A" data-b="30" data-a="150" data-oil="POE/PAG">R134A</option>
-        </select>
+    <div class="gas-selection">
+        <div><small style="color:var(--azul);">GAS ORIG.</small><select id="g-ori" onchange="updateReemp()"></select></div>
+        <div><small style="color:var(--rojo);">REEMP. <input type="checkbox" id="use-reemp" onchange="toggleReemp()"></small><select id="g-reemp" disabled onchange="run()"></select></div>
     </div>
 
-    <div class="press-grid">
-        <div class="p-card p-low">
-            <span class="p-label" style="color: #00d4ff;">BAJA (PSI)</span>
-            <input type="number" id="vB" value="65" oninput="update()" class="p-input" style="color: #00d4ff;">
+    <div class="gauges">
+        <div class="gauge-box baja" onclick="setFoco('baja')"><small>BAJA</small><span id="v-baja" class="p-val">0</span></div>
+        <div style="text-align:center"><input type="checkbox" id="ideal" checked onchange="run()"><br><small>IDEAL</small></div>
+        <div class="gauge-box alta" onclick="setFoco('alta')"><small>ALTA</small><span id="v-alta" class="p-val">0</span></div>
+    </div>
+
+    <div class="display" id="screen">
+        <div id="diag" class="msg">Listo para el servicio...</div>
+        <div id="extra" style="font-size:0.8rem; color:var(--amarillo); margin-top:5px;"></div>
+    </div>
+
+    <div class="reposo-container">
+        <div class="col-ideal">
+            <div class="meta-label" style="color:var(--azul)">Ideal (5 min)</div>
+            <div id="t-ideal" class="timer-big" style="color:var(--azul)">05:00</div>
+            <div id="p-ideal" class="psi-mini" style="color:var(--azul)">-- PSI</div>
+            <div style="font-size:0.6rem">META: <span id="p-meta">--</span> PSI</div>
         </div>
-        <div class="p-card p-high">
-            <span class="p-label" style="color: #ff5722;">ALTA (PSI)</span>
-            <input type="number" id="vA" value="250" oninput="update()" class="p-input" style="color: #ff5722;">
+        <div class="col-real">
+            <div class="meta-label">Tu Realidad</div>
+            <div id="t-real" class="timer-big" style="color:var(--verde)">00:00</div>
+            <div id="p-real" class="psi-mini">-- PSI</div>
+            <div id="aviso-col" style="font-size:0.6rem; color:var(--rojo); font-weight:bold;"></div>
+        </div>
+        <div style="grid-column: span 2; display: flex; flex-direction: column; align-items: center;">
+            <button id="btn-iniciar" class="btn-reposo btn-start" onclick="startTest()">INICIAR REPOSO</button>
+            <button id="btn-parar" class="btn-reposo btn-stop" onclick="stopTest()" style="display:none">PARAR PRUEBA</button>
         </div>
     </div>
 
-    <div class="alert-box" id="alerts">
-        <div id="msgB">--</div>
-        <div id="msgA">--</div>
-        <div id="msgI" style="font-size: 11px; margin-top: 5px; color: #aaa;">--</div>
-    </div>
-
-    <div class="test-zone">
-        <div style="font-size: 12px; color: #00d4ff; font-weight: bold;">TEST DE FLUJO / REPOSO</div>
-        <div class="timer" id="timer">00:00</div>
-        <div id="liveP" style="font-weight: bold; color: #eee;">-- PSI</div>
-        <button id="btnT" class="btn-run bg-green" onclick="run()">INICIAR PRUEBA</button>
-        <div id="verdict" style="font-size: 12px; margin-top: 8px; color: #ffff00;"></div>
+    <div id="keys" class="keypad">
+        <div class="btn-num" onclick="press(1)">1</div><div class="btn-num" onclick="press(2)">2</div><div class="btn-num" onclick="press(3)">3</div>
+        <div class="btn-num" onclick="press(4)">4</div><div class="btn-num" onclick="press(5)">5</div><div class="btn-num" onclick="press('B')">⌫</div>
+        <div class="btn-num" onclick="press(6)">6</div><div class="btn-num" onclick="press(7)">7</div><div class="btn-num" onclick="press(8)">8</div>
+        <div class="btn-num" onclick="press(9)">9</div><div class="btn-num" onclick="press(0)">0</div><div class="btn-num" onclick="press('C')">C</div>
+        <button onclick="closeKeys()" style="grid-column: span 6; padding: 10px; background:var(--verde); border:none; font-weight:bold;">PROCESAR</button>
     </div>
 </div>
 
 <script>
+    const data = {
+        aire: { ori: [{n:"R22", b:32, h:6.1, a:"MIN/AB", c:"GAS"}, {n:"R410A", b:85, h:11.5, a:"POE", c:"LIQ"}, {n:"R32", b:88, h:11.8, a:"POE", c:"LIQ", inf:true}], re: {"R22":[{n:"MO29", b:28, h:6.2, a:"MIN/AB", c:"LIQ"}]} },
+        nevera: { ori: [{n:"R134a", b:3, h:5.2, f:true, a:"POE", c:"LIQ"}, {n:"R600a", b:0, h:2.5, f:true, a:"MIN", c:"LIQ", inf:true}], re: {} },
+        auto: { ori: [{n:"R134a", b:32, h:6.5, f:true, a:"PAG", c:"LIQ"}], re: {} }
+    };
+
+    let cat = 'aire', foco = '', idB = 0, idA = 0, metaPSI = 0;
+    let timerID, seg = 0, testActivo = false;
+
     setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-    function update() {
-        const s = document.getElementById('gas').options[document.getElementById('gas').selectedIndex];
-        const b = parseFloat(document.getElementById('vB').value), a = parseFloat(document.getElementById('vA').value);
-        const iB = parseFloat(s.dataset.b), iA = parseFloat(s.dataset.a);
-
-        document.getElementById('msgB').innerHTML = Math.abs(b-iB) > 6 ? `<span class="critico">⚠️ Baja: ${b} PSI (Ideal: ${iB})</span>` : `<span class="ok">✅ Baja: ${b} PSI - OK</span>`;
-        document.getElementById('msgA').innerHTML = (a-iA) >= 15 ? `<span class="critico">🚨 Alta: ${a} PSI - CRÍTICO</span>` : (a-iA) >= 10 ? `<span class="ok" style="color:yellow">⚠️ Alta: ${a} PSI - REVISAR</span>` : `<span class="ok">✅ Alta: ${a} PSI - ESTABLE</span>`;
-        document.getElementById('msgI').innerText = `ACEITE: ${s.dataset.oil} | CARGA GASEOSA`;
+    function setCat(c, b) {
+        cat = c; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); b.classList.add('active');
+        const s = document.getElementById('g-ori'); s.innerHTML = "";
+        data[cat].ori.forEach(g => s.add(new Option(g.n, g.n))); updateReemp();
     }
 
-    let t, s = 0, on = false, p0 = 0;
+    function updateReemp() {
+        const ori = document.getElementById('g-ori').value; const s = document.getElementById('g-reemp'); s.innerHTML = "";
+        if(data[cat].re[ori]) data[cat].re[ori].forEach(g => s.add(new Option(g.n, g.n)));
+        else s.add(new Option("SIN REEMP", "")); run();
+    }
+
+    function toggleReemp() { document.getElementById('g-reemp').disabled = !document.getElementById('use-reemp').checked; run(); }
+    function setFoco(id) { foco = id; document.getElementById('keys').style.display = 'grid'; document.getElementById(id==='temp'?'v-temp':(id==='baja'?'v-baja':'v-alta')).innerText = ''; }
+    function press(v) {
+        const e = document.getElementById(foco==='temp'?'v-temp':(foco==='baja'?'v-baja':'v-alta'));
+        if(v==='C') e.innerText = '0'; else if(v==='B') e.innerText = e.innerText.slice(0,-1); else e.innerText += v; run();
+    }
+    function closeKeys() { document.getElementById('keys').style.display = 'none'; run(); }
+
     function run() {
-        const btn = document.getElementById('btnT');
-        if(!on) {
-            on = true; s = 0; p0 = parseFloat(document.getElementById('vB').value);
-            btn.innerText = "PARAR PRUEBA"; btn.className = "btn-run bg-red";
-            t = setInterval(() => {
-                s++;
-                document.getElementById('timer').innerText = `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
-                document.getElementById('liveP').innerText = `${(p0 + (s*0.12)).toFixed(1)} PSI`;
-            }, 1000);
-        } else {
-            on = false; clearInterval(t);
-            btn.innerText = "INICIAR PRUEBA"; btn.className = "btn-run bg-green";
-            document.getElementById('verdict').innerText = s < 60 ? "¡OJO! Equilibrio muy rápido." : s > 240 ? "Subida muy lenta." : "Estabilización OK.";
+        const isIdeal = document.getElementById('ideal').checked;
+        const gName = document.getElementById('use-reemp').checked ? document.getElementById('g-reemp').value : document.getElementById('g-ori').value;
+        const temp = parseInt(document.getElementById('v-temp').innerText) || 30;
+        let all = [...data.aire.ori, ...data.nevera.ori, ...data.auto.ori];
+        let g = all.find(x => x.n === gName);
+        if(g) {
+            idB = g.f ? g.b : Math.round(temp + g.b); idA = Math.round(temp * g.h);
+            if(isIdeal) { document.getElementById('v-baja').innerText = idB; document.getElementById('v-alta').innerText = idA; }
+            metaPSI = (idA + idB) / 2; document.getElementById('p-meta').innerText = metaPSI.toFixed(1);
+            document.getElementById('extra').innerText = "⚙️ ACEITE: " + g.a + " | CARGA: " + g.c;
+            diag();
         }
     }
-    window.onload = update;
+
+    function diag() {
+        const b = parseInt(document.getElementById('v-baja').innerText) || 0;
+        const a = parseInt(document.getElementById('v-alta').innerText) || 0;
+        let m = "✅ EQUIPO EN RANGO", c = "var(--verde)";
+        if (a >= idA + 15) { m = "🚨 CRÍTICO ALTA"; c = "var(--rojo)"; }
+        else if (b <= idB - 7) { m = "🚨 CRÍTICO BAJA"; c = "var(--rojo)"; }
+        document.getElementById('diag').innerText = m; document.getElementById('screen').style.borderLeftColor = c;
+    }
+
+    function startTest() {
+        testActivo = true; seg = 0; let pIni = parseInt(document.getElementById('v-baja').innerText);
+        document.getElementById('btn-iniciar').style.display = "none"; document.getElementById('btn-parar').style.display = "block";
+        document.getElementById('aviso-col').innerText = "";
+        timerID = setInterval(() => {
+            seg++;
+            // Lado Izquierdo (Ideal)
+            let desc = 300 - seg; if(desc < 0) desc = 0;
+            document.getElementById('t-ideal').innerText = `${Math.floor(desc/60).toString().padStart(2,'0')}:${(desc%60).toString().padStart(2,'0')}`;
+            let pIdealVal = pIni + ((metaPSI - pIni) * (Math.min(seg, 300)/300));
+            document.getElementById('p-ideal').innerText = pIdealVal.toFixed(1) + " PSI";
+            
+            // Lado Derecho (Real)
+            document.getElementById('t-real').innerText = `${Math.floor(seg/60).toString().padStart(2,'0')}:${(seg%60).toString().padStart(2,'0')}`;
+            if(seg > 300) document.getElementById('t-real').style.color = "var(--rojo)";
+            if(seg > 480) document.getElementById('aviso-col').innerText = "⚠️ COLESTEROL ALTO - OBSTRUCCIÓN";
+            document.getElementById('p-real').innerText = (pIni + (seg * 0.3)).toFixed(1) + " PSI";
+        }, 1000);
+    }
+
+    function stopTest() {
+        clearInterval(timerID); testActivo = false;
+        document.getElementById('btn-iniciar').style.display = "block"; document.getElementById('btn-parar').style.display = "none";
+        let v = seg < 60 ? "VÁLVULAS MALAS" : (seg > 300 ? "OBSTRUCCIÓN DETECTADA" : "SISTEMA OK");
+        document.getElementById('diag').innerText = "TEST FINALIZADO: " + v;
+    }
+
+    setCat('aire', document.querySelector('.tab'));
 </script>
 </body>
 </html>
