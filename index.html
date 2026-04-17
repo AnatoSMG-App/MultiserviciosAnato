@@ -5,108 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v25-header { width: 100%; max-width: 415px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px; background: #000; position: relative; }
-        
-        .empresa { text-align: center; font-size: 13px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; }
-        
-        /* UBICACIÓN DINÁMICA */
-        .ubicacion-display { text-align: center; color: #00e5ff; font-size: 13px; font-weight: 900; min-height: 18px; margin-bottom: 15px; text-shadow: 0 0 8px #00e5ff66; }
+        .v27-container { width: 100%; max-width: 420px; margin: 0 auto; border: 1px solid #333; border-radius: 15px; background: #000; overflow: hidden; }
 
-        .btu-float { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; border: none; padding: 7px 12px; border-radius: 4px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 3px #bf360c; }
+        /* CABECERA: ESPACIO CORREGIDO */
+        .v27-header { padding: 15px; position: relative; border-bottom: 1px solid #222; }
+        
+        .empresa { text-align: left; font-size: 13px; color: #FFFFFF; font-weight: 900; letter-spacing: 1px; margin-bottom: 5px; width: 70%; /* Para que no choque con el botón */ }
+        
+        .loc-display { text-align: left; color: #00e5ff; font-size: 12px; font-weight: 900; min-height: 18px; margin-bottom: 15px; text-shadow: 0 0 8px #00e5ff66; }
+
+        .btu-float { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 4px #bf360c; }
 
         .main-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 
-        /* GPS: CUADRITO MANUAL */
-        .gps-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
-        .gps-box { width: 20px; height: 20px; border: 2px solid #fff; background: #000; display: flex; align-items: center; justify-content: center; }
+        /* GPS */
+        .gps-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; min-width: 50px; }
+        .gps-box { width: 22px; height: 22px; border: 2px solid #fff; background: #000; display: flex; align-items: center; justify-content: center; }
         .gps-active .gps-box { background: #fff; }
         .gps-active .gps-box::after { content: '✔'; color: #000; font-size: 18px; font-weight: 900; }
-        .gps-lbl { font-size: 10px; font-weight: 900; color: #fff; }
+        .gps-lbl { font-size: 10px; font-weight: 900; }
 
-        /* TÍTULO CENTRAL CIAN */
         .jha-brand { flex: 1; text-align: center; color: #00e5ff; font-size: 16px; font-weight: 900; line-height: 1.1; }
 
-        /* AMBIENTE: CUADRO SIN FLECHAS */
-        .amb-side { border: 2px solid #39ff14; border-radius: 6px; padding: 6px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; min-width: 70px; }
-        .amb-lbl { font-size: 9px; color: #39ff14; font-weight: 900; display: block; margin-bottom: 2px; }
-        
-        /* Quitamos las flechas del input de número */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-
+        /* AMBIENTE: SIN FLECHAS */
+        .amb-side { border: 2px solid #39ff14; border-radius: 8px; padding: 6px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; min-width: 75px; }
+        .amb-lbl { font-size: 9px; color: #39ff14; font-weight: 900; display: block; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         .amb-in { background: none; border: none; color: #39ff14; font-size: 24px; font-weight: 900; font-family: monospace; width: 45px; text-align: center; outline: none; }
+
+        /* --- BLOQUE 2: PESTAÑAS (TABS) --- */
+        .tabs-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 15px; background: #0a0a0a; }
+        .tab { padding: 12px 0; text-align: center; font-size: 12px; font-weight: 900; background: #1a1a1a; border-radius: 8px; border: 1px solid #333; cursor: pointer; color: #666; transition: 0.3s; }
+        
+        /* Colores de selección según tu diseño */
+        .tab.active-aires { border-color: #00e5ff; color: #00e5ff; background: #00e5ff11; box-shadow: inset 0 0 10px #00e5ff22; }
+        .tab.active-neveras { border-color: #39ff14; color: #39ff14; background: #39ff1411; box-shadow: inset 0 0 10px #39ff1422; }
+        .tab.active-auto { border-color: #ff3131; color: #ff3131; background: #ff313111; box-shadow: inset 0 0 10px #ff313122; }
     </style>
 </head>
 <body>
 
-<div class="v25-header">
-    <a href="calculadora_btu.html" class="btu-float">BTU 📏</a>
+<div class="v27-container">
+    <div class="v27-header">
+        <a href="calculadora_btu.html" class="btu-float">BTU 📏</a>
+        <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
+        <div id="loc-display" class="loc-display">📍 BUSCANDO SEÑAL...</div>
 
-    <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
-    <div id="loc-display" class="ubicacion-display">📍 BUSCANDO SEÑAL...</div>
-
-    <div class="main-row">
-        <div id="gps-btn" class="gps-side" onclick="toggleGPS()">
-            <div class="gps-box"></div>
-            <span class="gps-lbl">GPS</span>
-        </div>
-
-        <div class="jha-brand">
-            ANALIZADOR DE<br>PRESIONES JHA
-        </div>
-
-        <div class="amb-side">
-            <span class="amb-lbl">AMB.</span>
-            <div style="display: flex; align-items: center; justify-content: center;">
-                <input type="number" id="temp-val" class="amb-in" value="30">
-                <span style="color:#39ff14; font-weight:900; font-size: 20px;">°C</span>
+        <div class="main-row">
+            <div id="gps-btn" class="gps-side" onclick="toggleGPS()">
+                <div class="gps-box"></div>
+                <span class="gps-lbl">GPS</span>
+            </div>
+            <div class="jha-brand">ANALIZADOR DE<br>PRESIONES JHA</div>
+            <div class="amb-side">
+                <span class="amb-lbl">AMB.</span>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <input type="number" id="temp-val" class="amb-in" value="30">
+                    <span style="color:#39ff14; font-weight:900; font-size: 20px;">°C</span>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="tabs-row">
+        <div id="tab-aires" class="tab active-aires" onclick="selectTab('aires')">AIRES</div>
+        <div id="tab-neveras" class="tab" onclick="selectTab('neveras')">NEVERAS</div>
+        <div id="tab-auto" class="tab" onclick="selectTab('auto')">AUTO</div>
     </div>
 </div>
 
 <script>
+    // Lógica de Pestañas
+    function selectTab(mode) {
+        // Quitar clases activas
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.remove('active-aires', 'active-neveras', 'active-auto');
+        });
+        
+        // Activar la seleccionada
+        const target = document.getElementById('tab-' + mode);
+        target.classList.add('active-' + mode);
+        
+        console.log("Cambiando a modo: " + mode);
+        // Aquí conectaremos la lista de gases en el siguiente paso
+    }
+
+    // Lógica GPS (Ya funcionando)
     async function toggleGPS() {
         const btn = document.getElementById('gps-btn');
         const locTxt = document.getElementById('loc-display');
         const tempIn = document.getElementById('temp-val');
-        
         const isActivating = btn.classList.toggle('gps-active');
         
         if(isActivating) {
             locTxt.innerText = "📍 CONECTANDO GPS...";
-            
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-
                     try {
-                        // 1. OBTENER CIUDAD (Usando un servicio gratuito de reversa)
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
                         const data = await res.json();
-                        const ciudad = data.address.city || data.address.town || data.address.village || "LOS GUAYOS";
+                        const ciudad = data.address.city || data.address.town || "UBICACIÓN DETECTADA";
                         locTxt.innerText = `📍 UBICACIÓN: ${ciudad.toUpperCase()}`;
-
-                        // 2. OBTENER TEMPERATURA REAL (Usando Open-Meteo que es gratis)
-                        const resW = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-                        const dataW = await resW.json();
-                        const tempReal = Math.round(dataW.current_weather.temperature);
                         
-                        tempIn.value = tempReal; // Cambia el 30 por la temperatura del sitio
-                    } catch (e) {
-                        locTxt.innerText = "📍 UBICACIÓN: CARABOBO";
-                        tempIn.value = 28; // Valor de respaldo
-                    }
-                }, () => {
-                    locTxt.innerText = "📍 ERROR: ACTIVA TU GPS";
-                    btn.classList.remove('gps-active');
+                        const resW = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
+                        const dataW = await resW.json();
+                        tempIn.value = Math.round(dataW.current_weather.temperature);
+                    } catch (e) { locTxt.innerText = "📍 UBICACIÓN: CARABOBO"; }
                 });
             }
         } else {
             locTxt.innerText = "📍 BUSCANDO SEÑAL...";
-            // No reseteamos la temperatura al apagar para que puedas seguir editando la que quedó
         }
     }
 </script>
