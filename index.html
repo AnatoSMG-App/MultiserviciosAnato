@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v23-header { width: 100%; max-width: 410px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px 12px 0 0; background: linear-gradient(180deg, #0a0a0a 0%, #000 100%); }
+        .v23-header { width: 100%; max-width: 410px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px 12px 0 0; background: #000; }
         
-        /* 1. Empresa en Blanco */
-        .empresa { text-align: center; font-size: 12px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .empresa { text-align: center; font-size: 13px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         
-        /* 2. Fila Ubicación y BTU */
         .row-1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .ubicacion { color: #00e5ff; font-size: 13px; font-weight: 900; text-shadow: 0 0 8px #00e5ff66; }
-        .btu-btn { background: #ff5722; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; font-weight: 900; font-size: 12px; box-shadow: 0 4px #bf360c; cursor: pointer; }
+        .btu-btn { background: #ff5722; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; font-weight: 900; font-size: 12px; box-shadow: 0 4px #bf360c; cursor: pointer; text-decoration: none; }
 
-        /* 3. Fila GPS y Ambiente */
         .row-2 { display: flex; justify-content: space-between; align-items: center; }
         
-        /* Cuadrito blanco del GPS */
-        .gps-area { display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 11px; font-weight: 900; }
-        .gps-status-box { width: 14px; height: 14px; border: 2px solid #fff; background: #000; display: inline-block; position: relative; }
-        .gps-active .gps-status-box::after { content: '✔'; color: #fff; position: absolute; top: -3px; left: 1px; font-size: 12px; }
+        /* GPS ESTILO CHECKBOX */
+        .gps-area { display: flex; align-items: center; gap: 8px; color: #666; font-size: 11px; font-weight: 900; cursor: pointer; }
+        .gps-status-box { width: 16px; height: 16px; border: 2px solid #fff; background: #000; display: inline-block; position: relative; transition: 0.3s; }
+        
+        .gps-active { color: #fff !important; }
+        .gps-active .gps-status-box { background: #fff; }
+        .gps-active .gps-status-box::after { content: '✔'; color: #000; position: absolute; top: -3px; left: 1px; font-size: 14px; font-weight: 900; }
 
-        /* Cuadrito digital verde del Ambiente */
-        .amb-digital { border: 2px solid #39ff14; border-radius: 4px; padding: 4px 10px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; }
-        .amb-label { font-size: 8px; color: #39ff14; display: block; margin-bottom: 2px; }
-        .amb-val { font-size: 20px; color: #39ff14; font-weight: 900; font-family: monospace; }
+        /* CUADRO AMBIENTE DIGITAL / MANUAL */
+        .amb-digital { border: 2px solid #39ff14; border-radius: 4px; padding: 4px 10px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; cursor: pointer; }
+        .amb-label { font-size: 8px; color: #39ff14; display: block; margin-bottom: 2px; font-weight: 900; }
+        .amb-input { background: none; border: none; color: #39ff14; font-size: 24px; font-weight: 900; font-family: monospace; width: 60px; text-align: center; outline: none; }
     </style>
 </head>
 <body>
@@ -35,28 +35,66 @@
     <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
     
     <div class="row-1">
-        <div class="ubicacion">📍 UBICACIÓN: CARABOBO</div>
-        <button class="btu-btn">BTU 📏</button>
+        <div class="ubicacion" id="loc-text">📍 BUSCANDO...</div>
+        <a href="calculadora_btu.html" class="btu-btn">BTU 📏</a>
     </div>
 
     <div class="row-2">
-        <div id="gps-wrap" class="gps-area">
-            <span class="gps-status-box"></span> GPS: <span id="gps-text">BUSCANDO...</span>
+        <div id="gps-wrap" class="gps-area" onclick="toggleGPS()">
+            <span class="gps-status-box"></span> GPS: <span id="gps-text">DESACTIVADO</span>
         </div>
-        <div class="amb-digital">
+
+        <div class="amb-digital" onclick="modoManual()">
             <span class="amb-label">AMBIENTE</span>
-            <span class="amb-val">25°C</span>
+            <input type="number" id="temp-val" class="amb-input" value="25" oninput="cambioManual()">
+            <span style="color:#39ff14; font-weight:900;">°C</span>
         </div>
     </div>
 </div>
 
 <script>
-    // Simulación de activación de GPS
-    setTimeout(() => {
-        document.getElementById('gps-wrap').classList.add('gps-active');
-        document.getElementById('gps-text').innerText = 'ACTIVADO';
-        document.getElementById('gps-text').style.color = '#fff';
-    }, 1500);
+    let manualMode = false;
+
+    function activarGPS() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                document.getElementById('gps-wrap').classList.add('gps-active');
+                document.getElementById('gps-text').innerText = 'ACTIVADO';
+                document.getElementById('loc-text').innerText = '📍 UBICACIÓN: CARABOBO'; 
+                document.getElementById('temp-val').value = 25; // Aquí iría la API del clima
+                document.getElementById('temp-val').readOnly = true;
+                manualMode = false;
+            });
+        }
+    }
+
+    function toggleGPS() {
+        let wrap = document.getElementById('gps-wrap');
+        if(wrap.classList.contains('gps-active')) {
+            // DESACTIVAR
+            wrap.classList.remove('gps-active');
+            document.getElementById('gps-text').innerText = 'DESACTIVADO';
+            document.getElementById('temp-val').readOnly = false;
+            document.getElementById('temp-val').focus();
+            manualMode = true;
+        } else {
+            activarGPS();
+        }
+    }
+
+    function modoManual() {
+        if(!manualMode) {
+            if(confirm("¿Deseas desactivar GPS y ajustar temperatura manualmente?")) {
+                toggleGPS();
+            }
+        }
+    }
+
+    function cambioManual() {
+        console.log("Nueva temperatura manual: " + document.getElementById('temp-val').value);
+    }
+
+    window.onload = activarGPS;
 </script>
 
 </body>
