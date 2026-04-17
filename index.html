@@ -3,73 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.H.A ANALIZADOR V3</title>
+    <title>J.H.A ANALIZADOR V4 PRO</title>
     <style>
-        :root { --azul: #00f2ff; --rojo: #ff3131; --bg: #0a0a0a; --amarillo: #ffeb3b; --verde: #0f0; --gris: #333; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; justify-content: center; }
-        .container { background: #111; border: 2px solid var(--gris); border-radius: 15px; padding: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        :root { --neon: #39ff14; --azul: #00d4ff; --rojo: #ff3131; --naranja: #ff5722; }
+        body { background-color: #050505; color: white; font-family: 'Arial', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 420px; border: 3px solid var(--neon); border-radius: 25px; padding: 15px; background: #111; box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
         
-        /* ENCABEZADO ESTILO V36 */
-        .header { text-align: center; border-bottom: 1px solid var(--gris); padding-bottom: 5px; margin-bottom: 8px; }
-        .header h1 { font-size: 1.1rem; margin: 0; color: #fff; text-transform: uppercase; font-weight: 900; }
-        .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
-        #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
-
-        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
-        .app-title { color: var(--azul); font-weight: 900; font-size: 1.35rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
+        /* CABECERA V36 */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .btn-btu { background: var(--naranja); color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; font-size: 12px; box-shadow: 0 4px #a03010; cursor: pointer; }
         
-        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
-        .temp-label { font-size: 0.6rem; color: #aaa; display: block; margin-bottom: -5px; font-weight: bold; }
+        /* PESTAÑAS V36 */
+        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 15px; }
+        .tab { padding: 10px; border: 1px solid #444; border-radius: 8px; text-align: center; font-size: 11px; font-weight: bold; cursor: pointer; background: #222; color: #888; }
+        .tab.active { background: var(--neon); color: black; border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
 
-        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
-        .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #000; }
-        .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
+        /* DASHBOARD PRINCIPAL */
+        .dashboard { background: #1a1a1a; border-radius: 15px; padding: 15px; border: 1px solid #333; margin-bottom: 15px; position: relative; }
+        .temp-box { position: absolute; right: 15px; top: 15px; border: 2px solid var(--neon); padding: 5px 10px; border-radius: 10px; background: #000; text-align: center; }
+        .temp-val { font-size: 24px; font-weight: bold; color: var(--neon); }
 
-        .gas-selection { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #333; margin-bottom: 10px; }
-        select { width: 100%; background: #222; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; }
+        /* SELECTORES */
+        .select-group { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px; }
+        select { width: 100%; padding: 12px; background: #000; color: var(--neon); border: 1px solid var(--neon); border-radius: 10px; font-weight: bold; }
 
-        .gauges { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 8px; align-items: center; margin-bottom: 10px; }
-        .gauge-box { background: #000; padding: 10px 5px; border-radius: 12px; text-align: center; border: 2px solid #333; cursor: pointer; }
-        .p-val { font-size: 2.8rem; font-weight: bold; font-family: monospace; display: block; }
-        .baja { color: var(--azul); border-color: var(--azul); }
-        .alta { color: var(--rojo); border-color: var(--rojo); }
+        /* CUADROS DE PRESIÓN V36 */
+        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .p-box { border: 4px solid; border-radius: 20px; padding: 15px; text-align: center; background: #000; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); }
+        .p-val { background: none; border: none; color: inherit; font-size: 38px; font-weight: bold; width: 100%; text-align: center; outline: none; font-family: 'Courier New', monospace; }
 
-        .display { background: #000; border-left: 5px solid var(--verde); padding: 15px; border-radius: 8px; margin-bottom: 10px; min-height: 80px; }
-        .msg { font-size: 1rem; font-weight: bold; line-height: 1.2; }
+        /* NUEVO MÓDULO DE REPOSO (AJUSTADO AL ESTILO V36) */
+        .reposo-v4 { border: 2px dashed var(--neon); border-radius: 20px; padding: 15px; background: #0a0a0a; margin-top: 10px; }
+        .timer-grid { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 10px; align-items: center; text-align: center; }
+        .btn-play { background: #1b5e20; color: white; width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 24px; box-shadow: 0 0 15px #39ff14; cursor: pointer; }
+        .btn-stop { background: #b71c1c; color: white; width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; margin-bottom: 10px; }
+        
+        .timer-label { font-size: 10px; color: #aaa; margin-bottom: 5px; }
+        .timer-val { font-size: 28px; font-weight: bold; font-family: monospace; }
+        .psi-val { font-size: 16px; font-weight: bold; color: var(--azul); }
 
-        /* MODULO REPOSO V3 (NUEVO MOTOR) */
-        .reposo-box { background: #050505; border: 2px dashed var(--azul); border-radius: 15px; padding: 10px; margin-top: 10px; }
-        .timer-grid { display: grid; grid-template-columns: 1fr 70px 1fr; gap: 5px; text-align: center; align-items: center; }
-        .t-val { font-family: monospace; font-size: 1.4rem; font-weight: bold; }
-        .btn-mando { width: 45px; height: 45px; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; margin: 3px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
-        .keypad { display: none; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #111; padding: 5px; border-radius: 8px; margin-top: 5px; }
-        .btn { background: #333; color: #fff; padding: 18px 0; font-size: 1.4rem; border-radius: 5px; font-weight: bold; text-align: center; cursor: pointer; }
+        .diagnostico { text-align: center; margin-top: 15px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: var(--neon); min-height: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>⚙️ MULTISERVICIOS ANATO S.M.G.</h1>
-        <div id="loc" class="loc-info">📍 BUSCANDO SEÑAL...</div>
-        <div id="clock">--:--:--</div>
+        <span style="color:var(--azul); font-size: 12px; font-weight: bold;">📍 GPS: ACTIVO</span>
+        <button class="btn-btu">📏 BTU</button>
+    </div>
+    
+    <div class="tabs">
+        <div class="tab active">AIRES</div>
+        <div class="tab">NEVERAS</div>
+        <div class="tab">AUTOS</div>
     </div>
 
-    <div class="status-row">
-        <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-weight: bold;">GPS</small></div>
-        <div class="app-title">ANALIZADOR JHA<br>VERSIÓN 3</div>
-        <div class="temp-box" onclick="setFoco('temp')">
-            <span class="temp-label">AMB.</span>
-            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
+    <div class="dashboard">
+        <div style="font-size: 14px; font-weight: bold; color: var(--azul);">J.H.A ANALIZADOR V4</div>
+        <div style="font-size: 10px; color: #888;">EDICIÓN PROFESIONAL</div>
+        
+        <div class="temp-box" onclick="setTemp()">
+            <span style="font-size: 9px; display: block; color: #888;">AMB.</span>
+            <span class="temp-val" id="dispTemp">30</span><span style="color:var(--neon); font-weight:bold;">°C</span>
         </div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" onclick="setCat('aire', this)">AIRES</button>
-        <button class="tab" onclick="setCat('nevera', this)">NEVERAS</button>
-        <button class="tab" onclick="setCat('auto', this)">AUTO</button>
+    <div class="select-group">
+        <select id="selGas" onchange="actualizar()">
+            <option value="R22" data-f="3.8" data-oil="MINERAL">R22</option>
+            <option value="R410A" data-f="5.8" data-oil="POE">R410A</option>
+            <option value="R32" data-f="5.6" data-oil="POE">R32</option>
+        </select>
+        <button style="background:#333; color:white; border:1px solid #555; border-radius:8px; font-size:10px; font-weight:bold;">REEMP.</button>
     </div>
 
-    <div class="gas-selection">
-        <div><small style="color:var(--azul);">GAS</small><select id="g-ori" onchange="run
+    <div id="infoAceite" style="font-size:11px; color:var(--neon); text-align:center; margin-bottom:10px; font-weight:bold;">SISTEMA CARGADO | ACEITE: MINERAL</div>
+
+    <div class="press-grid">
+        <div class="p-box" style="border-color: var(--azul); color: var(--azul);">
+            <div style="font-size:10px;">BAJA PSI</div>
+            <input type="number" id="valB" class="p-val" value="65" oninput="recalcMeta()">
+        </div>
+        <div class="p-box" style="border-color: var(--rojo); color: var(--rojo);">
+            <div style="font-size:10px;">ALTA PSI</div>
+            <input type="number" id="valA" class="p-val" value="250" oninput="recalcMeta()">
+        </div>
+    </div>
+
+    <div class="reposo-v4">
+        <div class="timer-grid">
+            <div>
+                <div class="timer-label">IDEAL</div>
+                <div id="clockI" class="timer-val" style="color:var(--azul);">05:00</div>
+                <div id="psiI" class="psi-val">-- PSI</div>
+                <div style="font-size:8px; margin-top:5px;">META: <span id="metaTxt" style="color:white;">157.5</span></div>
+            </div>
+            <div>
+                <button class="btn-stop" onclick="stopTest()">■</button>
+                <button class="btn-play" onclick="startTest()">▶</button>
+            </div>
+            <div>
+                <div class="timer-label">REAL</div>
+                <div id="clockR" class="timer-val" style="color:var(--neon);">00:00</div>
+                <div id="psiR" class="psi-val" style="color:var(--neon);">-- PSI</div>
+                <div style="font-size:8px; margin-top:5px;">REALIDAD</div>
+            </div>
+        </div>
+        <div id="diagnostico" class="diagnostico">ESPERANDO INICIO...</div>
+    </div>
+</div>
+
+<script>
+    let t, segR=0, segI=300, running=false, tempAmb=30;
+
+    function setTemp() {
+        let n = prompt("Temp Ambiente:", tempAmb);
+        if(n) { tempAmb = n; document.getElementById('dispTemp').innerText = n; actualizar(); }
+    }
+
+    function actualizar() {
+        const g = document.getElementById('selGas').options[document.getElementById('selGas').selectedIndex];
+        document.getElementById('infoAceite').innerText = `SISTEMA CARGADO | ACEITE: ${g.dataset.oil}`;
+        // Fórmula de Alta Pro
+        let vA = (tempAmb * parseFloat(g.dataset.f)) + 130;
+        document.getElementById('valA').value = Math.round(vA);
+        recalcMeta();
+    }
+
+    function recalcMeta() {
+        let b = parseFloat(document.getElementById('valB').value)||0;
+        let a = parseFloat(document.getElementById('valA').value)||0;
+        document.getElementById('metaTxt').innerText = ((b+a)/2).toFixed(1);
+    }
+
+    function startTest() {
+        if(running) return; running=true; segR=0; segI=300;
+        let b0 = parseFloat(document.getElementById('valB').value);
+        let m0 = parseFloat(document.getElementById('metaTxt').innerText);
+        document.getElementById('diagnostico').innerText = "ANALIZANDO FLUJO...";
+        
+        t = setInterval(() => {
+            segR++;
+            document.getElementById('clockR').innerText = `${Math.floor(segR/60).toString().padStart(2,'0')}:${(segR%60).toString().padStart(2,'0')}`;
+            if(segR > 300) document.getElementById('clockR').style.color = "var(--rojo)";
+            document.getElementById('psiR').innerText = (b0 + ((m0-b0)*(segR/300))).toFixed(1) + " PSI";
+
+            if(segI > 0) {
+                segI--;
+                document.getElementById('clockI').innerText = `${Math.floor(segI/60).toString().padStart(2,'0')}:${(segI%60).toString().padStart(2,'0')}`;
+                document.getElementById('psiI').innerText = (b0 + ((m0-b0)*((300-segI)/300))).toFixed(1) + " PSI";
+            }
+            if(segR === 480) {
+                document.getElementById('diagnostico').innerText = "⚠️ COLESTEROL ALTO - OBSTRUCCIÓN";
+                document.getElementById('diagnostico').style.color = "var(--rojo)";
+            }
+        }, 1000);
+    }
+
+    function stopTest() { clearInterval(t); running=false; document.getElementById('diagnostico').innerText = "TEST DETENIDO"; }
+    window.onload = actualizar;
+</script>
+</body>
+</html>
