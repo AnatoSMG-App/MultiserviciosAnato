@@ -3,231 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANALIZADOR JHA V36.2</title>
+    <title>S.M.G. V36 - Analizador Profesional</title>
     <style>
-        :root { --azul: #00f2ff; --rojo: #ff3131; --bg: #0a0a0a; --amarillo: #ffeb3b; --verde: #0f0; --gris: #333; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; justify-content: center; }
-        .container { background: #111; border: 2px solid var(--gris); border-radius: 15px; padding: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        
-        /* ENCABEZADO */
-        .header { text-align: center; border-bottom: 1px solid var(--gris); padding-bottom: 5px; margin-bottom: 8px; }
-        .header h1 { font-size: 1.1rem; margin: 0; color: #fff; text-transform: uppercase; font-weight: 900; }
-        .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
-        #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
-
-        /* TITULO JHA EN AZUL POTENTE */
-        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
-        .app-title { color: var(--azul); font-weight: 900; font-size: 1.35rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
-        
-        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
-        .temp-label { font-size: 0.6rem; color: #aaa; display: block; margin-bottom: -5px; font-weight: bold; }
-
-        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
-        .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #000; }
-        .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
-
-        .gas-selection { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #333; margin-bottom: 10px; }
-        select { width: 100%; background: #222; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; }
-        .warn-gas { grid-column: span 2; color: var(--rojo); font-weight: 900; font-size: 0.8rem; text-align: center; display: none; margin-top: 5px; background: rgba(255,0,0,0.15); padding: 5px; border-radius: 5px; border: 1px solid var(--rojo); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
-
-        .gauges { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 8px; align-items: center; margin-bottom: 10px; }
-        .gauge-box { background: #000; padding: 10px 5px; border-radius: 12px; text-align: center; border: 2px solid #333; cursor: pointer; }
-        .p-val { font-size: 2.8rem; font-weight: bold; font-family: monospace; display: block; }
-        .baja { color: var(--azul); border-color: var(--azul); }
-        .alta { color: var(--rojo); border-color: var(--rojo); }
-
-        .display { background: #000; border-left: 5px solid var(--verde); padding: 15px; border-radius: 8px; margin-bottom: 10px; min-height: 80px; box-shadow: inset 0 0 10px rgba(0,255,0,0.1); }
-        .msg { font-size: 1.1rem; font-weight: bold; line-height: 1.2; }
-        .tags { font-size: 0.85rem; color: var(--amarillo); margin-top: 10px; border-top: 1px solid #222; padding-top: 8px; font-weight: bold; }
-
-        .keypad { display: none; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #111; padding: 5px; border-radius: 8px; margin-top: 5px; }
-        .btn { background: #333; color: #fff; padding: 18px 0; font-size: 1.4rem; border-radius: 5px; font-weight: bold; text-align: center; border-bottom: 3px solid #000; cursor: pointer; }
-        .btn:active { background: var(--azul); color: #000; transform: translateY(2px); }
-        .btn-ok { grid-column: span 6; background: var(--verde); color: #000; font-size: 1rem; padding: 15px; margin-top: 5px; font-weight: 900; text-transform: uppercase; border: none; border-radius: 8px; }
+        body { background-color: #000; color: #0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; }
+        .header { padding: 20px; border-bottom: 2px solid #0f0; margin-bottom: 20px; }
+        .container { padding: 15px; max-width: 500px; margin: auto; border: 1px solid #333; border-radius: 20px; background: #050505; }
+        .btn-smg { background: #0f0; color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 80%; margin: 10px; cursor: pointer; }
+        input, select { width: 70%; padding: 12px; margin: 10px; background: #111; color: #0f0; border: 1px solid #0f0; border-radius: 8px; }
+        .gauge-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        .gauge { border: 4px solid #0f0; border-radius: 50%; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; font-size: 1.8em; font-weight: bold; }
+        .gauge.high { border-color: #f00; color: #f00; }
+        .info-panel { font-size: 0.9em; color: #888; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
     <div class="header">
-        <h1>⚙️ MULTISERVICIOS ANATO S.M.G.</h1>
-        <div id="loc" class="loc-info">📍 BUSCANDO SEÑAL...</div>
-        <div id="clock">--:--:--</div>
+        <h2>MULTISERVICIOS ANATO S.M.G.</h2>
+        <p>V36 - Diagnóstico Avanzado</p>
     </div>
 
-    <div class="status-row">
-        <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-size:0.6rem; font-weight: bold;">GPS</small></div>
-        <div class="app-title">ANALIZADOR DE<br>PRESIONES JHA</div>
-        <div class="temp-box" onclick="setFoco('temp')">
-            <span class="temp-label">AMB.</span>
-            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
+    <div class="container">
+        <div id="clima-section">
+            <label>Temp. Ambiente (°C):</label><br>
+            <input type="number" id="temp-val" value="32">
+        </div>
+
+        <label>Seleccione Refrigerante:</label><br>
+        <select id="gas-orig">
+            <optgroup label="Aires Acondicionados">
+                <option value="R22">R22</option>
+                <option value="R410A">R410A</option>
+                <option value="R32">R32</option>
+                <option value="R290">R290</option>
+                <option value="R407C">R407C</option>
+            </optgroup>
+            <optgroup label="Neveras / Refrigeración">
+                <option value="R134A">R134a</option>
+                <option value="R600A">R600a</option>
+                <option value="R12">R12 / Sustitutos</option>
+                <option value="R404A">R404A</option>
+            </optgroup>
+        </select>
+
+        <br>
+        <button class="btn-smg" onclick="calcularPresiones()">CALCULAR IDEAL S.M.G.</button>
+
+        <div class="gauge-container">
+            <div>
+                <div class="gauge" id="ideal-baja">0</div>
+                <span>BAJA</span>
+            </div>
+            <div>
+                <div class="gauge high" id="ideal-alta">0</div>
+                <span>ALTA</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <button onclick="alert('GPS Activado - Localizando Valencia, Carabobo')">📍 UBICACIÓN GPS</button>
+            <p>Estado del Sistema: <span style="color: #0f0;">Activo</span></p>
         </div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" onclick="setCat('aire', this)">AIRES</button>
-        <button class="tab" onclick="setCat('nevera', this)">NEVERAS</button>
-        <button class="tab" onclick="setCat('auto', this)">AUTO</button>
-    </div>
-
-    <div class="gas-selection">
-        <div><small style="color:var(--azul); font-weight: bold;">GAS ORIG.</small><select id="g-ori" onchange="updateReemp()"></select></div>
-        <div><small style="color:var(--rojo); font-weight: bold;">REEMP. <input type="checkbox" id="use-reemp" onchange="toggleReemp()"></small><select id="g-reemp" disabled onchange="run()"></select></div>
-        <div id="warn" class="warn-gas">⚠️ PRECAUCIÓN: GAS INFLAMABLE EXTREMO</div>
-    </div>
-
-    <div class="gauges">
-        <div class="gauge-box baja" onclick="setFoco('baja')"><small style="font-weight: bold;">BAJA (PSI)</small><span id="v-baja" class="p-val">0</span></div>
-        <div style="text-align:center"><input type="checkbox" id="ideal" checked style="transform: scale(1.3);" onchange="run()"><br><small style="font-weight: bold;">IDEAL</small></div>
-        <div class="gauge-box alta" onclick="setFoco('alta')"><small style="font-weight: bold;">ALTA (PSI)</small><span id="v-alta" class="p-val">0</span></div>
-    </div>
-
-    <div class="display" id="screen">
-        <div id="diag" class="msg">Analizador listo para el servicio...</div>
-        <div id="extra" class="tags"></div>
-    </div>
-
-    <div id="keys" class="keypad">
-        <div class="btn" onclick="press(1)">1</div><div class="btn" onclick="press(2)">2</div><div class="btn" onclick="press(3)">3</div>
-        <div class="btn" onclick="press(4)">4</div><div class="btn" onclick="press(5)">5</div><div class="btn" style="color:var(--amarillo)" onclick="press('B')">⌫</div>
-        <div class="btn" onclick="press(6)">6</div><div class="btn" onclick="press(7)">7</div><div class="btn" onclick="press(8)">8</div>
-        <div class="btn" onclick="press(9)">9</div><div class="btn" onclick="press(0)">0</div><div class="btn" style="color:var(--rojo)" onclick="press('C')">C</div>
-        <button class="btn-ok" onclick="closeKeys()">PROCESAR DATOS</button>
-    </div>
-</div>
-
 <script>
-    const data = {
-        aire: {
-            ori: [
-                {n:"R22", b:35, h:5.62, a:"MINERAL/AB", c:"GASEOSA"}, 
-                {n:"R410A", b:88, h:8.55, a:"POE", c:"LÍQUIDA"}, 
-                {n:"R32", b:90, h:8.85, a:"POE", c:"LÍQUIDA", inf:true},
-                {n:"R290", b:60, h:5.38, a:"MINERAL", c:"LÍQUIDA", inf:true},
-                {n:"R407C", b:75, h:5.98, a:"POE", c:"LÍQUIDA"}
-            ],
-            re: { "R22": [
-                {n:"MO29 (422D)", b:32, h:5.85, a:"MIN/AB", c:"LÍQUIDA"}, 
-                {n:"MO99 (438A)", b:34, h:5.62, a:"MIN/AB", c:"LÍQUIDA"},
-                {n:"MO59 (417A)", b:30, h:5.55, a:"MIN/AB", c:"LÍQUIDA"}
-            ]}
-        },
-        nevera: {
-            ori: [
-                {n:"R134a", b:3, h:2.88, f:true, a:"POE", c:"LÍQUIDA"}, 
-                {n:"R600a", b:0.5, h:1.58, f:true, a:"MINERAL", c:"LÍQUIDA", inf:true},
-                {n:"R12", b:12, h:3.38, f:true, a:"MINERAL", c:"GASEOSA"}
-            ],
-            re: { "R12": [
-                {n:"MP39 (401A)", b:10, h:3.45, f:true, a:"ALQUILBENCENO", c:"LÍQUIDA"},
-                {n:"R406A", b:8, h:3.50, f:true, a:"MINERAL", c:"LÍQUIDA"}
-            ]}
-        },
-        auto: { ori: [{n:"R134a", b:32, h:6.5, f:true, a:"PAG", c:"LÍQUIDA"}], re: {} }
-    };
+function calcularPresiones() {
+    const tempAmb = parseFloat(document.getElementById('temp-val').value) || 0;
+    const gas = document.getElementById('gas-orig').value;
+    const tempCond = tempAmb + 17; 
 
-    let cat = 'aire', foco = '', idB = 0, idA = 0;
+    let baja = 0;
+    let alta = 0;
 
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 1000);
-
-    function setCat(c, b) {
-        cat = c;
-        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-        b.classList.add('active');
-        const s = document.getElementById('g-ori'); s.innerHTML = "";
-        data[cat].ori.forEach(g => s.add(new Option(g.n, g.n)));
-        updateReemp();
+    switch(gas) {
+        case "R22":
+            baja = 65 + (tempAmb - 30) * 0.7;
+            alta = tempCond * 5.62;
+            break;
+        case "R410A":
+            baja = 118 + (tempAmb - 30) * 1.2;
+            alta = tempCond * 8.55;
+            break;
+        case "R32":
+            baja = 120 + (tempAmb - 30) * 1.3;
+            alta = tempCond * 8.85;
+            break;
+        case "R407C":
+            baja = 75 + (tempAmb - 30) * 0.9;
+            alta = tempCond * 6.80;
+            break;
+        case "R134A":
+            baja = 8 + (tempAmb - 30) * 0.1;
+            alta = tempCond * 2.88;
+            break;
+        case "R600A":
+            baja = 0.5 + (tempAmb - 30) * 0.05;
+            alta = tempCond * 1.58;
+            break;
+        case "R12":
+            baja = 12 + (tempAmb - 30) * 0.2;
+            alta = tempCond * 3.38;
+            break;
+        case "R404A":
+            baja = 115 + (tempAmb - 30) * 1.1;
+            alta = tempCond * 8.20;
+            break;
+        case "R290":
+            baja = 68 + (tempAmb - 30) * 0.8;
+            alta = tempCond * 5.38;
+            break;
     }
 
-    function updateReemp() {
-        const ori = document.getElementById('g-ori').value;
-        const s = document.getElementById('g-reemp'); s.innerHTML = "";
-        if(data[cat].re[ori]) data[cat].re[ori].forEach(g => s.add(new Option(g.n, g.n)));
-        else s.add(new Option("SIN REEMP", ""));
-        run();
-    }
-
-    function toggleReemp() { document.getElementById('g-reemp').disabled = !document.getElementById('use-reemp').checked; run(); }
-    
-    function setFoco(id) { 
-        foco = id; 
-        document.getElementById('keys').style.display = 'grid'; 
-        document.getElementById(id==='temp'?'v-temp':(id==='baja'?'v-baja':'v-alta')).innerText = ''; 
-    }
-    
-    function press(v) {
-        const e = document.getElementById(foco==='temp'?'v-temp':(foco==='baja'?'v-baja':'v-alta'));
-        if(v==='C') e.innerText = '0';
-        else if(v==='B') e.innerText = e.innerText.slice(0,-1);
-        else e.innerText += v;
-        if(foco==='temp') run();
-    }
-    
-    function closeKeys() { document.getElementById('keys').style.display = 'none'; run(); }
-
-    async function toggleGPS() {
-        const locBox = document.getElementById('loc');
-        if(document.getElementById('gps').checked) {
-            locBox.innerText = "📍 BUSCANDO UBICACIÓN...";
-            navigator.geolocation.getCurrentPosition(async (p) => {
-                locBox.innerText = "📍 LOS GUAYOS - VALENCIA";
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current_weather=true`);
-                const d = await res.json();
-                document.getElementById('v-temp').innerText = Math.round(d.current_weather.temperature);
-                run();
-            }, () => { locBox.innerText = "📍 UBICACIÓN ACTIVA"; });
-        } else { locBox.innerText = ""; }
-    }
-
-    function run() {
-        const isIdeal = document.getElementById('ideal').checked;
-        const gName = document.getElementById('use-reemp').checked ? document.getElementById('g-reemp').value : document.getElementById('g-ori').value;
-        const temp = parseInt(document.getElementById('v-temp').innerText) || 30;
-        
-        // CÁLCULO CON LEY DE SALTO TÉRMICO (+17)
-        const tempCondensacion = temp + 17;
-
-        let all = [...data.aire.ori, ...data.nevera.ori, ...data.auto.ori];
-        Object.values(data.aire.re).forEach(arr => all = all.concat(arr));
-        Object.values(data.nevera.re).forEach(arr => all = all.concat(arr));
-        
-        let g = all.find(x => x.n === gName);
-        
-        if(g) {
-            // Baja se ajusta según el gas / Alta usa el nuevo multiplicador sobre la temperatura de condensación
-            idB = g.f ? g.b : Math.round(65 + (temp - 30) * 0.7); 
-            idA = Math.round(tempCondensacion * g.h);
-
-            document.getElementById('warn').style.display = g.inf ? "block" : "none";
-            if(isIdeal) {
-                document.getElementById('v-baja').innerText = idB;
-                document.getElementById('v-alta').innerText = idA;
-                document.getElementById('diag').innerText = "CALCULANDO IDEAL PARA: " + gName;
-                document.getElementById('screen').style.borderLeftColor = "var(--verde)";
-            }
-            document.getElementById('extra').innerHTML = "⚙️ ACEITE: " + g.a + " | 💧 CARGA: " + g.c;
-            if(!isIdeal) diag();
-        }
-    }
-
-    function diag() {
-        const b = parseInt(document.getElementById('v-baja').innerText) || 0;
-        const a = parseInt(document.getElementById('v-alta').innerText) || 0;
-        let m = "", c = "var(--verde)";
-
-        if (a >= idA + 15) { m = "🚨 CRÍTICO ALTA: Presión excesiva. ¡Apague el equipo ya!"; c = "var(--rojo)"; }
-        else if (a >= idA + 10) { m = "⚠️ ADVERTENCIA ALTA: Condensación pobre o exceso de gas."; c = "var(--amarillo)"; }
-        else if (b <= idB - 7) { m = "🚨 CRÍTICO BAJA: Fuga masiva u obstrucción de sistema."; c = "var(--rojo)"; }
-        else if (b <= idB - 6 || b >= idB + 6) { m = "⚠️ ADVERTENCIA BAJA: Revisar posible falta de gas."; c = "var(--amarillo)"; }
-        else { m = "✅ EQUIPO EN RANGO: El sistema opera correctamente."; c = "var(--verde)"; }
-        
-        document.getElementById('diag').innerText = m;
-        document.getElementById('screen').style.borderLeftColor = c;
-    }
-    setCat('aire', document.querySelector('.tab'));
+    document.getElementById('ideal-baja').innerText = Math.round(baja);
+    document.getElementById('ideal-alta').innerText = Math.round(alta);
+}
 </script>
+
 </body>
 </html>
