@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.M.G. Reposo Calibrado</title>
+    <title>S.M.G. Reposo V36.8.4</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .header { color: #00ff00; text-shadow: 0 0 15px #00ff00; font-size: 1.6em; margin: 5px 0; }
-        .sub-header { color: #fff; font-weight: bold; font-size: 0.9em; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+        .sub-header { color: #fff; font-weight: bold; font-size: 0.8em; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; }
+        
         .gps-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
         .temp-box { background: #0a0a0a; padding: 15px; border-radius: 20px; border: 2px solid #444; margin-bottom: 15px; }
-        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 1.6em; width: 100px; }
+        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 1.6em; width: 110px; outline: none; }
+        
         .cat-btn { flex: 1; padding: 12px; border: 2px solid #333; border-radius: 10px; background: #111; color: #fff; font-weight: bold; cursor: pointer; font-size: 0.8em; }
         .active-cat { border-color: #0080ff; background: #0080ff22; }
+
         .dashboard { display: grid; grid-template-columns: 1fr 0.5fr 1fr; gap: 10px; align-items: start; background: #050505; padding: 15px; border-radius: 25px; border: 1px solid #333; margin-bottom: 15px; }
         .val-meta { color: #00ff00; font-size: 1.8em; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
         .timer { font-family: monospace; font-size: 1.8em; font-weight: bold; color: #fff; margin: 5px 0; }
+        
         .ctrl-btn { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background: none; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 10px auto; }
         .btn-go { border-color: #00ff00; color: #00ff00; }
         .btn-pause { border-color: #fff; color: #fff; }
         .btn-stop { border-color: #ff0000; color: #ff0000; }
-        #msg-status { background: #001122; border: 3px solid #0080ff; padding: 20px; border-radius: 15px; color: #fff; font-weight: bold; font-size: 1.1em; min-height: 50px; box-shadow: 0 0 15px #0080ff55; text-transform: uppercase; }
-        .nav-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        #msg-status { background: #001122; border: 3px solid #0080ff; padding: 20px; border-radius: 15px; color: #fff; font-weight: bold; font-size: 1.1em; min-height: 50px; box-shadow: 0 0 15px #0080ff55; text-transform: uppercase; transition: 0.3s; }
+        .nav-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; background: #222; color: #00ff00; border: 1px solid #00ff00; }
     </style>
 </head>
 <body>
 
     <h1 class="header">MULTISERVICIOS ANATO S.M.G.</h1>
-    <div class="sub-header">DIAGNÓSTICO PROFESIONAL CALIBRADO</div>
+    <div class="sub-header">DIAGNÓSTICO DE REPOSO CALIBRADO</div>
 
     <div class="gps-row">
         <button onclick="gpsOn()" style="background:none; border:none; font-size:1.8em; cursor:pointer;">🛰️</button>
@@ -36,7 +41,7 @@
     </div>
 
     <div class="temp-box">
-        <small style="color:#fff; font-weight:bold; display:block; margin-bottom:5px;">TEMPERATURA AMBIENTE / PLACA</small>
+        <small style="color:#fff; font-weight:bold; display:block; margin-bottom:5px;">TEMPERATURA AMBIENTE / PLACA (°C)</small>
         <input type="number" id="tIn" value="30" oninput="gpsOff()">
     </div>
 
@@ -47,7 +52,7 @@
     </div>
 
     <select id="gasIn" onchange="calc()" style="width:100%; padding:15px; background:#111; color:#00ff00; border:1px solid #333; border-radius:12px; margin-bottom:15px; font-size:1.1em;">
-        <option value="">-- ELEGIR REFRIGERANTE --</option>
+        <option value="">-- SELECCIONAR GAS --</option>
     </select>
 
     <div class="dashboard">
@@ -57,18 +62,22 @@
             <div id="t-ideal" class="timer" style="color:#00ff00; font-size:1.2em;">00:00</div>
             <button class="ctrl-btn btn-go" onclick="run()">▶️</button>
         </div>
-        <div style="align-self: center;"><button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button></div>
+
+        <div style="align-self: center;">
+            <button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button>
+        </div>
+
         <div>
-            <small style="color:#0080ff; font-weight:bold;">REAL</small>
-            <input type="number" id="pReal" placeholder="PSI" style="width:85%; border-color:#0080ff; color:#fff; margin-bottom:5px;">
+            <small style="color:#0080ff; font-weight:bold;">MANÓMETRO</small>
+            <input type="number" id="pReal" placeholder="PSI" oninput="analizarAhora()" style="width:85%; border:2px solid #0080ff; color:#fff; margin-bottom:5px; font-size:1.4em;">
             <div id="t-real" class="timer">00:00</div>
             <button class="ctrl-btn btn-stop" onclick="stop()">⏹️</button>
         </div>
     </div>
 
-    <div id="msg-status">ESPERANDO INICIO...</div>
+    <div id="msg-status">SISTEMA LISTO... ELIJA GAS E INICIE</div>
 
-    <button class="nav-btn" onclick="window.location.href='index.html'" style="background:#222; color:#00ff00; border:1px solid #00ff00; margin-top:20px;">⬅️ ANALIZADOR</button>
+    <button class="nav-btn" onclick="window.location.href='index.html'">⬅️ VOLVER AL ANALIZADOR</button>
 
     <script>
         const db = { 
@@ -76,28 +85,29 @@
             nevera: ["R134a", "R600a", "R290", "R404A", "R12"], 
             auto: ["R134a"] 
         };
-        let sI, sR, loopI, loopR, running = false, tMetaInicial = 300;
+        let sI, sR = 0, loopI, loopR, running = false, tMetaInicial = 300;
 
         function setCat(c) {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active-cat'));
             document.getElementById('cat-'+c).classList.add('active-cat');
             const s = document.getElementById('gasIn');
-            s.innerHTML = '<option value="">-- ELEGIR REFRIGERANTE --</option>';
+            s.innerHTML = '<option value="">-- SELECCIONAR GAS --</option>';
             db[c].forEach(g => s.innerHTML += `<option value="${g}">${g}</option>`);
         }
 
         function calc() {
             const g = document.getElementById('gasIn').value;
             const t = parseFloat(document.getElementById('tIn').value) || 30;
-            let p = 0;
-            // CALIBRACIÓN DE TIEMPO SEGÚN EL GAS
-            if (["R410A", "R32", "R404A"].includes(g)) tMetaInicial = 420; // 7 Minutos
-            else if (["R600a", "R290"].includes(g)) tMetaInicial = 180; // 3 Minutos
-            else tMetaInicial = 300; // 5 Minutos Estándar
+            
+            // CALIBRACIÓN DE TIEMPOS POR GAS
+            if (["R410A", "R32", "R404A"].includes(g)) tMetaInicial = 420; // 7 Min
+            else if (["R600a", "R290"].includes(g)) tMetaInicial = 180; // 3 Min
+            else tMetaInicial = 300; // 5 Min
             
             sI = tMetaInicial;
             fmt('t-ideal', sI);
 
+            let p = 0;
             if(g === "R410A") p = (t * 4.3) + 52;
             else if(g === "R22") p = (t * 2.7) + 38;
             else if(g === "R134a") p = (t * 2.0) + 16;
@@ -105,22 +115,23 @@
         }
 
         function run() {
-            if(!document.getElementById('gasIn').value) return alert("Seleccione Gas");
+            if(!document.getElementById('gasIn').value) return alert("Seleccione el refrigerante primero");
             if(running) return;
-            if(sR === undefined || sR === 0) { sI = tMetaInicial; sR = 0; }
             running = true;
             document.getElementById('msg-status').innerText = "⏳ ANALIZANDO FLUJO... ESPERE IGUALACIÓN";
+            document.getElementById('msg-status').style.borderColor = "#0080ff";
+            
             loopI = setInterval(() => { if(sI > 0) { sI--; fmt('t-ideal', sI); } }, 1000);
             loopR = setInterval(() => { sR++; fmt('t-real', sR); if(sR > tMetaInicial) document.getElementById('t-real').style.color = "#f00"; }, 1000);
         }
 
         function pause() {
             clearInterval(loopI); clearInterval(loopR); running = false;
-            document.getElementById('msg-status').innerText = "⏸️ PRUEBA PAUSADA";
+            document.getElementById('msg-status').innerText = "⏸️ PRUEBA EN PAUSA";
         }
 
         function stop() {
-            if(!running && sR === 0) { // RESET
+            if(!running && sR === 0) { // Segundo toque para Reset total
                 sR = 0; sI = tMetaInicial; fmt('t-real', 0); fmt('t-ideal', sI);
                 document.getElementById('pReal').value = "";
                 document.getElementById('t-real').style.color = "#fff";
@@ -128,18 +139,25 @@
                 return;
             }
             clearInterval(loopI); clearInterval(loopR); running = false;
+            document.getElementById('msg-status').innerText = "⏳ TIEMPO DETENIDO. INGRESE PSI REALES.";
+            document.getElementById('msg-status').style.borderColor = "#ff8c00"; 
+        }
+
+        function analizarAhora() {
             const pR = parseFloat(document.getElementById('pReal').value) || 0;
             const pM = parseInt(document.getElementById('m-psi').innerText) || 0;
-            let res = "";
             
-            // LÓGICA DE DIAGNÓSTICO PROFESIONAL
+            if (pR === 0 || running) return; // Espera a que se detenga el reloj y haya datos
+
+            let res = "";
+            // CRUCE DE DATOS: TIEMPO REAL VS META CALIBRADA
             if(sR < (tMetaInicial * 0.4)) res = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
-            else if(sR > (tMetaInicial * 1.4)) res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN CAPILAR/FILTRO";
-            else if(pR > 0 && Math.abs(pR - pM) > 25) res = "⚠️ CARGA IRREGULAR O GAS CONTAMINADO";
+            else if(sR > (tMetaInicial * 1.4)) res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN SISTEMA";
+            else if(Math.abs(pR - pM) > 25) res = "⚠️ CARGA IRREGULAR O GAS CONTAMINADO";
             else res = "✅ SISTEMA SANO: IGUALACIÓN CORRECTA";
             
             document.getElementById('msg-status').innerText = res;
-            sR = 0; 
+            document.getElementById('msg-status').style.borderColor = "#00ff00";
         }
 
         function fmt(id, s) {
