@@ -5,47 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v24-header { width: 100%; max-width: 415px; margin: 0 auto; border: 1px solid #222; padding: 10px; border-radius: 12px 12px 0 0; background: #000; }
+        .v25-header { width: 100%; max-width: 415px; margin: 0 auto; border: 1px solid #222; padding: 15px; border-radius: 12px; background: #000; position: relative; }
         
-        /* EMPRESA Y RELOJ */
-        .top-info { text-align: center; margin-bottom: 10px; }
-        .empresa { font-size: 14px; color: #FFFFFF; font-weight: 900; letter-spacing: 1px; }
-        .status-msg { color: #00e5ff; font-size: 11px; font-weight: 900; margin: 4px 0; }
-        .clock-real { font-size: 18px; font-weight: 900; font-family: monospace; letter-spacing: 1px; }
+        .empresa { text-align: center; font-size: 13px; color: #FFFFFF; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; }
+        
+        /* UBICACIÓN DINÁMICA */
+        .ubicacion-display { text-align: center; color: #00e5ff; font-size: 13px; font-weight: 900; min-height: 18px; margin-bottom: 15px; text-shadow: 0 0 8px #00e5ff66; }
 
-        /* FILA DE CONTROLES */
-        .main-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 15px; }
+        .btu-float { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; border: none; padding: 7px 12px; border-radius: 4px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 3px #bf360c; }
 
-        /* GPS MANUAL */
-        .gps-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; min-width: 50px; }
-        .gps-box { width: 22px; height: 22px; border: 2px solid #fff; background: #000; display: flex; align-items: center; justify-content: center; }
+        .main-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+
+        /* GPS: CUADRITO MANUAL */
+        .gps-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+        .gps-box { width: 20px; height: 20px; border: 2px solid #fff; background: #000; display: flex; align-items: center; justify-content: center; }
         .gps-active .gps-box { background: #fff; }
         .gps-active .gps-box::after { content: '✔'; color: #000; font-size: 18px; font-weight: 900; }
-        .gps-lbl { font-size: 10px; font-weight: 900; }
+        .gps-lbl { font-size: 10px; font-weight: 900; color: #fff; }
 
         /* TÍTULO CENTRAL CIAN */
-        .jha-brand { flex: 1; text-align: center; color: #00e5ff; font-size: 18px; font-weight: 900; line-height: 1; text-shadow: 0 0 10px #00e5ff44; }
+        .jha-brand { flex: 1; text-align: center; color: #00e5ff; font-size: 16px; font-weight: 900; line-height: 1.1; }
 
-        /* AMBIENTE VERDE */
-        .amb-side { border: 2px solid #39ff14; border-radius: 8px; padding: 5px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; min-width: 65px; }
-        .amb-lbl { font-size: 8px; color: #39ff14; font-weight: 900; display: block; }
-        .amb-row { display: flex; align-items: center; justify-content: center; }
-        .amb-in { background: none; border: none; color: #39ff14; font-size: 22px; font-weight: 900; font-family: monospace; width: 40px; text-align: center; outline: none; }
+        /* AMBIENTE: CUADRO SIN FLECHAS */
+        .amb-side { border: 2px solid #39ff14; border-radius: 6px; padding: 6px; background: #051005; box-shadow: 0 0 10px #39ff1444; text-align: center; min-width: 70px; }
+        .amb-lbl { font-size: 9px; color: #39ff14; font-weight: 900; display: block; margin-bottom: 2px; }
+        
+        /* Quitamos las flechas del input de número */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
 
-        /* BOTÓN BTU (FLOTANTE O EN ESQUINA) */
-        .btu-float { position: absolute; top: 20px; right: 20px; background: #ff5722; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 3px #bf360c; }
+        .amb-in { background: none; border: none; color: #39ff14; font-size: 24px; font-weight: 900; font-family: monospace; width: 45px; text-align: center; outline: none; }
     </style>
 </head>
 <body>
 
-<div class="v24-header">
+<div class="v25-header">
     <a href="calculadora_btu.html" class="btu-float">BTU 📏</a>
 
-    <div class="top-info">
-        <div class="empresa">⚙️ MULTISERVICIOS ANATO S.M.G.</div>
-        <div id="gps-status" class="status-msg">📍 BUSCANDO SEÑAL...</div>
-        <div id="live-clock" class="clock-real">00:00:00 a. m.</div>
-    </div>
+    <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
+    <div id="loc-display" class="ubicacion-display">📍 BUSCANDO SEÑAL...</div>
 
     <div class="main-row">
         <div id="gps-btn" class="gps-side" onclick="toggleGPS()">
@@ -59,41 +58,55 @@
 
         <div class="amb-side">
             <span class="amb-lbl">AMB.</span>
-            <div class="amb-row">
+            <div style="display: flex; align-items: center; justify-content: center;">
                 <input type="number" id="temp-val" class="amb-in" value="30">
-                <span style="color:#39ff14; font-weight:900; font-size: 18px;">°C</span>
+                <span style="color:#39ff14; font-weight:900; font-size: 20px;">°C</span>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Reloj en tiempo real
-    function updateClock() {
-        const now = new Date();
-        let h = now.getHours();
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        const ampm = h >= 12 ? 'p. m.' : 'a. m.';
-        h = h % 12 || 12;
-        document.getElementById('live-clock').innerText = `${h}:${m}:${s} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // GPS Manual
-    function toggleGPS() {
+    async function toggleGPS() {
         const btn = document.getElementById('gps-btn');
-        const status = document.getElementById('gps-status');
-        const isAct = btn.classList.toggle('gps-active');
+        const locTxt = document.getElementById('loc-display');
+        const tempIn = document.getElementById('temp-val');
         
-        if(isAct) {
-            status.innerText = "📍 GPS: CONECTADO";
-            status.style.color = "#00e5ff";
-            // Aquí podrías jalar ubicación real si quieres, pero lo dejo manual.
+        const isActivating = btn.classList.toggle('gps-active');
+        
+        if(isActivating) {
+            locTxt.innerText = "📍 CONECTANDO GPS...";
+            
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+
+                    try {
+                        // 1. OBTENER CIUDAD (Usando un servicio gratuito de reversa)
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        const ciudad = data.address.city || data.address.town || data.address.village || "LOS GUAYOS";
+                        locTxt.innerText = `📍 UBICACIÓN: ${ciudad.toUpperCase()}`;
+
+                        // 2. OBTENER TEMPERATURA REAL (Usando Open-Meteo que es gratis)
+                        const resW = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                        const dataW = await resW.json();
+                        const tempReal = Math.round(dataW.current_weather.temperature);
+                        
+                        tempIn.value = tempReal; // Cambia el 30 por la temperatura del sitio
+                    } catch (e) {
+                        locTxt.innerText = "📍 UBICACIÓN: CARABOBO";
+                        tempIn.value = 28; // Valor de respaldo
+                    }
+                }, () => {
+                    locTxt.innerText = "📍 ERROR: ACTIVA TU GPS";
+                    btn.classList.remove('gps-active');
+                });
+            }
         } else {
-            status.innerText = "📍 BUSCANDO SEÑAL...";
-            status.style.color = "#00e5ff";
+            locTxt.innerText = "📍 BUSCANDO SEÑAL...";
+            // No reseteamos la temperatura al apagar para que puedas seguir editando la que quedó
         }
     }
 </script>
