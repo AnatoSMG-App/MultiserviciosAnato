@@ -3,113 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.H.A ANALIZADOR V36 PRO - V8</title>
+    <title>ANALIZADOR JHA V36.2 PRO</title>
     <style>
-        body { background-color: #000; color: white; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 5px; display: flex; flex-direction: column; align-items: center; }
-        .app-container { width: 100%; max-width: 420px; background: #000; padding-bottom: 20px; }
+        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .v36-box { width: 100%; max-width: 400px; background: #000; border: 2px solid #333; border-radius: 15px; padding: 15px; position: relative; }
         
-        /* CABECERA NEGRA ESTILO V36 */
-        .top-nav { background: #111; padding: 15px; border-bottom: 2px solid #39ff14; display: flex; justify-content: space-between; align-items: center; }
-        .brand { font-weight: bold; font-size: 16px; letter-spacing: 1px; }
-        .btu-orange { background: #ff5722; color: white; border: none; padding: 6px 15px; border-radius: 5px; font-weight: bold; box-shadow: 0 3px #943115; }
+        /* TOP INFO */
+        .top-info { text-align: center; font-size: 10px; color: #aaa; margin-bottom: 10px; }
+        .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .gps-box { display: flex; align-items: center; gap: 5px; color: #00e5ff; font-size: 11px; font-weight: bold; }
+        .amb-box { border: 2px solid #39ff14; border-radius: 8px; padding: 5px 10px; text-align: center; background: #051a05; }
+        
+        /* TITULO PRINCIPAL */
+        .main-title { text-align: center; color: #fff; font-size: 18px; font-weight: bold; margin: 10px 0; text-transform: uppercase; }
 
-        .location-bar { color: #00e5ff; font-size: 11px; padding: 8px 15px; font-weight: bold; background: #080808; }
+        /* TABS V36 */
+        .tabs-v36 { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-v36 { flex: 1; padding: 10px; text-align: center; font-weight: bold; font-size: 12px; background: #1a1a1a; border-radius: 5px; border-bottom: 3px solid #444; }
+        .tab-v36.active-a { border-color: #00e5ff; color: #00e5ff; }
+        .tab-v36.active-n { border-color: #39ff14; color: #39ff14; }
+        .tab-v36.active-au { border-color: #ff3131; color: #ff3131; }
 
-        /* TABS DE COLORES V36 */
-        .mode-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; padding: 10px; }
-        .tab-btn { padding: 12px; font-weight: bold; font-size: 12px; text-align: center; border-radius: 4px; border: none; color: white; }
-        .tab-aire { background: #005a7d; border-bottom: 4px solid #00d4ff; }
-        .tab-nev { background: #006b2b; border-bottom: 4px solid #39ff14; }
-        .tab-auto { background: #8b0000; border-bottom: 4px solid #ff3131; }
+        /* SELECTORES */
+        .sel-container { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222; }
+        .sel-row { display: flex; align-items: center; gap: 8px; }
+        .sel-item { flex: 1; }
+        .sel-item label { display: block; font-size: 9px; color: #39ff14; font-weight: bold; margin-bottom: 4px; }
+        select { width: 100%; background: #000; color: white; border: 1px solid #444; padding: 8px; border-radius: 5px; font-size: 14px; }
+        .check-btn { background: #007bff; border: none; padding: 5px; border-radius: 4px; color: white; margin-top: 15px; }
 
-        /* SELECTORES GRISES V36 */
-        .selection-area { background: #1a1a1a; margin: 10px; padding: 15px; border-radius: 8px; border: 1px solid #333; }
-        .grid-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .label-v36 { font-size: 10px; color: #39ff14; font-weight: bold; margin-bottom: 5px; display: block; }
-        select { width: 100%; padding: 10px; background: #000; color: white; border: 1px solid #444; border-radius: 4px; }
+        /* PRESIONES V36 */
+        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .p-box-v36 { border: 3px solid; border-radius: 12px; padding: 15px 5px; text-align: center; background: #000; }
+        .p-box-v36 span { display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; }
+        .p-input { background: none; border: none; color: inherit; font-size: 32px; font-weight: bold; width: 100%; text-align: center; outline: none; }
 
-        /* MANOMETROS CON ETIQUETA FLOTANTE */
-        .gauge-section { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px 10px; }
-        .gauge-box { border: 3px solid; border-radius: 12px; padding: 20px 10px; text-align: center; position: relative; background: #050505; }
-        .floating-label { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #000; padding: 0 10px; font-size: 10px; font-weight: bold; }
-        .gauge-val { background: none; border: none; color: inherit; font-size: 48px; font-weight: bold; width: 100%; text-align: center; font-family: 'Arial Black', sans-serif; }
+        /* BARRA INFO VERDE */
+        .info-strip { background: #0e1d0e; border-left: 5px solid #39ff14; padding: 10px; margin-bottom: 15px; }
+        .info-strip div { font-size: 10px; font-weight: bold; color: #39ff14; margin-bottom: 3px; }
 
-        /* BARRA VERDE DE INFO */
-        .green-status { background: #39ff14; color: black; padding: 8px 15px; font-weight: bold; font-size: 11px; display: flex; justify-content: space-between; margin: 10px 0; }
-
-        /* RELOJES DE REPOSO (INTEGRADOS AL ESTILO) */
-        .reposo-v8 { background: #0a0a0a; border: 1px solid #333; margin: 10px; padding: 15px; border-radius: 10px; }
-        .clock-grid { display: grid; grid-template-columns: 1fr 80px 1fr; align-items: center; text-align: center; }
-        .clock-v { font-size: 26px; font-weight: bold; font-family: monospace; }
-        .btn-play-v8 { width: 60px; height: 60px; background: #1b5e20; border: 2px solid #39ff14; border-radius: 50%; color: white; font-size: 24px; cursor: pointer; }
+        /* REPOSO V10 - EL NUEVO MODULO */
+        .reposo-v10 { border: 2px dashed #39ff14; border-radius: 15px; padding: 15px; background: #050505; }
+        .timer-display { display: flex; justify-content: space-around; align-items: center; text-align: center; }
+        .clock-num { font-size: 24px; font-weight: bold; font-family: monospace; }
+        .play-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: #28a745; color: white; font-size: 20px; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="top-nav">
-        <span class="brand">J.H.A ANALIZADOR</span>
-        <button class="btu-orange">BTU 📏</button>
+<div class="v36-box">
+    <div class="top-info">MULTISERVICIOS ANATO S.M.G.</div>
+    
+    <div class="header-row">
+        <div class="gps-box">
+            <input type="checkbox" checked> <span>GPS: CONECTADO</span>
+        </div>
+        <div class="amb-box">
+            <div style="font-size:8px; color:#39ff14;">AMB.</div>
+            <div style="font-size:18px; font-weight:bold; color:#39ff14;">25<small>°C</small></div>
+        </div>
     </div>
 
-    <div class="location-bar">📍 LOS GUAYOS - VALENCIA | 2026</div>
+    <div class="main-title">ANALIZADOR DE PRESIONES JHA</div>
 
-    <div class="mode-tabs">
-        <div class="tab-btn tab-aire">AIRES</div>
-        <div class="tab-btn tab-nev">NEVERAS</div>
-        <div class="tab-btn tab-auto">AUTO</div>
+    <div class="tabs-v36">
+        <div class="tab-v36 active-a">AIRES</div>
+        <div class="tab-v36">NEVERAS</div>
+        <div class="tab-v36">AUTO</div>
     </div>
 
-    <div class="selection-area">
-        <div class="grid-selects">
-            <div>
-                <span class="label-v36">GAS ORIG.</span>
-                <select id="gas" onchange="calc()">
-                    <option value="R22" data-f="3.8">R22</option>
+    <div class="sel-container">
+        <div class="sel-row">
+            <div class="sel-item">
+                <label>GAS ORIG.</label>
+                <select id="g" onchange="calc()">
                     <option value="R410A" data-f="5.8">R410A</option>
+                    <option value="R22" data-f="3.8">R22</option>
                 </select>
             </div>
-            <div>
-                <span class="label-v36">REEMP. ☑</span>
+            <button class="check-btn">✔</button>
+            <div class="sel-item">
+                <label>REEMP.</label>
                 <select>
+                    <option>SIN REEMP.</option>
                     <option>MO29 (422D)</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <div class="gauge-section">
-        <div class="gauge-box" style="border-color:#00e5ff; color:#00e5ff;">
-            <span class="floating-label">BAJA (PSI)</span>
-            <input type="number" id="b" class="gauge-val" value="65" oninput="meta()">
+    <div class="press-grid">
+        <div class="p-box-v36" style="border-color:#00e5ff; color:#00e5ff;">
+            <span>BAJA (PSI)</span>
+            <input type="number" id="vb" class="p-input" value="110" oninput="meta()">
         </div>
-        <div class="gauge-box" style="border-color:#ff3131; color:#ff3131;">
-            <span class="floating-label">ALTA (PSI)</span>
-            <input type="number" id="a" class="gauge-val" value="250" oninput="meta()">
+        <div class="p-box-v36" style="border-color:#ff3131; color:#ff3131;">
+            <span>ALTA (PSI)</span>
+            <input type="number" id="va" class="p-input" value="288" oninput="meta()">
         </div>
     </div>
 
-    <div class="green-status">
-        <span>ACEITE: MINERAL / AB</span>
-        <span>CARGA: GASEOSA</span>
+    <div class="info-strip">
+        <div id="ideal-txt">CALCULANDO IDEAL PARA: R410A</div>
+        <div id="aceite-txt">● ACEITE: POE | ● CARGA: LÍQUIDA</div>
     </div>
 
-    <div class="reposo-v8">
-        <div class="clock-grid">
+    <div class="reposo-v10">
+        <div class="timer-display">
             <div style="color:#00e5ff;">
                 <div style="font-size:9px;">IDEAL</div>
-                <div id="cI" class="clock-v">05:00</div>
-                <div id="pI" style="font-size:14px;">-- PSI</div>
-                <div style="font-size:8px;">META: <span id="mT">--</span></div>
+                <div id="cI" class="clock-num">05:00</div>
+                <div id="pI" style="font-size:12px;">-- PSI</div>
+                <div style="font-size:8px; color:#fff;">META: <span id="mT">--</span></div>
             </div>
-            <div>
-                <button onclick="start()" class="btn-play-v8">▶</button>
-            </div>
+            <button onclick="start()" class="play-btn">▶</button>
             <div style="color:#39ff14;">
                 <div style="font-size:9px;">REAL</div>
-                <div id="cR" class="clock-v">00:00</div>
-                <div id="pR" style="font-size:14px;">-- PSI</div>
-                <div style="font-size:8px;" id="st">READY</div>
+                <div id="cR" class="clock-num">00:00</div>
+                <div id="pR" style="font-size:12px;">-- PSI</div>
+                <div id="st" style="font-size:8px;">READY</div>
             </div>
         </div>
     </div>
@@ -118,12 +130,12 @@
 <script>
     let t, sR=0, sI=300, run=false;
     function meta(){
-        let vb=parseFloat(document.getElementById('b').value)||0, va=parseFloat(document.getElementById('a').value)||0;
-        document.getElementById('mT').innerText=((vb+va)/2).toFixed(1);
+        let b=parseFloat(document.getElementById('vb').value)||0, a=parseFloat(document.getElementById('va').value)||0;
+        document.getElementById('mT').innerText=((b+a)/2).toFixed(1);
     }
     function start(){
         if(run)return; run=true; sR=0; sI=300; meta();
-        let b0=parseFloat(document.getElementById('b').value), m0=parseFloat(document.getElementById('mT').innerText);
+        let b0=parseFloat(document.getElementById('vb').value), m0=parseFloat(document.getElementById('mT').innerText);
         t=setInterval(()=>{
             sR++;
             document.getElementById('cR').innerText=`${Math.floor(sR/60).toString().padStart(2,'0')}:${(sR%60).toString().padStart(2,'0')}`;
@@ -133,7 +145,6 @@
                 document.getElementById('cI').innerText=`${Math.floor(sI/60).toString().padStart(2,'0')}:${(sI%60).toString().padStart(2,'0')}`;
                 document.getElementById('pI').innerText=(b0+((m0-b0)*((300-sI)/300))).toFixed(1);
             }
-            if(sR===480) { document.getElementById('st').innerText="⚠️ COLESTEROL"; document.getElementById('cR').style.color="#ff3131"; }
         },1000);
     }
     window.onload=meta;
