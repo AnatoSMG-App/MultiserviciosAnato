@@ -3,82 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANALIZADOR JHA V36.2 PRO</title>
+    <title>ANALIZADOR JHA V36.2 PRO - V11</title>
     <style>
-        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .v36-box { width: 100%; max-width: 400px; background: #000; border: 2px solid #333; border-radius: 15px; padding: 15px; position: relative; }
+        :root { --neon: #39ff14; --cyan: #00e5ff; --red: #ff3131; --bg: #000; --panel: #141414; }
+        body { background-color: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .v36-container { width: 100%; max-width: 420px; background: var(--bg); border: 1px solid #333; padding-bottom: 30px; }
         
-        /* TOP INFO */
-        .top-info { text-align: center; font-size: 10px; color: #aaa; margin-bottom: 10px; }
-        .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .gps-box { display: flex; align-items: center; gap: 5px; color: #00e5ff; font-size: 11px; font-weight: bold; }
-        .amb-box { border: 2px solid #39ff14; border-radius: 8px; padding: 5px 10px; text-align: center; background: #051a05; }
+        /* HEADER SUPERIOR */
+        .top-header { text-align: center; font-size: 10px; color: #666; letter-spacing: 2px; margin-bottom: 10px; padding-top: 5px; }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; padding: 0 15px; margin-bottom: 15px; }
+        .gps-btn { color: var(--cyan); font-size: 12px; font-weight: bold; border: 1px solid #333; padding: 5px 10px; border-radius: 5px; background: #0a0a0a; }
+        .temp-amb-box { border: 2px solid var(--neon); border-radius: 10px; padding: 5px 12px; background: #051505; text-align: center; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
         
-        /* TITULO PRINCIPAL */
-        .main-title { text-align: center; color: #fff; font-size: 18px; font-weight: bold; margin: 10px 0; text-transform: uppercase; }
+        .main-app-title { text-align: center; font-size: 18px; font-weight: bold; margin: 15px 0; letter-spacing: 1px; }
 
-        /* TABS V36 */
-        .tabs-v36 { display: flex; gap: 5px; margin-bottom: 15px; }
-        .tab-v36 { flex: 1; padding: 10px; text-align: center; font-weight: bold; font-size: 12px; background: #1a1a1a; border-radius: 5px; border-bottom: 3px solid #444; }
-        .tab-v36.active-a { border-color: #00e5ff; color: #00e5ff; }
-        .tab-v36.active-n { border-color: #39ff14; color: #39ff14; }
-        .tab-v36.active-au { border-color: #ff3131; color: #ff3131; }
+        /* TABS V36 ESTILO REAL */
+        .v36-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 15px; margin-bottom: 20px; }
+        .v36-tab { padding: 14px; text-align: center; font-weight: bold; font-size: 12px; border-radius: 8px; background: #1a1a1a; border-bottom: 4px solid #444; color: #888; }
+        .v36-tab.active-aire { border-color: var(--cyan); color: var(--cyan); background: #0b1618; }
+        .v36-tab.active-nev { border-color: var(--neon); color: var(--neon); background: #0b180b; }
+        .v36-tab.active-auto { border-color: var(--red); color: var(--red); background: #180b0b; }
 
-        /* SELECTORES */
-        .sel-container { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222; }
-        .sel-row { display: flex; align-items: center; gap: 8px; }
+        /* SELECTORES EN FILA */
+        .selectors-v36 { background: #0a0a0a; margin: 0 15px 15px 15px; padding: 15px; border-radius: 12px; border: 1px solid #222; }
+        .sel-grid { display: flex; align-items: center; gap: 10px; }
         .sel-item { flex: 1; }
-        .sel-item label { display: block; font-size: 9px; color: #39ff14; font-weight: bold; margin-bottom: 4px; }
-        select { width: 100%; background: #000; color: white; border: 1px solid #444; padding: 8px; border-radius: 5px; font-size: 14px; }
-        .check-btn { background: #007bff; border: none; padding: 5px; border-radius: 4px; color: white; margin-top: 15px; }
+        .sel-item label { display: block; font-size: 9px; color: var(--neon); font-weight: bold; margin-bottom: 5px; }
+        select { width: 100%; background: #000; color: white; border: 1px solid #444; padding: 10px; border-radius: 6px; font-size: 14px; outline: none; }
+        .check-btn { background: #007bff; color: white; border: none; padding: 8px; border-radius: 5px; margin-top: 15px; font-weight: bold; }
 
-        /* PRESIONES V36 */
-        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .p-box-v36 { border: 3px solid; border-radius: 12px; padding: 15px 5px; text-align: center; background: #000; }
-        .p-box-v36 span { display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; }
-        .p-input { background: none; border: none; color: inherit; font-size: 32px; font-weight: bold; width: 100%; text-align: center; outline: none; }
+        /* CUADROS DE PRESIÓN V36 */
+        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px; margin-bottom: 20px; }
+        .p-box { border: 3px solid; border-radius: 15px; padding: 20px 10px; text-align: center; background: #000; box-shadow: inset 0 0 20px rgba(0,0,0,1); }
+        .p-box span { display: block; font-size: 11px; font-weight: bold; margin-bottom: 8px; }
+        .p-input { background: none; border: none; color: inherit; font-size: 38px; font-weight: bold; width: 100%; text-align: center; outline: none; font-family: monospace; }
 
-        /* BARRA INFO VERDE */
-        .info-strip { background: #0e1d0e; border-left: 5px solid #39ff14; padding: 10px; margin-bottom: 15px; }
-        .info-strip div { font-size: 10px; font-weight: bold; color: #39ff14; margin-bottom: 3px; }
+        /* FRANJA DE INFO */
+        .info-strip { background: #0a140a; border-left: 6px solid var(--neon); padding: 12px 15px; margin: 0 15px 20px 15px; border-radius: 0 8px 8px 0; }
+        .info-strip div { font-size: 11px; font-weight: bold; color: var(--neon); margin-bottom: 4px; }
 
-        /* REPOSO V10 - EL NUEVO MODULO */
-        .reposo-v10 { border: 2px dashed #39ff14; border-radius: 15px; padding: 15px; background: #050505; }
+        /* MODULO DE REPOSO (INTEGRADO ABAJO) */
+        .reposo-pro { background: #080808; border-top: 2px solid #222; padding: 20px 15px; margin-top: 10px; }
         .timer-display { display: flex; justify-content: space-around; align-items: center; text-align: center; }
-        .clock-num { font-size: 24px; font-weight: bold; font-family: monospace; }
-        .play-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: #28a745; color: white; font-size: 20px; }
+        .clock-v { font-size: 28px; font-weight: bold; font-family: 'Courier New', monospace; }
+        .play-circle { width: 60px; height: 60px; border-radius: 50%; border: none; background: #2e7d32; color: white; font-size: 24px; box-shadow: 0 0 15px rgba(46, 125, 50, 0.4); }
     </style>
 </head>
 <body>
 
-<div class="v36-box">
-    <div class="top-info">MULTISERVICIOS ANATO S.M.G.</div>
+<div class="v36-container">
+    <div class="top-header">MULTISERVICIOS ANATO S.M.G.</div>
     
-    <div class="header-row">
-        <div class="gps-box">
-            <input type="checkbox" checked> <span>GPS: CONECTADO</span>
-        </div>
-        <div class="amb-box">
-            <div style="font-size:8px; color:#39ff14;">AMB.</div>
-            <div style="font-size:18px; font-weight:bold; color:#39ff14;">25<small>°C</small></div>
+    <div class="nav-row">
+        <div class="gps-btn">📍 GPS: CONECTADO</div>
+        <div class="temp-amb-box" onclick="let n=prompt('Temp Ambiente:',25); if(n) document.getElementById('vT').innerText=n;">
+            <div style="font-size:9px; color:var(--neon);">AMB.</div>
+            <div style="font-size:20px; font-weight:bold; color:var(--neon);"><span id="vT">25</span>°C</div>
         </div>
     </div>
 
-    <div class="main-title">ANALIZADOR DE PRESIONES JHA</div>
+    <div class="main-app-title">ANALIZADOR DE PRESIONES JHA</div>
 
-    <div class="tabs-v36">
-        <div class="tab-v36 active-a">AIRES</div>
-        <div class="tab-v36">NEVERAS</div>
-        <div class="tab-v36">AUTO</div>
+    <div class="v36-tabs">
+        <div class="v36-tab active-aire">AIRES</div>
+        <div class="v36-tab">NEVERAS</div>
+        <div class="v36-tab">AUTO</div>
     </div>
 
-    <div class="sel-container">
-        <div class="sel-row">
+    <div class="selectors-v36">
+        <div class="sel-grid">
             <div class="sel-item">
                 <label>GAS ORIG.</label>
-                <select id="g" onchange="calc()">
-                    <option value="R410A" data-f="5.8">R410A</option>
-                    <option value="R22" data-f="3.8">R22</option>
+                <select id="gas" onchange="actualizar()">
+                    <option value="R410A" data-f="5.8" data-oil="POE">R410A</option>
+                    <option value="R22" data-f="3.8" data-oil="MINERAL">R22</option>
                 </select>
             </div>
             <button class="check-btn">✔</button>
@@ -93,13 +91,13 @@
     </div>
 
     <div class="press-grid">
-        <div class="p-box-v36" style="border-color:#00e5ff; color:#00e5ff;">
+        <div class="p-box" style="border-color: var(--cyan); color: var(--cyan);">
             <span>BAJA (PSI)</span>
-            <input type="number" id="vb" class="p-input" value="110" oninput="meta()">
+            <input type="number" id="vB" class="p-input" value="110" oninput="meta()">
         </div>
-        <div class="p-box-v36" style="border-color:#ff3131; color:#ff3131;">
+        <div class="p-box" style="border-color: var(--red); color: var(--red);">
             <span>ALTA (PSI)</span>
-            <input type="number" id="va" class="p-input" value="288" oninput="meta()">
+            <input type="number" id="vA" class="p-input" value="288" oninput="meta()">
         </div>
     </div>
 
@@ -108,20 +106,20 @@
         <div id="aceite-txt">● ACEITE: POE | ● CARGA: LÍQUIDA</div>
     </div>
 
-    <div class="reposo-v10">
+    <div class="reposo-pro">
         <div class="timer-display">
-            <div style="color:#00e5ff;">
-                <div style="font-size:9px;">IDEAL</div>
-                <div id="cI" class="clock-num">05:00</div>
-                <div id="pI" style="font-size:12px;">-- PSI</div>
-                <div style="font-size:8px; color:#fff;">META: <span id="mT">--</span></div>
+            <div style="color:var(--cyan);">
+                <div style="font-size:10px;">IDEAL</div>
+                <div id="cI" class="clock-v">05:00</div>
+                <div id="pI" style="font-size:14px;">-- PSI</div>
+                <div style="font-size:9px; color:white;">META: <span id="mT">199.0</span></div>
             </div>
-            <button onclick="start()" class="play-btn">▶</button>
-            <div style="color:#39ff14;">
-                <div style="font-size:9px;">REAL</div>
-                <div id="cR" class="clock-num">00:00</div>
-                <div id="pR" style="font-size:12px;">-- PSI</div>
-                <div id="st" style="font-size:8px;">READY</div>
+            <button onclick="start()" class="play-circle">▶</button>
+            <div style="color:var(--neon);">
+                <div style="font-size:10px;">REAL</div>
+                <div id="cR" class="clock-v">00:00</div>
+                <div id="pR" style="font-size:14px;">-- PSI</div>
+                <div id="st" style="font-size:9px;">READY</div>
             </div>
         </div>
     </div>
@@ -130,12 +128,12 @@
 <script>
     let t, sR=0, sI=300, run=false;
     function meta(){
-        let b=parseFloat(document.getElementById('vb').value)||0, a=parseFloat(document.getElementById('va').value)||0;
+        let b=parseFloat(document.getElementById('vB').value)||0, a=parseFloat(document.getElementById('vA').value)||0;
         document.getElementById('mT').innerText=((b+a)/2).toFixed(1);
     }
     function start(){
         if(run)return; run=true; sR=0; sI=300; meta();
-        let b0=parseFloat(document.getElementById('vb').value), m0=parseFloat(document.getElementById('mT').innerText);
+        let b0=parseFloat(document.getElementById('vB').value), m0=parseFloat(document.getElementById('mT').innerText);
         t=setInterval(()=>{
             sR++;
             document.getElementById('cR').innerText=`${Math.floor(sR/60).toString().padStart(2,'0')}:${(sR%60).toString().padStart(2,'0')}`;
