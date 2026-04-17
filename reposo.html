@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.M.G. Reposo V36.8.4</title>
+    <title>S.M.G. Reposo V36.8.5</title>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .header { color: #00ff00; text-shadow: 0 0 15px #00ff00; font-size: 1.6em; margin: 5px 0; }
@@ -32,7 +32,7 @@
 <body>
 
     <h1 class="header">MULTISERVICIOS ANATO S.M.G.</h1>
-    <div class="sub-header">DIAGNÓSTICO DE REPOSO CALIBRADO</div>
+    <div class="sub-header">ESCANER DE REPOSO PROFESIONAL</div>
 
     <div class="gps-row">
         <button onclick="gpsOn()" style="background:none; border:none; font-size:1.8em; cursor:pointer;">🛰️</button>
@@ -51,7 +51,7 @@
         <button class="cat-btn" id="cat-auto" onclick="setCat('auto')">AUTO</button>
     </div>
 
-    <select id="gasIn" onchange="calc()" style="width:100%; padding:15px; background:#111; color:#00ff00; border:1px solid #333; border-radius:12px; margin-bottom:15px; font-size:1.1em;">
+    <select id="gasIn" onchange="actualizarGas()" style="width:100%; padding:15px; background:#111; color:#00ff00; border:1px solid #333; border-radius:12px; margin-bottom:15px; font-size:1.1em;">
         <option value="">-- SELECCIONAR GAS --</option>
     </select>
 
@@ -62,30 +62,22 @@
             <div id="t-ideal" class="timer" style="color:#00ff00; font-size:1.2em;">00:00</div>
             <button class="ctrl-btn btn-go" onclick="run()">▶️</button>
         </div>
-
-        <div style="align-self: center;">
-            <button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button>
-        </div>
-
+        <div style="align-self: center;"><button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button></div>
         <div>
-            <small style="color:#0080ff; font-weight:bold;">MANÓMETRO</small>
-            <input type="number" id="pReal" placeholder="PSI" oninput="analizarAhora()" style="width:85%; border:2px solid #0080ff; color:#fff; margin-bottom:5px; font-size:1.4em;">
+            <small style="color:#0080ff; font-weight:bold;">CAMPO</small>
+            <input type="number" id="pReal" placeholder="000" oninput="validarDigitos()" style="width:85%; border:2px solid #0080ff; color:#fff; margin-bottom:5px; font-size:1.4em;">
             <div id="t-real" class="timer">00:00</div>
             <button class="ctrl-btn btn-stop" onclick="stop()">⏹️</button>
         </div>
     </div>
 
-    <div id="msg-status">SISTEMA LISTO... ELIJA GAS E INICIE</div>
+    <div id="msg-status">SISTEMA LISTO...</div>
 
     <button class="nav-btn" onclick="window.location.href='index.html'">⬅️ VOLVER AL ANALIZADOR</button>
 
     <script>
-        const db = { 
-            aire: ["R410A", "R32", "R22", "R407C", "R134a"], 
-            nevera: ["R134a", "R600a", "R290", "R404A", "R12"], 
-            auto: ["R134a"] 
-        };
-        let sI, sR = 0, loopI, loopR, running = false, tMetaInicial = 300;
+        const db = { aire: ["R410A", "R32", "R22", "R407C", "R134a"], nevera: ["R134a", "R600a", "R290", "R404A", "R12"], auto: ["R134a"] };
+        let sI = 300, sR = 0, loopI, loopR, running = false, tMetaBase = 300;
 
         function setCat(c) {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active-cat'));
@@ -95,16 +87,16 @@
             db[c].forEach(g => s.innerHTML += `<option value="${g}">${g}</option>`);
         }
 
-        function calc() {
+        function actualizarGas() {
             const g = document.getElementById('gasIn').value;
             const t = parseFloat(document.getElementById('tIn').value) || 30;
             
-            // CALIBRACIÓN DE TIEMPOS POR GAS
-            if (["R410A", "R32", "R404A"].includes(g)) tMetaInicial = 420; // 7 Min
-            else if (["R600a", "R290"].includes(g)) tMetaInicial = 180; // 3 Min
-            else tMetaInicial = 300; // 5 Min
-            
-            sI = tMetaInicial;
+            // CALIBRACIÓN DE TIEMPOS AL INSTANTE
+            if (["R410A", "R32", "R404A"].includes(g)) tMetaBase = 420; // 7 Minutos
+            else if (["R600a", "R290"].includes(g)) tMetaBase = 180; // 3 Minutos
+            else tMetaBase = 300; // 5 Minutos
+
+            sI = tMetaBase;
             fmt('t-ideal', sI);
 
             let p = 0;
@@ -115,49 +107,64 @@
         }
 
         function run() {
-            if(!document.getElementById('gasIn').value) return alert("Seleccione el refrigerante primero");
+            if(!document.getElementById('gasIn').value) return alert("Seleccione Gas");
             if(running) return;
             running = true;
-            document.getElementById('msg-status').innerText = "⏳ ANALIZANDO FLUJO... ESPERE IGUALACIÓN";
+            document.getElementById('msg-status').innerText = "⏳ ANALIZANDO IGUALACIÓN...";
             document.getElementById('msg-status').style.borderColor = "#0080ff";
-            
             loopI = setInterval(() => { if(sI > 0) { sI--; fmt('t-ideal', sI); } }, 1000);
-            loopR = setInterval(() => { sR++; fmt('t-real', sR); if(sR > tMetaInicial) document.getElementById('t-real').style.color = "#f00"; }, 1000);
+            loopR = setInterval(() => { sR++; fmt('t-real', sR); if(sR > tMetaBase) document.getElementById('t-real').style.color = "#f00"; }, 1000);
         }
 
         function pause() {
             clearInterval(loopI); clearInterval(loopR); running = false;
-            document.getElementById('msg-status').innerText = "⏸️ PRUEBA EN PAUSA";
+            document.getElementById('msg-status').innerText = "⏸️ PRUEBA PAUSADA";
         }
 
         function stop() {
-            if(!running && sR === 0) { // Segundo toque para Reset total
-                sR = 0; sI = tMetaInicial; fmt('t-real', 0); fmt('t-ideal', sI);
-                document.getElementById('pReal').value = "";
-                document.getElementById('t-real').style.color = "#fff";
-                document.getElementById('msg-status').innerText = "SISTEMA REINICIADO";
-                return;
-            }
+            if(!running && sR === 0) { location.reload(); return; }
             clearInterval(loopI); clearInterval(loopR); running = false;
-            document.getElementById('msg-status').innerText = "⏳ TIEMPO DETENIDO. INGRESE PSI REALES.";
-            document.getElementById('msg-status').style.borderColor = "#ff8c00"; 
+            document.getElementById('msg-status').innerText = "⏳ TIEMPO OK. ESCRIBA PSI DE MANÓMETRO.";
+            document.getElementById('msg-status').style.borderColor = "#ff8c00";
         }
 
-        function analizarAhora() {
+        function validarDigitos() {
+            const val = document.getElementById('pReal').value;
+            // Si el reloj está parado y ya escribiste 3 números (ej: 140, 065) dispara el veredicto
+            if (!running && val.length >= 2 && sR > 0) {
+                lanzarVeredicto();
+            }
+        }
+
+        function lanzarVeredicto() {
             const pR = parseFloat(document.getElementById('pReal').value) || 0;
             const pM = parseInt(document.getElementById('m-psi').innerText) || 0;
-            
-            if (pR === 0 || running) return; // Espera a que se detenga el reloj y haya datos
-
+            const status = document.getElementById('msg-status');
             let res = "";
-            // CRUCE DE DATOS: TIEMPO REAL VS META CALIBRADA
-            if(sR < (tMetaInicial * 0.4)) res = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
-            else if(sR > (tMetaInicial * 1.4)) res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN SISTEMA";
-            else if(Math.abs(pR - pM) > 25) res = "⚠️ CARGA IRREGULAR O GAS CONTAMINADO";
-            else res = "✅ SISTEMA SANO: IGUALACIÓN CORRECTA";
+            let color = "#0080ff";
+
+            const diff = Math.abs(pR - pM);
+
+            if(sR < (tMetaBase * 0.4)) {
+                res = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
+                color = "#ff0000";
+            } else if(sR > (tMetaBase * 1.4)) {
+                res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN SISTEMA";
+                color = "#ff0000";
+            } else if(diff <= 15) {
+                res = "✅ SISTEMA SANO: IGUALACIÓN ÓPTIMA";
+                color = "#00ff00";
+            } else if(diff > 15 && diff <= 30) {
+                res = "⚠️ ESTABILIDAD MEDIA: REVISAR CARGA O AMBIENTE";
+                color = "#ffff00";
+            } else {
+                res = "❌ CARGA IRREGULAR O GAS MEZCLADO";
+                color = "#ff0000";
+            }
             
-            document.getElementById('msg-status').innerText = res;
-            document.getElementById('msg-status').style.borderColor = "#00ff00";
+            status.innerText = res;
+            status.style.borderColor = color;
+            status.style.color = color;
         }
 
         function fmt(id, s) {
@@ -168,13 +175,13 @@
         function gpsOn() {
             document.getElementById('gps-led').style.background = "#0f0";
             document.getElementById('loc-txt').innerText = "📍 VALENCIA / LOS GUAYOS";
-            document.getElementById('tIn').value = 32; calc();
+            document.getElementById('tIn').value = 32; actualizarGas();
         }
 
         function gpsOff() {
             document.getElementById('gps-led').style.background = "#f00";
             document.getElementById('loc-txt').innerText = "📍 MODO MANUAL";
-            calc();
+            actualizarGas();
         }
     </script>
 </body>
