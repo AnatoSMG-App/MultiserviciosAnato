@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.M.G. Reposo Master</title>
+    <title>S.M.G. Reposo V36.8</title>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
-        .header { color: #00ff00; text-shadow: 0 0 15px #00ff00; font-size: 1.8em; margin-bottom: 5px; }
-        .sub-header { color: #fff; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 5px #fff; margin-bottom: 20px; }
+        .header { color: #00ff00; text-shadow: 0 0 15px #00ff00; font-size: 1.6em; margin: 5px 0; }
+        .sub-header { color: #fff; font-weight: bold; font-size: 0.9em; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+
+        /* GPS y Ambiente */
+        .gps-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        .temp-box { background: #0a0a0a; padding: 15px; border-radius: 20px; border: 2px solid #444; margin-bottom: 15px; }
+        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 1.6em; width: 100px; }
+
+        /* Categorías y Gases */
+        .cat-btn { flex: 1; padding: 12px; border: 2px solid #333; border-radius: 10px; background: #111; color: #fff; font-weight: bold; cursor: pointer; font-size: 0.8em; }
+        .active-cat { border-color: #0080ff; background: #0080ff22; }
+
+        /* Tablero de Diagnóstico */
+        .dashboard { display: grid; grid-template-columns: 1fr 0.5fr 1fr; gap: 10px; align-items: start; background: #050505; padding: 15px; border-radius: 25px; border: 1px solid #333; margin-bottom: 15px; }
         
-        /* Barra de Estado GPS */
-        .gps-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 15px; }
-        #gps-ind { width: 15px; height: 15px; border-radius: 50%; background: #555; transition: 0.3s; }
-
-        /* Temperatura Ambiente */
-        .temp-row { background: #0a0a0a; padding: 20px; border-radius: 20px; border: 1px solid #444; margin-bottom: 15px; }
-        .label-white { color: #fff; font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 10px; }
-        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 12px; width: 100px; text-align: center; font-size: 1.8em; font-weight: bold; }
-
-        .cat-btn { flex: 1; padding: 15px; border: 2px solid #444; border-radius: 12px; background: #111; color: #fff; font-weight: bold; cursor: pointer; }
-        .active-cat { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; background: #00ff0011; }
-
-        /* Relojes y Metas */
-        .relojes-grid { display: grid; grid-template-columns: 1fr 0.5fr 1fr; gap: 10px; align-items: center; background: #111; padding: 15px; border-radius: 25px; border: 2px solid #222; margin-bottom: 15px; }
-        .meta-box { color: #fff; font-size: 1.8em; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
-        .time-display { font-family: monospace; font-size: 2.2em; font-weight: bold; color: #00ff00; }
-
-        .btn-action { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #00ff00; background: none; color: #00ff00; font-size: 2em; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 5px auto; }
+        /* Estilos de Relojes y PSI */
+        .val-meta { color: #00ff00; font-size: 1.8em; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
+        .val-real { color: #0080ff; font-size: 1.8em; font-weight: bold; text-shadow: 0 0 10px #0080ff; }
+        .timer { font-family: monospace; font-size: 1.8em; font-weight: bold; color: #fff; margin: 5px 0; }
+        
+        /* Botones de Control */
+        .ctrl-btn { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background: none; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 10px auto; transition: 0.2s; }
+        .btn-go { border-color: #00ff00; color: #00ff00; }
+        .btn-pause { border-color: #fff; color: #fff; }
         .btn-stop { border-color: #ff0000; color: #ff0000; }
 
-        #msg-alerta { background: #000; border: 2px dashed #0080ff; padding: 20px; border-radius: 15px; font-size: 1.1em; font-weight: bold; color: #0080ff; min-height: 50px; text-transform: uppercase; }
-        .nav-btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: bold; margin-top: 10px; font-size: 1em; cursor: pointer; }
+        #msg-status { background: #000; border: 2px dashed #0080ff; padding: 15px; border-radius: 15px; color: #0080ff; font-weight: bold; font-size: 0.9em; min-height: 40px; text-transform: uppercase; }
+        .nav-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -39,120 +42,129 @@
     <div class="sub-header">DIAGNÓSTICO DE REPOSO CALIBRADO (+17°C)</div>
 
     <div class="gps-row">
-        <button onclick="activarGPS()" style="background:none; border:none; font-size:2em; cursor:pointer;">🛰️</button>
-        <div id="gps-ind"></div>
-        <span id="loc-status" style="color:#0080ff; font-weight:bold; font-size:0.8em;">GPS: MANUAL</span>
+        <button onclick="gpsOn()" style="background:none; border:none; font-size:1.8em; cursor:pointer;">🛰️</button>
+        <span id="loc-txt" style="color:#0080ff; font-size:0.7em; font-weight:bold;">📍 MODO MANUAL</span>
+        <div id="gps-led" style="width:12px; height:12px; border-radius:50%; background:#f00;"></div>
     </div>
 
-    <div class="temp-row">
-        <span class="label-white">TEMPERATURA AMBIENTE</span>
-        <input type="number" id="tAmb" value="30" inputmode="decimal" oninput="manualTemp()">
-        <span style="color:#00ff00; font-size:1.8em; font-weight:bold;">°C</span>
+    <div class="temp-box">
+        <small style="color:#fff; font-weight:bold; display:block; margin-bottom:5px;">TEMPERATURA AMBIENTE / PLACA</small>
+        <input type="number" id="tIn" value="30" inputmode="decimal" oninput="gpsOff()">
     </div>
 
-    <div style="display:flex; gap:10px; margin-bottom:15px;">
-        <button class="cat-btn" id="b-aire" onclick="setCat('aire')">AIRE</button>
-        <button class="cat-btn" id="b-nevera" onclick="setCat('nevera')">NEVERA</button>
-        <button class="cat-btn" id="b-auto" onclick="setCat('auto')">AUTO</button>
+    <div style="display:flex; gap:8px; margin-bottom:15px;">
+        <button class="cat-btn" id="cat-aire" onclick="setCat('aire')">AIRE</button>
+        <button class="cat-btn" id="cat-nevera" onclick="setCat('nevera')">NEVERA</button>
+        <button class="cat-btn" id="cat-auto" onclick="setCat('auto')">AUTO</button>
     </div>
 
-    <select id="gasSel" onchange="actualizarMeta()" style="width:100%; padding:15px; background:#111; color:#00ff00; border:2px solid #333; border-radius:15px; font-size:1.2em; margin-bottom:15px;">
-        <option value="">-- SELECCIONAR REFRIGERANTE --</option>
+    <select id="gasIn" onchange="calc()" style="width:100%; padding:15px; background:#111; color:#00ff00; border:1px solid #333; border-radius:12px; margin-bottom:15px; font-size:1.1em;">
+        <option value="">-- ELEGIR REFRIGERANTE --</option>
     </select>
 
-    <div class="relojes-grid">
+    <div class="dashboard">
         <div>
-            <small style="color:#00ff00;">META TEÓRICA</small>
-            <div id="p-meta" class="meta-box">-- PSI</div>
-            <div id="c-ideal" class="time-display" style="font-size:1.5em;">00:00</div>
+            <small style="color:#00ff00; font-weight:bold;">META TEÓRICA</small>
+            <div id="m-psi" class="val-meta">-- PSI</div>
+            <div id="t-ideal" class="timer" style="color:#00ff00; font-size:1.2em;">05:00</div>
+            <button class="ctrl-btn btn-go" onclick="run()">▶️</button>
         </div>
-        <div>
-            <button class="btn-action" onclick="iniciarOReiniciar()">🟢</button>
-            <button class="btn-action btn-stop" onclick="detenerYDiagnosticar()">🔴</button>
+
+        <div style="align-self: center;">
+            <button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button>
         </div>
+
         <div>
-            <small style="color:#888;">CAMPO REAL</small>
-            <input type="number" id="p-real" placeholder="PSI" inputmode="decimal" style="width:80%; margin-bottom:10px; border-color:#555;">
-            <div id="c-real" class="time-display" style="color:#fff;">00:00</div>
+            <small style="color:#0080ff; font-weight:bold;">CAMPO REAL</small>
+            <input type="number" id="pReal" placeholder="PSI" inputmode="decimal" style="width:85%; border-color:#0080ff; color:#fff; margin-bottom:5px;">
+            <div id="t-real" class="timer">00:00</div>
+            <button class="ctrl-btn btn-stop" onclick="stop()">⏹️</button>
         </div>
     </div>
 
-    <div id="msg-alerta">ESPERANDO INICIO DE PRUEBA...</div>
+    <div id="msg-status">SISTEMA LISTO PARA ANÁLISIS</div>
 
-    <button class="nav-btn" onclick="window.location.href='index.html'" style="background:#222; color:#00ff00; border:1px solid #00ff00;">⬅️ ANALIZADOR DE CARGA</button>
-    <button class="nav-btn" onclick="window.location.href='dimensiones.html'" style="background:transparent; color:#ff8c00; border:1px solid #ff8c00;">📐 CALCULADORA BTU</button>
+    <div style="margin-top:20px;">
+        <button class="nav-btn" onclick="window.location.href='index.html'" style="background:#222; color:#00ff00; border:1px solid #00ff00;">⬅️ ANALIZADOR DE CARGA</button>
+        <button class="nav-btn" onclick="window.location.href='dimensiones.html'" style="background:transparent; color:#ff8c00; border:1px solid #ff8c00;">📐 CALCULADORA BTU</button>
+    </div>
 
     <script>
-        const db = {
-            aire: ["R410A", "R32", "R22", "R407C", "R134a", "R417A"],
-            nevera: ["R134a", "R600a", "R290", "R12", "R404A"],
-            auto: ["R134a", "R1234yf"]
-        };
-        let segI, segR, timerI, timerR;
+        const db = { aire: ["R410A", "R32", "R22", "R407C", "R134a"], nevera: ["R134a", "R600a", "R290", "R404A", "R12"], auto: ["R134a"] };
+        let sI, sR, loopI, loopR, running = false;
 
         function setCat(c) {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active-cat'));
-            document.getElementById('b-'+c).classList.add('active-cat');
-            const s = document.getElementById('gasSel');
-            s.innerHTML = '<option value="">-- SELECCIONAR REFRIGERANTE --</option>';
+            document.getElementById('cat-'+c).classList.add('active-cat');
+            const s = document.getElementById('gasIn');
+            s.innerHTML = '<option value="">-- ELEGIR REFRIGERANTE --</option>';
             db[c].forEach(g => s.innerHTML += `<option value="${g}">${g}</option>`);
         }
 
-        function actualizarMeta() {
-            const g = document.getElementById('gasSel').value;
-            const t = parseFloat(document.getElementById('tAmb').value) || 30;
-            let psi = 0;
-            if(g === "R410A" || g === "R32") psi = (t * 4.3) + 50;
-            else if(g === "R22") psi = (t * 2.6) + 38;
-            else if(g === "R134a") psi = (t * 1.9) + 18;
-            else if(g === "R600a") psi = (t * 1.2) - 2;
-            document.getElementById('p-meta').innerText = Math.round(psi) + " PSI";
+        function calc() {
+            const g = document.getElementById('gasIn').value;
+            const t = parseFloat(document.getElementById('tIn').value) || 30;
+            let p = 0;
+            if(g === "R410A") p = (t * 4.3) + 52;
+            else if(g === "R22") p = (t * 2.7) + 38;
+            else if(g === "R134a") p = (t * 2.0) + 16;
+            document.getElementById('m-psi').innerText = Math.round(p) + " PSI";
         }
 
-        function iniciarOReiniciar() {
-            if(!document.getElementById('gasSel').value) return alert("Seleccione Gas");
-            detenerTimers();
-            segI = 300; segR = 0;
-            document.getElementById('c-real').style.color = "#fff";
-            document.getElementById('msg-alerta').innerText = "⏳ ANALIZANDO FLUJO... ESPERE IGUALACIÓN";
-            timerI = setInterval(() => { if(segI > 0) segI--; format('c-ideal', segI); }, 1000);
-            timerR = setInterval(() => { 
-                segR++; 
-                format('c-real', segR); 
-                if(segR > 300) document.getElementById('c-real').style.color = "#ff0000";
-            }, 1000);
+        function run() {
+            if(!document.getElementById('gasIn').value) return alert("Seleccione Gas");
+            if(running) return;
+            if(sR === undefined || sR === 0) { sI = 300; sR = 0; }
+            running = true;
+            document.getElementById('msg-status').innerText = "⏳ ANALIZANDO IGUALACIÓN...";
+            loopI = setInterval(() => { if(sI > 0) { sI--; fmt('t-ideal', sI); } }, 1000);
+            loopR = setInterval(() => { sR++; fmt('t-real', sR); if(sR > 300) document.getElementById('t-real').style.color = "#f00"; }, 1000);
         }
 
-        function detenerYDiagnosticar() {
-            detenerTimers();
-            const pR = parseFloat(document.getElementById('p-real').value) || 0;
-            const pM = parseInt(document.getElementById('p-meta').innerText) || 0;
-            let d = "";
-            if(segR < 120) d = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
-            else if(segR > 420) d = "⚠️ COLESTEROL: OBSTRUCCIÓN EN CAPILAR O FILTRO";
-            else if(pR > 0 && Math.abs(pR - pM) > 25) d = "⚠️ CARGA IRREGULAR O GAS CONTAMINADO";
-            else d = "✅ SISTEMA SANO: IGUALACIÓN CORRECTA";
-            document.getElementById('msg-alerta').innerText = d;
+        function pause() {
+            clearInterval(loopI); clearInterval(loopR);
+            running = false;
+            document.getElementById('msg-status').innerText = "⏸️ PRUEBA EN PAUSA";
         }
 
-        function detenerTimers() { clearInterval(timerI); clearInterval(timerR); }
-        function format(id, s) {
+        function stop() {
+            if(!running && sR === 0) { // Segundo toque: Reset
+                sR = 0; sI = 300; fmt('t-real', 0); fmt('t-ideal', 300);
+                document.getElementById('pReal').value = "";
+                document.getElementById('t-real').style.color = "#fff";
+                document.getElementById('msg-status').innerText = "SISTEMA REINICIADO";
+                return;
+            }
+            clearInterval(loopI); clearInterval(loopR);
+            running = false;
+            const pR = parseFloat(document.getElementById('pReal').value) || 0;
+            const pM = parseInt(document.getElementById('m-psi').innerText) || 0;
+            let res = "";
+            if(sR < 120) res = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
+            else if(sR > 420) res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN SISTEMA";
+            else if(pR > 0 && Math.abs(pR - pM) > 25) res = "⚠️ CARGA IRREGULAR / GAS CONTAMINADO";
+            else res = "✅ SISTEMA EN REPOSO ÓPTIMO";
+            document.getElementById('msg-status').innerText = res;
+            sR = 0; // Prepara para el reset en el siguiente clic
+        }
+
+        function fmt(id, s) {
             let m = Math.floor(s/60); let seg = s%60;
             document.getElementById(id).innerText = `${m.toString().padStart(2,'0')}:${seg.toString().padStart(2,'0')}`;
         }
 
-        function activarGPS() {
-            document.getElementById('gps-ind').style.background = "#00ff00";
-            document.getElementById('gps-ind').style.boxShadow = "0 0 15px #00ff00";
-            document.getElementById('loc-status').innerText = "GPS: VALENCIA / LOS GUAYOS";
-            document.getElementById('tAmb').value = 32; actualizarMeta();
+        function gpsOn() {
+            document.getElementById('gps-led').style.background = "#0f0";
+            document.getElementById('gps-led').style.boxShadow = "0 0 10px #0f0";
+            document.getElementById('loc-txt').innerText = "📍 VALENCIA / LOS GUAYOS";
+            document.getElementById('tIn').value = 32; calc();
         }
 
-        function manualTemp() {
-            document.getElementById('gps-ind').style.background = "#ff0000";
-            document.getElementById('gps-ind').style.boxShadow = "0 0 15px #ff0000";
-            document.getElementById('loc-status').innerText = "GPS: MANUAL";
-            actualizarMeta();
+        function gpsOff() {
+            document.getElementById('gps-led').style.background = "#f00";
+            document.getElementById('gps-led').style.boxShadow = "0 0 10px #f00";
+            document.getElementById('loc-txt').innerText = "📍 MODO MANUAL";
+            calc();
         }
     </script>
 </body>
