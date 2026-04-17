@@ -3,194 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador J.H.A V40 Pro</title>
+    <title>Analizador J.H.A V40 Pro - FINAL</title>
     <style>
-        /* TU ADN ORIGINAL - COLORES Y ESTRUCTURA */
-        body { background-color: #121212; color: white; font-family: Arial, sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 400px; border: 2px solid #39ff14; border-radius: 15px; padding: 15px; box-shadow: 0 0 15px #39ff14; background: #1a1a1a; min-height: 95vh; position: relative; }
+        /* FONTO NEGRO PROFUNDO - MEJOR VISIBILIDAD EN CAMPO */
+        body { background-color: #0c0c0c; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 420px; border: 2px solid #39ff14; border-radius: 20px; padding: 15px; box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); background: #141414; min-height: 98vh; }
         
-        /* CABECERA CORREGIDA */
-        .header { text-align: center; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px; }
-        .header h1 { font-size: 16px; margin: 0; color: #39ff14; text-transform: uppercase; }
-        .info-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; }
+        /* CABECERA CON GPS Y BTU */
+        .header { text-align: center; margin-bottom: 10px; position: relative; }
+        .header h1 { font-size: 18px; margin: 5px 0; color: #fff; letter-spacing: 1px; }
+        .gps-row { display: flex; justify-content: space-between; align-items: center; color: #00d4ff; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+        .time { font-size: 22px; color: #eee; margin-bottom: 10px; }
         
-        /* BOTÓN BTU (EL PUENTE) */
-        .btn-btu { background: #ff8c00; color: black; border: none; padding: 5px 12px; border-radius: 5px; font-weight: bold; text-decoration: none; cursor: pointer; box-shadow: 0 0 5px #ff8c00; }
+        .btn-btu { background: #ff5722; color: white; border: none; padding: 6px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px #bf360c; }
 
-        /* SECCIÓN DE DATOS (REPLICANDO TU APP) */
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .box { border: 2px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
-        .box-baja { border-color: #00d4ff; }
-        .box-alta { border-color: #ff4d4d; }
-        .value { font-size: 32px; font-weight: bold; display: block; }
-        .label { font-size: 12px; color: #aaa; text-transform: uppercase; }
+        /* TABLERO DE MANDOS ORIGINAL */
+        .dashboard-box { background: #252525; border: 1px solid #444; border-radius: 12px; padding: 10px; margin-bottom: 10px; position: relative; }
+        .temp-box { position: absolute; right: 10px; top: 10px; border: 2px solid #39ff14; border-radius: 10px; padding: 5px 10px; text-align: center; min-width: 60px; }
+        .temp-val { font-size: 24px; font-weight: bold; color: #39ff14; }
+        
+        /* BOTONES DE CATEGORIA */
+        .cat-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 15px 0; }
+        .btn-cat { background: #333; border: 2px solid #444; color: #eee; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-cat.active { border-color: #00d4ff; color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
 
-        /* CONSOLA DE ALERTAS (LA LEY DE LOS 6 Y 10 PSI) */
-        #panel-alertas { margin-top: 20px; padding: 10px; border-radius: 8px; background: #222; font-size: 13px; border-left: 5px solid #39ff14; }
-        .alerta-item { margin-bottom: 5px; padding: 3px; }
+        /* PRESIONES */
+        .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .p-box { border: 3px solid; border-radius: 15px; padding: 15px; text-align: center; background: #000; }
+        .p-baja { border-color: #00d4ff; }
+        .p-alta { border-color: #ff4d4d; }
+        .p-val { background: none; border: none; color: inherit; font-size: 42px; font-weight: bold; width: 100%; text-align: center; outline: none; }
+
+        /* ALERTAS TÉCNICAS (LEY 6 Y 10 PSI) */
+        #panel-alertas { background: #1a1a1a; border-left: 5px solid #39ff14; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 14px; text-align: left; }
+        .alerta { margin-bottom: 6px; }
         .critico { color: #ff4d4d; font-weight: bold; }
         .advertencia { color: #ffff00; }
-        .seguro { color: #39ff14; }
+        .ok { color: #39ff14; }
 
-        /* TEST DE REPOSO (EL CRONÓMETRO) */
-        .test-reposo { margin-top: 20px; border: 1px dashed #39ff14; padding: 15px; border-radius: 10px; text-align: center; }
-        .cronometro { font-size: 40px; font-family: monospace; color: #39ff14; margin: 10px 0; }
-        .btn-test { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
-        .btn-start { background: #39ff14; color: black; }
-        .btn-stop { background: #ff4d4d; color: white; }
+        /* TEST DE REPOSO CON CRONOMETRO */
+        .reposo-section { margin-top: 20px; border: 2px dashed #39ff14; border-radius: 15px; padding: 15px; text-align: center; background: #111; }
+        .crono { font-size: 48px; font-family: monospace; color: #39ff14; text-shadow: 0 0 10px rgba(57,255,20,0.5); }
+        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-go { background: #39ff14; color: #000; }
+        .btn-stop { background: #ff4d4d; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>Multiservicios Anato S.M.G.</h1>
-        <div class="info-row">
-            <div>📍 Valencia - Los Guayos</div>
+        <h1>⚙️ MULTISERVICIOS ANATO S.M.G.</h1>
+        <div class="gps-row">
+            <span>📍 BUSCANDO SEÑAL...</span>
             <a href="dimensiones.html" class="btn-btu">📏 BTU</a>
         </div>
-        <div style="font-size: 18px; margin-top: 5px;" id="reloj">00:00:00</div>
+        <div class="time" id="clock">00:00:00 p.m.</div>
     </div>
 
-    <div style="margin-bottom: 10px;">
-        <label>GAS ORIG:</label>
-        <select id="gasSelect" onchange="calcularTodo()" style="width: 100%; padding: 5px; background: #333; color: white; border: 1px solid #39ff14;">
-            <option value="R22" data-ideal-baja="65" data-ideal-alta="250" data-aceite="MINERAL / ALQUILBENCENO">R22</option>
-            <option value="R410A" data-ideal-baja="118" data-ideal-alta="380" data-aceite="SINTÉTICO (POE)">R410A</option>
-            <option value="R134A" data-ideal-baja="30" data-ideal-alta="150" data-aceite="SINTÉTICO (PAG/POE)">R134A</option>
-            <option value="R600A" data-ideal-baja="0" data-ideal-alta="60" data-aceite="MINERAL" data-inflamable="true">R600A (INFLAMABLE)</option>
+    <div class="dashboard-box">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="background: white; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center;"><span style="color:black; font-size:10px;">■</span></div>
+            <span style="color: #00d4ff; font-weight: bold; font-size: 16px;">ANALIZADOR DE PRESIONES JHA</span>
+        </div>
+        <div class="temp-box">
+            <div style="font-size: 10px; color: #eee;">AMB.</div>
+            <div class="temp-val">30<small>°c</small></div>
+        </div>
+    </div>
+
+    <div class="cat-buttons">
+        <button class="btn-cat active">AIRES</button>
+        <button class="btn-cat">NEVERAS</button>
+        <button class="btn-cat">AUTO</button>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: #00d4ff; font-weight: bold;">GAS ORIG:</label>
+        <select id="gas" onchange="update()" style="width: 100%; padding: 12px; background: #222; color: white; border: 1px solid #39ff14; border-radius: 8px;">
+            <option value="R22" data-b="65" data-a="250" data-oil="MINERAL / AB">R22</option>
+            <option value="R410A" data-b="118" data-a="380" data-oil="SINTÉTICO (POE)">R410A</option>
+            <option value="R134A" data-b="30" data-a="150" data-oil="SINTÉTICO (POE/PAG)">R134A</option>
         </select>
     </div>
 
-    <div class="data-grid">
-        <div class="box box-baja">
-            <span class="label">Baja (PSI)</span>
-            <input type="number" id="inputBaja" value="65" oninput="calcularTodo()" style="width: 80%; background: none; border: none; color: #00d4ff; font-size: 32px; text-align: center; font-weight: bold;">
+    <div class="press-grid">
+        <div class="p-box p-baja">
+            <span style="color: #00d4ff; font-size: 12px;">BAJA (PSI)</span>
+            <input type="number" id="valBaja" value="65" oninput="update()" class="p-val" style="color: #00d4ff;">
         </div>
-        <div class="box box-alta">
-            <span class="label">Alta (PSI)</span>
-            <input type="number" id="inputAlta" value="250" oninput="calcularTodo()" style="width: 80%; background: none; border: none; color: #ff4d4d; font-size: 32px; text-align: center; font-weight: bold;">
+        <div class="p-box p-alta">
+            <span style="color: #ff4d4d; font-size: 12px;">ALTA (PSI)</span>
+            <input type="number" id="valAlta" value="250" oninput="update()" class="p-val" style="color: #ff4d4d;">
         </div>
     </div>
 
     <div id="panel-alertas">
-        <div id="alertaBaja" class="alerta-item">--</div>
-        <div id="alertaAlta" class="alerta-item">--</div>
-        <div id="alertaGas" class="alerta-item">--</div>
+        <div id="aBaja" class="alerta">--</div>
+        <div id="aAlta" class="alerta">--</div>
+        <div id="aInfo" class="alerta">--</div>
     </div>
 
-    <div class="test-reposo">
-        <span class="label">TEST DE FLUJO / REPOSO</span>
-        <div id="cronoDisplay" class="cronometro">00:00</div>
-        <div id="psiDinamico" style="font-size: 20px; color: #00d4ff;">-- PSI</div>
-        <button id="btnTest" class="btn-test btn-start" onclick="toggleTest()">INICIAR PRUEBA</button>
-        <div id="veredicto" style="margin-top: 10px; font-weight: bold; font-size: 14px; color: #ffff00;"></div>
+    <div class="reposo-section">
+        <div style="font-size: 12px; font-weight: bold; color: #eee;">TEST DE FLUJO / REPOSO</div>
+        <div id="timerDisplay" class="crono">00:00</div>
+        <div id="livePsi" style="color: #00d4ff; font-weight: bold; font-size: 20px;">-- PSI</div>
+        <button id="mainBtn" class="btn-action btn-go" onclick="runTest()">INICIAR PRUEBA</button>
+        <div id="finalVeredicto" style="margin-top: 10px; color: #ffff00; font-size: 14px; font-weight: bold;"></div>
     </div>
 </div>
 
 <script>
-    // RELOJ EN VIVO
-    setInterval(() => {
-        document.getElementById('reloj').innerText = new Date().toLocaleTimeString();
-    }, 1000);
+    // RELOJ
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-    // LÓGICA DE LAS ALERTAS (LEY DE LOS 6 Y 10 PSI)
-    function calcularTodo() {
-        const gas = document.getElementById('gasSelect');
-        const selected = gas.options[gas.selectedIndex];
-        const idealBaja = parseFloat(selected.dataset.idealBaja);
-        const idealAlta = parseFloat(selected.dataset.idealAlta);
-        const baja = parseFloat(document.getElementById('inputBaja').value);
-        const alta = parseFloat(document.getElementById('inputAlta').value);
-        
-        // Alerta Baja (6 PSI)
-        const difBaja = baja - idealBaja;
-        let msgBaja = `Baja: ${baja} PSI (Ideal: ${idealBaja}). `;
-        if(Math.abs(difBaja) > 6) {
-            document.getElementById('alertaBaja').className = "alerta-item critico";
-            msgBaja += difBaja > 0 ? "⚠️ MUY ALTA" : "⚠️ MUY BAJA";
-        } else {
-            document.getElementById('alertaBaja').className = "alerta-item seguro";
-            msgBaja += "✅ RANGO OK";
-        }
-        document.getElementById('alertaBaja').innerText = msgBaja;
+    // LOGICA DE CALCULO Y ALERTAS
+    function update() {
+        const gas = document.getElementById('gas');
+        const sel = gas.options[gas.selectedIndex];
+        const iB = parseFloat(sel.dataset.b), iA = parseFloat(sel.dataset.a);
+        const vB = parseFloat(document.getElementById('valBaja').value);
+        const vA = parseFloat(document.getElementById('valAlta').value);
 
-        // Alerta Alta (10-15 PSI)
-        const difAlta = alta - idealAlta;
-        let msgAlta = `Alta: ${alta} PSI (Ideal: ${idealAlta}). `;
-        if(difAlta >= 15) {
-            document.getElementById('alertaAlta').className = "alerta-item critico";
-            msgAlta += "🚨 CRÍTICO: CONDENSADOR/VENTILADOR";
-        } else if(difAlta >= 10) {
-            document.getElementById('alertaAlta').className = "alerta-item advertencia";
-            msgAlta += "⚠️ VERIFICAR LIMPIEZA";
-        } else {
-            document.getElementById('alertaAlta').className = "alerta-item seguro";
-            msgAlta += "✅ PRESIÓN ESTABLE";
-        }
-        document.getElementById('alertaAlta').innerText = msgAlta;
+        // Baja
+        const dB = vB - iB;
+        let elB = document.getElementById('aBaja');
+        elB.className = Math.abs(dB) > 6 ? "alerta critico" : "alerta ok";
+        elB.innerHTML = (Math.abs(dB) > 6 ? "⚠️ " : "✅ ") + `Baja: ${vB} PSI (Ideal: ${iB})`;
 
-        // Aceite y Gas
-        let msgGas = `Aceite: ${selected.dataset.aceite}`;
-        if(selected.dataset.inflamable) {
-            msgGas += " | 🚩 INFLAMABLE (CUIDADO)";
-            document.getElementById('alertaGas').className = "alerta-item critico";
-        } else {
-            document.getElementById('alertaGas').className = "alerta-item seguro";
-        }
-        document.getElementById('alertaGas').innerText = msgGas;
+        // Alta
+        const dA = vA - iA;
+        let elA = document.getElementById('aAlta');
+        if(dA >= 15) { elA.className = "alerta critico"; elA.innerHTML = "🚨 Alta: " + vA + " PSI - CRÍTICO"; }
+        else if(dA >= 10) { elA.className = "alerta advertencia"; elA.innerHTML = "⚠️ Alta: " + vA + " PSI - REVISAR"; }
+        else { elA.className = "alerta ok"; elA.innerHTML = "✅ Alta: " + vA + " PSI - ESTABLE"; }
+
+        document.getElementById('aInfo').innerHTML = `🛢️ ACEITE: ${sel.dataset.oil} | ❄️ CARGA GASEOSA`;
     }
 
-    // LÓGICA DEL CRONÓMETRO DE REPOSO
-    let timer;
-    let segundos = 0;
-    let testActivo = false;
-    let psiInicial = 0;
-
-    function toggleTest() {
-        const btn = document.getElementById('btnTest');
-        if(!testActivo) {
-            // INICIAR
-            testActivo = true;
-            segundos = 0;
-            psiInicial = parseFloat(document.getElementById('inputBaja').value);
-            btn.innerText = "PARAR PRUEBA";
-            btn.className = "btn-test btn-stop";
-            document.getElementById('veredicto').innerText = "Analizando estabilidad...";
-            
-            timer = setInterval(() => {
-                segundos++;
-                let min = Math.floor(segundos / 60).toString().padStart(2, '0');
-                let seg = (segundos % 60).toString().padStart(2, '0');
-                document.getElementById('cronoDisplay').innerText = `${min}:${seg}`;
-                
-                // Simulación visual de subida (solo como referencia)
-                let subidaSimulada = psiInicial + (segundos * 0.1); 
-                document.getElementById('psiDinamico').innerText = `${subidaSimulada.toFixed(1)} PSI`;
-                
-                if(segundos >= 300) toggleTest(); // Auto-stop a los 5 min
+    // TEST DE REPOSO
+    let t, s = 0, activo = false, p0 = 0;
+    function runTest() {
+        const b = document.getElementById('mainBtn');
+        if(!activo) {
+            activo = true; s = 0; p0 = parseFloat(document.getElementById('valBaja').value);
+            b.innerText = "PARAR PRUEBA"; b.className = "btn-action btn-stop";
+            document.getElementById('finalVeredicto').innerText = "Analizando estabilidad...";
+            t = setInterval(() => {
+                s++;
+                let m = Math.floor(s/60).toString().padStart(2,'0'), sc = (s%60).toString().padStart(2,'0');
+                document.getElementById('timerDisplay').innerText = `${m}:${sc}`;
+                document.getElementById('livePsi').innerText = `${(p0 + (s*0.12)).toFixed(1)} PSI`;
             }, 1000);
         } else {
-            // PARAR Y DAR VEREDICTO
-            testActivo = false;
-            clearInterval(timer);
-            btn.innerText = "INICIAR PRUEBA";
-            btn.className = "btn-test btn-start";
-            
-            // Lógica de veredicto según tu experiencia
-            if(segundos < 60) {
-                document.getElementById('veredicto').innerText = "VEREDICTO: Equilibrio muy rápido. ¡Revisar Válvulas!";
-            } else if(segundos > 240) {
-                document.getElementById('veredicto').innerText = "VEREDICTO: Subida muy lenta. Posible Obstrucción.";
-            } else {
-                document.getElementById('veredicto').innerText = "VEREDICTO: Flujo dentro de parámetros normales.";
-            }
+            activo = false; clearInterval(t);
+            b.innerText = "INICIAR PRUEBA"; b.className = "btn-action btn-go";
+            let v = s < 60 ? "¡ALERTA! Equilibrio muy rápido (Válvulas)." : 
+                    s > 240 ? "¡AVISO! Subida muy lenta (Posible Obstrucción)." : "Estabilización correcta.";
+            document.getElementById('finalVeredicto').innerText = v;
         }
     }
-
-    // Arrancar cálculos al cargar
-    window.onload = calcularTodo;
+    window.onload = update;
 </script>
-
 </body>
 </html>
