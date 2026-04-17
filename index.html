@@ -4,118 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; }
-        .v34-container { width: 100%; max-width: 420px; margin: 0 auto; border: 1px solid #333; border-radius: 15px; background: #0a0a0a; overflow: hidden; padding-bottom: 20px; }
+        body { background-color: #000; color: #fff; font-family: 'Arial Narrow', sans-serif; margin: 0; padding: 10px; text-transform: uppercase; overflow-x: hidden; }
+        .v35-container { width: 100%; max-width: 420px; margin: 0 auto; border: 1px solid #333; border-radius: 15px; background: #0a0a0a; padding-bottom: 20px; }
 
-        /* CABECERA */
+        /* CABECERA: G DE S.M.G. CORREGIDA */
         .header { padding: 15px; position: relative; border-bottom: 1px solid #222; }
-        .empresa { font-size: 14px; font-weight: 900; color: #fff; width: 70%; }
-        .btu-btn { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 900; font-size: 11px; text-decoration: none; }
+        .empresa { font-size: 14px; font-weight: 900; color: #fff; width: 75%; display: block; }
+        .btu-btn { position: absolute; top: 15px; right: 15px; background: #ff5722; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 900; font-size: 11px; text-decoration: none; box-shadow: 0 4px #bf360c; border: none; }
+        .loc-text { font-size: 11px; color: #00e5ff; font-weight: 900; margin-top: 5px; }
 
         .main-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
         
-        /* AMBIENTE (EL CONTROLADOR) */
+        /* GPS STATUS */
+        .gps-side { text-align: center; min-width: 55px; }
+        .gps-box { width: 22px; height: 22px; border: 2px solid #fff; background: #fff; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+        .gps-box::after { content: '✔'; color: #000; font-size: 18px; font-weight: 900; }
+
+        /* AMBIENTE: TOCAR Y ESCRIBIR */
         .amb-box { border: 2px solid #39ff14; border-radius: 8px; padding: 5px; background: #051005; text-align: center; min-width: 90px; }
         .amb-in { background: none; border: none; color: #39ff14; font-size: 28px; font-weight: 900; width: 55px; text-align: center; outline: none; }
 
-        /* TABS */
+        /* TABS ORIGINALES */
         .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 15px; }
-        .tab { padding: 12px 0; text-align: center; font-size: 12px; font-weight: 900; background: #1a1a1a; border-radius: 8px; border: 1px solid #333; cursor: pointer; color: #666; }
-        .active-aires { border-color: #00e5ff; color: #00e5ff; }
+        .tab { padding: 12px 0; text-align: center; font-size: 12px; font-weight: 900; background: #222; border-radius: 8px; border: 1px solid #444; cursor: pointer; color: #888; }
+        .active-aires { border-color: #00e5ff; color: #00e5ff; background: #00e5ff11; }
+        .active-neveras { border-color: #39ff14; color: #39ff14; background: #39ff1411; }
+        .active-auto { border-color: #ff3131; color: #ff3131; background: #ff313111; }
 
         /* GASES */
         .gas-section { display: grid; grid-template-columns: 1fr 45px 1fr; gap: 10px; padding: 0 15px; align-items: center; }
         .sel-wrap { background: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 6px; position: relative; }
-        select { width: 100%; background: none; border: none; color: #fff; font-size: 16px; font-weight: 900; outline: none; appearance: none; }
+        .sel-label { font-size: 9px; color: #aaa; display: block; margin-bottom: 2px; }
+        select { width: 100%; background: none; border: none; color: #fff; font-size: 16px; font-weight: 900; outline: none; -webkit-appearance: none; }
+        .sel-wrap::after { content: '▼'; font-size: 10px; color: #555; position: absolute; right: 10px; bottom: 12px; }
 
-        /* MANÓMETROS CON FUNCIÓN IDEAL */
-        .gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px 15px; }
-        .gauge { border: 4px solid; border-radius: 15px; padding: 10px; text-align: center; background: #000; position: relative; }
+        /* MANÓMETROS CON IDEAL ARRIBA (COMO EN EL VIDEO) */
+        .gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 15px 15px 15px; }
+        .gauge { border: 4px solid; border-radius: 15px; padding: 15px; text-align: center; background: #000; position: relative; }
         .g-baja { border-color: #00e5ff; }
         .g-alta { border-color: #ff5722; }
-        .g-val { font-size: 40px; font-weight: 900; display: block; font-family: monospace; }
-        
-        /* EL TILDE IDEAL */
-        .ideal-tag { background: #39ff14; color: #000; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+        .ideal-label { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: #39ff14; color: #000; font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+        .g-val { font-size: 45px; font-weight: 900; display: block; font-family: monospace; letter-spacing: -2px; }
 
         /* CUADRO DE DIAGNÓSTICO */
-        .diag-box { margin: 0 15px; padding: 15px; border-radius: 10px; background: #111; border: 1px solid #333; text-align: center; }
+        .diag-box { margin: 15px; padding: 15px; border-radius: 10px; background: #111; border: 1px solid #333; text-align: center; }
         .diag-status { font-size: 16px; font-weight: 900; color: #39ff14; }
     </style>
 </head>
 <body>
 
-<div class="v34-container">
+<div class="v35-container">
     <div class="header">
         <div class="empresa">MULTISERVICIOS ANATO S.M.G.</div>
-        <div id="loc-display" style="font-size:11px; color:#00e5ff; font-weight:900; margin-top:5px;">📍 UBICACIÓN: LOS GUAYOS</div>
+        <div id="loc-display" class="loc-text">📍 UBICACIÓN: LOS GUAYOS - VALENCIA</div>
         <a href="calculadora_btu.html" class="btu-btn">BTU 📏</a>
 
         <div class="main-row">
-            <div style="text-align:center;">
-                <div style="width:24px; height:24px; border:2px solid #fff; margin:0 auto; background:#fff;"></div>
-                <span style="font-size:9px; font-weight:900;">GPS ✔</span>
+            <div class="gps-side">
+                <div class="gps-box"></div>
+                <span style="font-size:10px; font-weight:900; margin-top:4px; display:block;">GPS ✔</span>
             </div>
-            <div style="flex:1; text-align:center; color:#00e5ff; font-size:16px; font-weight:900;">ANALIZADOR JHA</div>
+            <div style="flex:1; text-align:center; color:#00e5ff; font-size:18px; font-weight:900;">ANALIZADOR JHA</div>
             <div class="amb-box">
                 <span style="font-size:9px; color:#39ff14; font-weight:900; display:block;">AMB.</span>
-                <input type="number" id="temp-val" class="amb-in" value="30" oninput="calcularIdeal()" inputmode="decimal">
-                <span style="color:#39ff14; font-weight:900;">°C</span>
+                <input type="number" id="temp-val" class="amb-in" value="25" oninput="calcularPresiones()" 
+                       inputmode="decimal" onfocus="this.value=''">
+                <span style="color:#39ff14; font-weight:900; font-size:18px;">°C</span>
             </div>
         </div>
     </div>
 
     <div class="tabs">
-        <div class="tab active-aires">AIRES</div>
-        <div class="tab">NEVERAS</div>
-        <div class="tab">AUTO</div>
+        <div id="tab-aires" class="tab active-aires" onclick="selectTab('aires')">AIRES</div>
+        <div id="tab-neveras" class="tab" onclick="selectTab('neveras')">NEVERAS</div>
+        <div id="tab-auto" class="tab" onclick="selectTab('auto')">AUTO</div>
     </div>
 
     <div class="gas-section">
-        <div class="sel-wrap"><span style="font-size:8px; color:#aaa;">GAS</span><select id="gas-sel" onchange="calcularIdeal()"><option>R22</option><option>R410A</option></select></div>
-        <div style="text-align:center;"><input type="checkbox" checked style="width:20px; height:20px;"></div>
-        <div class="sel-wrap"><span style="font-size:8px; color:#aaa;">REEMP.</span><select disabled><option>-</option></select></div>
+        <div class="sel-wrap">
+            <span class="sel-label">GAS ORIG.</span>
+            <select id="gas-orig" onchange="calcularPresiones()"></select>
+        </div>
+        <div style="text-align:center;">
+            <input type="checkbox" id="check-reemp" style="width:25px; height:25px;" checked onchange="calcularPresiones()">
+            <span style="font-size:8px; display:block; color:#aaa;">REEMP.</span>
+        </div>
+        <div class="sel-wrap">
+            <span class="sel-label">REEMP.</span>
+            <select id="gas-reemp"><option>-</option></select>
+        </div>
     </div>
 
     <div class="gauges">
         <div class="gauge g-baja">
-            <div class="ideal-tag">IDEAL: <span id="ideal-baja">65</span> PSI</div>
-            <span style="font-size:10px; font-weight:900; color:#00e5ff;">BAJA</span>
+            <div class="ideal-label">IDEAL: <span id="ideal-baja">65</span> PSI</div>
+            <span style="font-size:11px; font-weight:900; color:#00e5ff;">BAJA</span>
             <span class="g-val" id="val-baja">62</span>
         </div>
         <div class="gauge g-alta">
-            <div class="ideal-tag">IDEAL: <span id="ideal-alta">210</span> PSI</div>
-            <span style="font-size:10px; font-weight:900; color:#ff5722;">ALTA</span>
+            <div class="ideal-label">IDEAL: <span id="ideal-alta">210</span> PSI</div>
+            <span style="font-size:11px; font-weight:900; color:#ff5722;">ALTA</span>
             <span class="g-val" id="val-alta">185</span>
         </div>
     </div>
 
     <div class="diag-box">
-        <div id="diag-msg" class="diag-status">✓ SISTEMA EN RANGO IDEAL</div>
-        <div style="font-size:10px; color:#888; margin-top:5px;">ACEITE: MIN/AB | CARGA: LÍQUIDA</div>
+        <div id="diag-msg" class="diag-status">✓ EQUIPO EN RANGO</div>
+        <div style="font-size:10px; color:#888; margin-top:5px; font-weight:900;">ACEITE: MIN/AB | CARGA: LÍQUIDA</div>
     </div>
 </div>
 
 <script>
-    function calcularIdeal() {
-        const temp = parseFloat(document.getElementById('temp-val').value);
-        const gas = document.getElementById('gas-sel').value;
-        const dispBaja = document.getElementById('ideal-baja');
-        const dispAlta = document.getElementById('ideal-alta');
+    const dataGases = {
+        aires: ["R22", "R410A", "R32", "R290"],
+        neveras: ["R134A", "R600A", "R12"],
+        auto: ["R134A", "R1234YF"]
+    };
 
-        // Lógica simplificada: La presión ideal sube con la temperatura
-        // Esto es un ejemplo, tú puedes ajustar las tablas exactas
-        if (gas === "R22") {
-            const bajaBase = 60 + (temp - 25) * 0.5; 
-            const altaBase = 180 + (temp - 25) * 2.5;
-            dispBaja.innerText = Math.round(bajaBase);
-            dispAlta.innerText = Math.round(altaBase);
-        }
+    function selectTab(mode) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active-aires', 'active-neveras', 'active-auto'));
+        document.getElementById('tab-' + mode).classList.add('active-' + mode);
         
-        console.log("Calculando para " + temp + "°C");
+        const orig = document.getElementById('gas-orig');
+        orig.innerHTML = dataGases[mode].map(g => `<option value="${g}">${g}</option>`).join('');
+        calcularPresiones();
     }
 
-    window.onload = calcularIdeal;
+    function calcularPresiones() {
+        const temp = parseFloat(document.getElementById('temp-val').value) || 0;
+        const gas = document.getElementById('gas-orig').value;
+        const idealBaja = document.getElementById('ideal-baja');
+        const idealAlta = document.getElementById('ideal-alta');
+
+        // Lógica de cálculo basada en la temperatura ambiente (como en el video)
+        if (gas === "R22") {
+            idealBaja.innerText = Math.round(60 + (temp - 25) * 0.8);
+            idealAlta.innerText = Math.round(180 + (temp - 25) * 3);
+        } else if (gas === "R410A") {
+            idealBaja.innerText = Math.round(110 + (temp - 25) * 1.5);
+            idealAlta.innerText = Math.round(350 + (temp - 25) * 5);
+        }
+    }
+
+    window.onload = () => selectTab('aires');
 </script>
 </body>
 </html>
