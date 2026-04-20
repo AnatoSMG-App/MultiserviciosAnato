@@ -175,35 +175,29 @@
        async function gpsOn() {
     const status = document.getElementById('loc-txt');
     const led = document.getElementById('gps-led');
-    
     status.innerText = "BUSCANDO SEÑAL...";
-    led.style.backgroundColor = "#ffcc00"; // Naranja mientras busca
+    led.style.backgroundColor = "#ffcc00";
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
-            
-            // Link dinámico con tu posición real
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
-
             try {
                 const res = await fetch(url);
                 const data = await res.json();
                 const temp = data.current_weather.temperature;
-
                 document.getElementById('tin').value = temp;
                 status.innerText = "LOCALIZADO";
-                led.style.backgroundColor = "#00ff00"; // Verde: ¡Éxito!
+                led.style.backgroundColor = "#00ff00";
                 actualizarGas(); 
             } catch (e) {
-                status.innerText = "ERROR SATÉLITE";
+                status.innerText = "ERROR API";
                 led.style.backgroundColor = "#ff0000";
             }
         }, (err) => {
-            status.innerText = "GPS APAGADO";
+            status.innerText = "SIN GPS";
             led.style.backgroundColor = "#ff0000";
-            // Si falla el GPS, cargamos Los Guayos por defecto
             consultarClimaFijo(10.1993, -67.9383);
         });
     }
@@ -211,16 +205,18 @@
 
 async function consultarClimaFijo(lat, lon) {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
-    const res = await fetch(url);
-    const data = await res.json();
-    document.getElementById('tin').value = data.current_weather.temperature;
-    document.getElementById('loc-txt').innerText = "VALENCIA / LOS GUAYOS";
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        document.getElementById('tin').value = data.current_weather.temperature;
+        document.getElementById('loc-txt').innerText = "VALENCIA (AUTO)";
+        actualizarGas();
+    } catch (e) {
+        document.getElementById('loc-txt').innerText = "ERROR CONEXIÓN";
+    }
 }
 
 function gpsOff() {
     document.getElementById('gps-led').style.backgroundColor = "#333";
     document.getElementById('loc-txt').innerText = "MODO MANUAL";
 }
-    </script>
-</body>
-</html>
