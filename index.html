@@ -13,9 +13,9 @@
         .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
         #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
         .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
-        .app-title { color: var(--azul); font-weight: 900; font-size: 1.35rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
-        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
-        .temp-label { font-size: 0.6rem; color: #aaa; display: block; margin-bottom: -5px; font-weight: bold; }
+        .app-title { color: var(--azul); font-weight: 900; font-size: 1.1rem; text-align: center; line-height: 1.1; text-transform: uppercase; flex: 1; letter-spacing: 1px; padding: 0 5px; }
+        .temp-box { background: #000; border: 2px solid var(--verde); padding: 4px 10px; border-radius: 8px; color: var(--verde); font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: right; }
+        .temp-label { font-size: 0.55rem; color: #aaa; display: block; margin-bottom: -4px; font-weight: bold; text-transform: uppercase; }
         .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
         .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #000; }
         .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
@@ -49,9 +49,16 @@
     <div class="status-row">
         <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-size:0.6rem; font-weight: bold;">GPS</small></div>
         <div class="app-title">ANALIZADOR DE<br>PRESIONES JHA</div>
-        <div class="temp-box" onclick="setFoco('temp')">
-            <span class="temp-label">AMB.</span>
-            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
+        
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div class="temp-box" style="border-color: var(--amarillo); color: var(--amarillo);" onclick="setFoco('const')">
+                <span class="temp-label">CONST.</span>
+                <span id="v-const">17</span><small style="font-size:0.7rem">K</small>
+            </div>
+            <div class="temp-box" onclick="setFoco('temp')">
+                <span class="temp-label">AMB.</span>
+                <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
+            </div>
         </div>
     </div>
 
@@ -70,168 +77,4 @@
     <div class="gauges">
         <div class="gauge-box baja" onclick="setFoco('baja')"><small style="font-weight: bold;">BAJA (PSI)</small><span id="v-baja" class="p-val">0</span></div>
         <div style="text-align:center"><input type="checkbox" id="ideal" checked style="transform: scale(1.3);" onchange="run()"><br><small style="font-weight: bold;">IDEAL</small></div>
-        <div class="gauge-box alta" onclick="setFoco('alta')"><small style="font-weight: bold;">ALTA (PSI)</small><span id="v-alta" class="p-val">0</span></div>
-    </div>
-
-    <div class="display" id="screen">
-        <div id="diag" class="msg">Analizador listo para el servicio...</div>
-        <div id="extra" class="tags"></div>
-    </div>
-
-    <div id="keys" class="keypad">
-        <div class="btn" onclick="press(1)">1</div><div class="btn" onclick="press(2)">2</div><div class="btn" onclick="press(3)">3</div>
-        <div class="btn" onclick="press(4)">4</div><div class="btn" onclick="press(5)">5</div><div class="btn" style="color:var(--amarillo)" onclick="press('B')">⌫</div>
-        <div class="btn" onclick="press(6)">6</div><div class="btn" onclick="press(7)">7</div><div class="btn" onclick="press(8)">8</div>
-        <div class="btn" onclick="press(9)">9</div><div class="btn" onclick="press(0)">0</div><div class="btn" style="color:var(--rojo)" onclick="press('C')">C</div>
-        <button class="btn-ok" onclick="closeKeys()">PROCESAR DATOS</button>
-    </div>
-</div>
-
-<script>
-    const data = {
-        aire: {
-            ori: [
-                {n:"R22", b:0.7, bBase:65, h:5.62, a:"MINERAL/AB", c:"GASEOSA"}, 
-                {n:"R410A", b:1.2, bBase:118, h:8.55, a:"POE", c:"LÍQUIDA"}, 
-                {n:"R32", b:1.3, bBase:120, h:8.85, a:"POE", c:"LÍQUIDA", inf:true},
-                {n:"R290", b:0.8, bBase:68, h:5.38, a:"MINERAL", c:"LÍQUIDA", inf:true},
-                {n:"R407C", b:0.9, bBase:75, h:6.80, a:"POE", c:"LÍQUIDA"}
-            ],
-            re: { "R22": [
-                {n:"MO29 (422D)", b:0.65, bBase:60, h:5.4, a:"MIN/AB", c:"LÍQUIDA"}, 
-                {n:"MO99 (438A)", b:0.7, bBase:65, h:5.6, a:"MIN/AB", c:"LÍQUIDA"},
-                {n:"MO59 (417A)", b:0.6, bBase:58, h:5.2, a:"MIN/AB", c:"LÍQUIDA"}
-            ]}
-        },
-        nevera: {
-            ori: [
-                {n:"R134a", b:0.1, bBase:8, h:2.88, f:true, a:"POE", c:"LÍQUIDA"}, 
-                {n:"R600a", b:0.05, bBase:0.5, h:1.58, f:true, a:"MINERAL", c:"LÍQUIDA", inf:true},
-                {n:"R12", b:0.2, bBase:12, h:3.38, f:true, a:"MINERAL", c:"GASEOSA"}
-            ],
-            re: { "R12": [
-                {n:"MP39 (401A)", b:0.15, bBase:10, h:3.1, f:true, a:"ALQUILBENCENO", c:"LÍQUIDA"},
-                {n:"R406A", b:0.18, bBase:9, h:3.2, f:true, a:"MINERAL", c:"LÍQUIDA"}
-            ]}
-        },
-        auto: { ori: [{n:"R134a", b:0.1, bBase:32, h:2.88, f:true, a:"PAG", c:"LÍQUIDA"}], re: {} }
-    };
-
-    let cat = 'aire', foco = '', idB = 0, idA = 0;
-
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 1000);
-
-    function setCat(c, b) {
-        cat = c;
-        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-        b.classList.add('active');
-        const s = document.getElementById('g-ori'); s.innerHTML = "";
-        data[cat].ori.forEach(g => s.add(new Option(g.n, g.n)));
-        updateReemp();
-    }
-
-    function updateReemp() {
-        const ori = document.getElementById('g-ori').value;
-        const s = document.getElementById('g-reemp'); s.innerHTML = "";
-        if(data[cat].re[ori]) data[cat].re[ori].forEach(g => s.add(new Option(g.n, g.n)));
-        else s.add(new Option("SIN REEMP", ""));
-        run();
-    }
-
-    function toggleReemp() { document.getElementById('g-reemp').disabled = !document.getElementById('use-reemp').checked; run(); }
-    
-    function setFoco(id) { 
-        foco = id; 
-        document.getElementById('keys').style.display = 'grid'; 
-        document.getElementById(id==='temp'?'v-temp':(id==='baja'?'v-baja':'v-alta')).innerText = ''; 
-    }
-    
-    function press(v) {
-        const e = document.getElementById(foco==='temp'?'v-temp':(foco==='baja'?'v-baja':'v-alta'));
-        if(v==='C') e.innerText = '0';
-        else if(v==='B') e.innerText = e.innerText.slice(0,-1);
-        else e.innerText += v;
-        if(foco==='temp') run();
-    }
-    
-    function closeKeys() { document.getElementById('keys').style.display = 'none'; run(); }
-
-    async function toggleGPS() {
-        const locBox = document.getElementById('loc');
-        if(document.getElementById('gps').checked) {
-            locBox.innerText = "📍 BUSCANDO UBICACIÓN...";
-            navigator.geolocation.getCurrentPosition(async (p) => {
-                locBox.innerText = "📍 LOS GUAYOS - VALENCIA";
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current_weather=true`);
-                const d = await res.json();
-                document.getElementById('v-temp').innerText = Math.round(d.current_weather.temperature);
-                run();
-            }, () => { locBox.innerText = "📍 UBICACIÓN ACTIVA"; });
-        } else { locBox.innerText = ""; }
-    }
-
-    function run() {
-        const isIdeal = document.getElementById('ideal').checked;
-        const gName = document.getElementById('use-reemp').checked ? document.getElementById('g-reemp').value : document.getElementById('g-ori').value;
-        const temp = parseInt(document.getElementById('v-temp').innerText) || 30;
-        
-        let all = [...data.aire.ori, ...data.nevera.ori, ...data.auto.ori];
-        Object.values(data.aire.re).forEach(arr => all = all.concat(arr));
-        Object.values(data.nevera.re).forEach(arr => all = all.concat(arr));
-        
-        let g = all.find(x => x.n === gName);
-        
-        if(g) {
-            // CÁLCULO DINÁMICO REPOTENCIADO
-            idB = Math.round(g.bBase + (temp - 30) * g.b);
-            idA = Math.round((temp + 17) * g.h);
-            
-            document.getElementById('warn').style.display = g.inf ? "block" : "none";
-            if(isIdeal) {
-                document.getElementById('v-baja').innerText = idB;
-                document.getElementById('v-alta').innerText = idA;
-                document.getElementById('diag').innerText = "CALCULANDO IDEAL PARA: " + gName;
-                document.getElementById('screen').style.borderLeftColor = "var(--verde)";
-            }
-            document.getElementById('extra').innerHTML = "⚙️ ACEITE: " + g.a + " | 💧 CARGA: " + g.c;
-            if(!isIdeal) diag();
-        }
-    }
-
-    function diag() {
-        const b = parseInt(document.getElementById('v-baja').innerText) || 0;
-        const a = parseInt(document.getElementById('v-alta').innerText) || 0;
-        let m = "", c = "var(--verde)";
-
-        if (a >= idA + 15) { m = "🚨 CRÍTICO ALTA: Presión excesiva. ¡Apague el equipo ya!"; c = "var(--rojo)"; }
-        else if (a >= idA + 10) { m = "⚠️ ADVERTENCIA ALTA: Condensación pobre o exceso de gas."; c = "var(--amarillo)"; }
-        else if (b <= idB - 7) { m = "🚨 CRÍTICO BAJA: Fuga masiva u obstrucción de sistema."; c = "var(--rojo)"; }
-        else if (b <= idB - 6 || b >= idB + 6) { m = "⚠️ ADVERTENCIA BAJA: Revisar posible falta de gas."; c = "var(--amarillo)"; }
-        else { m = "✅ EQUIPO EN RANGO: El sistema opera correctamente."; c = "var(--verde)"; }
-        
-        document.getElementById('diag').innerText = m;
-        document.getElementById('screen').style.borderLeftColor = c;
-    }
-    setCat('aire', document.querySelector('.tab'));
-</script>
-</body>
-</html>
-<hr style="border: 1px solid #333; margin: 40px 0; width: 80%;">
-
-    <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; padding-bottom: 50px;">
-        
-        <button onclick="window.location.href='reposo.html'" style="width: 90%; max-width: 400px; background: #0080ff; color: white; border: none; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 4px 15px rgba(0,128,255,0.4); text-transform: uppercase; letter-spacing: 1px;">
-            🧪 DIAGNÓSTICO DE REPOSO
-        </button>
-
-        <button onclick="window.location.href='dimensiones.html'" style="width: 90%; max-width: 400px; background: transparent; color: #ff8c00; border: 2px solid #ff8c00; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 0 10px rgba(255,140,0,0.2); text-transform: uppercase; letter-spacing: 1px;">
-            📐 CALCULADORA VOLUMÉTRICA (BTU)
-        </button>
-
-        <p style="color: #444; font-size: 0.8em; margin-top: 20px;">S.M.G. ENGINEERING TOOLS • V36.2</p>
-    </div>
-
-</body>
-</html>
+        <div class="gauge-box alta" onclick="setFoco('alta')"><small style="font-weight: bold;">
