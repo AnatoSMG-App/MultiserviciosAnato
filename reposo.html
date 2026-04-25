@@ -9,40 +9,45 @@
         .header { color: #00ff00; text-shadow: 0 0 15px #00ff00; font-size: 1.6em; margin: 5px 0; }
         .sub-header { color: #fff; font-weight: bold; font-size: 0.8em; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; }
         
-        .gps-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        .temp-box { background: #0a0a0a; padding: 15px; border-radius: 20px; border: 2px solid #444; margin-bottom: 15px; }
-        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 1.6em; width: 110px; outline: none; }
+        /* GPS Y TEMPERATURA CON NEÓN */
+        .gps-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; box-shadow: 0 0 10px #0080ff33; }
+        .temp-box { background: #0a0a0a; padding: 15px; border-radius: 20px; border: 2px solid #00ff00; margin-bottom: 15px; box-shadow: 0 0 15px #00ff0044; }
         
+        input[type="number"] { background: #000; border: 2px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 1.6em; width: 110px; outline: none; text-shadow: 0 0 10px #00ff00; }
+        
+        /* CATEGORÍAS */
         .cat-btn { flex: 1; padding: 12px; border: 2px solid #333; border-radius: 10px; background: #111; color: #fff; font-weight: bold; cursor: pointer; font-size: 0.8em; }
-        .active-cat { border-color: #0080ff; background: #0080ff22; }
+        .active-cat { border-color: #0080ff; background: #0080ff22; box-shadow: 0 0 10px #0080ff; }
 
+        /* DASHBOARD */
         .dashboard { display: grid; grid-template-columns: 1fr 0.5fr 1fr; gap: 10px; align-items: start; background: #050505; padding: 15px; border-radius: 25px; border: 1px solid #333; margin-bottom: 15px; }
         .val-meta { color: #00ff00; font-size: 1.8em; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
         .timer { font-family: monospace; font-size: 1.8em; font-weight: bold; color: #fff; margin: 5px 0; }
         
-        .ctrl-btn { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background: none; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 10px auto; }
-        .btn-go { border-color: #00ff00; color: #00ff00; }
+        /* BOTONES DE CONTROL */
+        .ctrl-btn { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background: none; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 10px auto; transition: 0.3s; }
+        .btn-go { border-color: #00ff00; color: #00ff00; box-shadow: 0 0 15px #00ff00; }
         .btn-pause { border-color: #fff; color: #fff; }
-        .btn-stop { border-color: #ff0000; color: #ff0000; }
+        .btn-stop { border-color: #ff0000; color: #ff0000; box-shadow: 0 0 15px #ff0000; }
 
-        #msg-status { background: #001122; border: 3px solid #0080ff; padding: 20px; border-radius: 15px; color: #fff; font-weight: bold; font-size: 1.1em; min-height: 50px; box-shadow: 0 0 15px #0080ff55; text-transform: uppercase; transition: 0.3s; }
-        .nav-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; background: #222; color: #00ff00; border: 1px solid #00ff00; }
+        #msg-status { background: #001122; border: 3px solid #0080ff; padding: 20px; border-radius: 15px; color: #fff; font-weight: bold; font-size: 1.1em; min-height: 50px; box-shadow: 0 0 20px #0080ff66; text-transform: uppercase; }
+        .nav-btn { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #00ff00; font-weight: bold; margin-top: 20px; cursor: pointer; background: #000; color: #00ff00; box-shadow: 0 0 10px #00ff00; }
     </style>
 </head>
 <body>
 
-    <h1 class="header">MULTISERVICIOS ANATO S.M.G.</h1>
+    <h1 class="header">ANATO S.M.G.</h1>
     <div class="sub-header">ESCANER DE REPOSO PROFESIONAL</div>
 
     <div class="gps-row">
         <button onclick="gpsOn()" style="background:none; border:none; font-size:1.8em; cursor:pointer;">🛰️</button>
-        <span id="loc-txt" style="color:#0080ff; font-size:0.7em; font-weight:bold;">📍 MODO MANUAL</span>
+        <span id="loc-txt" style="color:#0080ff; font-size:0.7em; font-weight:bold;">📍 MODO MANUAL (VALENCIA)</span>
         <div id="gps-led" style="width:12px; height:12px; border-radius:50%; background:#f00;"></div>
     </div>
 
     <div class="temp-box">
-        <small style="color:#fff; font-weight:bold; display:block; margin-bottom:5px;">TEMPERATURA AMBIENTE / PLACA (°C)</small>
-        <input type="number" id="tin" value="30" class="temp-input" oninput="actualizarGas()">
+        <small style="color:#fff; font-weight:bold; display:block; margin-bottom:5px;">TEMPERATURA AMBIENTE (°C)</small>
+        <input type="number" id="tin" value="30" oninput="actualizarGas()">
     </div>
 
     <div style="display:flex; gap:8px; margin-bottom:15px;">
@@ -65,7 +70,7 @@
         <div style="align-self: center;"><button class="ctrl-btn btn-pause" onclick="pause()">⏸️</button></div>
         <div>
             <small style="color:#0080ff; font-weight:bold;">CAMPO</small>
-            <input type="number" id="pReal" placeholder="000" oninput="validarDigitos()" style="width:85%; border:2px solid #0080ff; color:#fff; margin-bottom:5px; font-size:1.4em;">
+            <input type="number" id="pReal" placeholder="000" oninput="validarDigitos()" style="width:85%; border:2px solid #0080ff; color:#fff; margin-bottom:5px; font-size:1.4em; box-shadow: 0 0 10px #0080ff;">
             <div id="t-real" class="timer">00:00</div>
             <button class="ctrl-btn btn-stop" onclick="stop()">⏹️</button>
         </div>
@@ -89,12 +94,11 @@
 
         function actualizarGas() {
             const g = document.getElementById('gasIn').value;
-            const t = parseFloat(document.getElementById('tIn').value) || 30;
+            const t = parseFloat(document.getElementById('tin').value) || 30;
             
-            // CALIBRACIÓN DE TIEMPOS AL INSTANTE
-            if (["R410A", "R32", "R404A"].includes(g)) tMetaBase = 420; // 7 Minutos
-            else if (["R600a", "R290"].includes(g)) tMetaBase = 180; // 3 Minutos
-            else tMetaBase = 300; // 5 Minutos
+            if (["R410A", "R32", "R404A"].includes(g)) tMetaBase = 420; 
+            else if (["R600a", "R290"].includes(g)) tMetaBase = 180; 
+            else tMetaBase = 300; 
 
             sI = tMetaBase;
             fmt('t-ideal', sI);
@@ -111,7 +115,6 @@
             if(running) return;
             running = true;
             document.getElementById('msg-status').innerText = "⏳ ANALIZANDO IGUALACIÓN...";
-            document.getElementById('msg-status').style.borderColor = "#0080ff";
             loopI = setInterval(() => { if(sI > 0) { sI--; fmt('t-ideal', sI); } }, 1000);
             loopR = setInterval(() => { sR++; fmt('t-real', sR); if(sR > tMetaBase) document.getElementById('t-real').style.color = "#f00"; }, 1000);
         }
@@ -122,49 +125,31 @@
         }
 
         function stop() {
-            if(!running && sR === 0) { location.reload(); return; }
             clearInterval(loopI); clearInterval(loopR); running = false;
-            document.getElementById('msg-status').innerText = "⏳ TIEMPO OK. ESCRIBA PSI DE MANÓMETRO.";
-            document.getElementById('msg-status').style.borderColor = "#ff8c00";
+            document.getElementById('msg-status').innerText = "⏳ TIEMPO OK. ESCRIBA PSI.";
         }
 
         function validarDigitos() {
             const val = document.getElementById('pReal').value;
-            // Si el reloj está parado y ya escribiste 3 números (ej: 140, 065) dispara el veredicto
-            if (!running && val.length >= 2 && sR > 0) {
-                lanzarVeredicto();
-            }
+            if (!running && val.length >= 2 && sR > 0) { lanzarVeredicto(); }
         }
 
         function lanzarVeredicto() {
             const pR = parseFloat(document.getElementById('pReal').value) || 0;
             const pM = parseInt(document.getElementById('m-psi').innerText) || 0;
             const status = document.getElementById('msg-status');
-            let res = "";
-            let color = "#0080ff";
-
             const diff = Math.abs(pR - pM);
 
             if(sR < (tMetaBase * 0.4)) {
-                res = "⚠️ BYPASS: VÁLVULAS O COMPRESOR DEFICIENTE";
-                color = "#ff0000";
-            } else if(sR > (tMetaBase * 1.4)) {
-                res = "⚠️ COLESTEROL: OBSTRUCCIÓN EN SISTEMA";
-                color = "#ff0000";
+                status.innerText = "⚠️ BYPASS: VÁLVULAS DEFICIENTES";
+                status.style.borderColor = "#ff0000";
             } else if(diff <= 15) {
-                res = "✅ SISTEMA SANO: IGUALACIÓN ÓPTIMA";
-                color = "#00ff00";
-            } else if(diff > 15 && diff <= 30) {
-                res = "⚠️ ESTABILIDAD MEDIA: REVISAR CARGA O AMBIENTE";
-                color = "#ffff00";
+                status.innerText = "✅ SISTEMA SANO: IGUALACIÓN ÓPTIMA";
+                status.style.borderColor = "#00ff00";
             } else {
-                res = "❌ CARGA IRREGULAR O GAS MEZCLADO";
-                color = "#ff0000";
+                status.innerText = "❌ CARGA IRREGULAR O MEZCLADA";
+                status.style.borderColor = "#ff0000";
             }
-            
-            status.innerText = res;
-            status.style.borderColor = color;
-            status.style.color = color;
         }
 
         function fmt(id, s) {
@@ -172,49 +157,28 @@
             document.getElementById(id).innerText = `${m.toString().padStart(2,'0')}:${seg.toString().padStart(2,'0')}`;
         }
 
-      async function gpsOn() {
-    const status = document.getElementById('loc-txt');
-    const led = document.getElementById('gps-led');
-    status.innerText = "BUSCANDO SEÑAL...";
-    led.style.backgroundColor = "#ffcc00";
+        async function gpsOn() {
+            const status = document.getElementById('loc-txt');
+            const led = document.getElementById('gps-led');
+            status.innerText = "BUSCANDO SEÑAL...";
+            led.style.backgroundColor = "#ffcc00";
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            // Usamos la API de Open-Meteo que ya te dio éxito en el Index
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
-            
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                const temp = data.current_weather.temperature;
-                
-                // IMPORTANTE: En reposo usamos 'tin' para la temperatura
-                document.getElementById('tin').value = temp;
-                status.innerText = "LOCALIZADO";
-                led.style.backgroundColor = "#00ff00";
-                
-                // Esto es lo que hace que los PSI se muevan solos
-                actualizarGas(); 
-            } catch (e) {
-                status.innerText = "ERROR API";
-                led.style.backgroundColor = "#ff0000";
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
+                    try {
+                        const res = await fetch(url);
+                        const data = await res.json();
+                        document.getElementById('tin').value = data.current_weather.temperature;
+                        status.innerText = "LOCALIZADO";
+                        led.style.backgroundColor = "#00ff00";
+                        actualizarGas();
+                    } catch (e) { status.innerText = "ERROR API"; led.style.backgroundColor = "#f00"; }
+                }, () => { status.innerText = "SIN GPS"; led.style.backgroundColor = "#f00"; });
             }
-        }, (err) => {
-            status.innerText = "SIN GPS";
-            led.style.backgroundColor = "#ff0000";
-            // Si falla, Valencia por defecto (tu zona)
-            consultarClimaFijo(10.1993, -67.9383);
-        });
-    }
-}
-    } catch (e) {
-        document.getElementById('loc-txt').innerText = "ERROR CONEXIÓN";
-    }
-}
-
-function gpsOff() {
-    document.getElementById('gps-led').style.backgroundColor = "#333";
-    document.getElementById('loc-txt').innerText = "MODO MANUAL";
-}
+        }
+    </script>
+</body>
+</html>
