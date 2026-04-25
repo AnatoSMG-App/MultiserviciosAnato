@@ -13,9 +13,9 @@
         .loc-info { font-size: 0.85rem; color: var(--azul); font-weight: bold; min-height: 18px; margin-top: 2px; }
         #clock { font-family: monospace; font-size: 1.1rem; color: #fff; font-weight: bold; }
         .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #222; }
-        .app-title { color: var(--azul); font-weight: 900; font-size: 1.1rem; text-align: center; line-height: 1.1; text-transform: uppercase; flex: 1; letter-spacing: 1px; padding: 0 5px; }
-        .temp-box { background: #000; border: 2px solid var(--verde); padding: 4px 10px; border-radius: 8px; color: var(--verde); font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: right; }
-        .temp-label { font-size: 0.55rem; color: #aaa; display: block; margin-bottom: -4px; font-weight: bold; text-transform: uppercase; }
+        .app-title { color: var(--azul); font-weight: 900; font-size: 1.35rem; text-align: center; line-height: 1; text-transform: uppercase; flex: 1; letter-spacing: 1px; }
+        .temp-box { background: #000; border: 2px solid var(--verde); padding: 5px 12px; border-radius: 8px; color: var(--verde); font-size: 1.8rem; font-weight: bold; cursor: pointer; text-align: right; }
+        .temp-label { font-size: 0.6rem; color: #aaa; display: block; margin-bottom: -5px; font-weight: bold; }
         .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
         .tab { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #000; }
         .tab.active { border-color: var(--azul); color: var(--azul); background: rgba(0,242,255,0.1); border-bottom: 3px solid var(--azul); }
@@ -49,16 +49,9 @@
     <div class="status-row">
         <div style="text-align:center;"><input type="checkbox" id="gps" style="transform: scale(1.5);" onchange="toggleGPS()"><br><small style="font-size:0.6rem; font-weight: bold;">GPS</small></div>
         <div class="app-title">ANALIZADOR DE<br>PRESIONES JHA</div>
-        
-        <div style="display: flex; flex-direction: column; gap: 4px;">
-            <div class="temp-box" style="border-color: var(--amarillo); color: var(--amarillo);" onclick="setFoco('const')">
-                <span class="temp-label">CONST.</span>
-                <span id="v-const">17</span><small style="font-size:0.7rem">K</small>
-            </div>
-            <div class="temp-box" onclick="setFoco('temp')">
-                <span class="temp-label">AMB.</span>
-                <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
-            </div>
+        <div class="temp-box" onclick="setFoco('temp')">
+            <span class="temp-label">AMB.</span>
+            <span id="v-temp">30</span><small style="font-size:0.8rem">°C</small>
         </div>
     </div>
 
@@ -152,17 +145,15 @@
     function setFoco(id) { 
         foco = id; 
         document.getElementById('keys').style.display = 'grid'; 
-        let target = id==='temp'?'v-temp':(id==='baja'?'v-baja':(id==='alta'?'v-alta':'v-const'));
-        document.getElementById(target).innerText = ''; 
+        document.getElementById(id==='temp'?'v-temp':(id==='baja'?'v-baja':'v-alta')).innerText = ''; 
     }
     
     function press(v) {
-        const targetId = foco==='temp'?'v-temp':(foco==='baja'?'v-baja':(foco==='alta'?'v-alta':'v-const'));
-        const e = document.getElementById(targetId);
+        const e = document.getElementById(foco==='temp'?'v-temp':(foco==='baja'?'v-baja':'v-alta'));
         if(v==='C') e.innerText = '0';
         else if(v==='B') e.innerText = e.innerText.slice(0,-1);
         else e.innerText += v;
-        run();
+        if(foco==='temp') run();
     }
     
     function closeKeys() { document.getElementById('keys').style.display = 'none'; run(); }
@@ -185,7 +176,6 @@
         const isIdeal = document.getElementById('ideal').checked;
         const gName = document.getElementById('use-reemp').checked ? document.getElementById('g-reemp').value : document.getElementById('g-ori').value;
         const temp = parseInt(document.getElementById('v-temp').innerText) || 30;
-        const kManual = parseInt(document.getElementById('v-const').innerText) || 17;
         
         let all = [...data.aire.ori, ...data.nevera.ori, ...data.auto.ori];
         Object.values(data.aire.re).forEach(arr => all = all.concat(arr));
@@ -194,8 +184,9 @@
         let g = all.find(x => x.n === gName);
         
         if(g) {
+            // CÁLCULO DINÁMICO REPOTENCIADO
             idB = Math.round(g.bBase + (temp - 30) * g.b);
-            idA = Math.round((temp + kManual) * g.h);
+            idA = Math.round((temp + 17) * g.h);
             
             document.getElementById('warn').style.display = g.inf ? "block" : "none";
             if(isIdeal) {
@@ -225,18 +216,22 @@
     }
     setCat('aire', document.querySelector('.tab'));
 </script>
-
+</body>
+</html>
 <hr style="border: 1px solid #333; margin: 40px 0; width: 80%;">
 
-<div style="display: flex; flex-direction: column; gap: 20px; align-items: center; padding-bottom: 50px; width: 100%;">
-    <button onclick="window.location.href='reposo.html'" style="width: 90%; max-width: 400px; background: #0080ff; color: white; border: none; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 4px 15px rgba(0,128,255,0.4); text-transform: uppercase;">
-        🧪 DIAGNÓSTICO DE REPOSO
-    </button>
-    <button onclick="window.location.href='dimensiones.html'" style="width: 90%; max-width: 400px; background: transparent; color: #ff8c00; border: 2px solid #ff8c00; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 0 10px rgba(255,140,0,0.2); text-transform: uppercase;">
-        📐 CALCULADORA VOLUMÉTRICA (BTU)
-    </button>
-    <p style="color: #444; font-size: 0.8em; margin-top: 20px;">S.M.G. ENGINEERING TOOLS • V36.2</p>
-</div>
+    <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; padding-bottom: 50px;">
+        
+        <button onclick="window.location.href='reposo.html'" style="width: 90%; max-width: 400px; background: #0080ff; color: white; border: none; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 4px 15px rgba(0,128,255,0.4); text-transform: uppercase; letter-spacing: 1px;">
+            🧪 DIAGNÓSTICO DE REPOSO
+        </button>
+
+        <button onclick="window.location.href='dimensiones.html'" style="width: 90%; max-width: 400px; background: transparent; color: #ff8c00; border: 2px solid #ff8c00; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 0 10px rgba(255,140,0,0.2); text-transform: uppercase; letter-spacing: 1px;">
+            📐 CALCULADORA VOLUMÉTRICA (BTU)
+        </button>
+
+        <p style="color: #444; font-size: 0.8em; margin-top: 20px;">S.M.G. ENGINEERING TOOLS • V36.2</p>
+    </div>
 
 </body>
 </html>
