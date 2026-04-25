@@ -6,7 +6,7 @@
     <title>ANALIZADOR JHA V36.2</title>
     <style>
         :root { --azul: #00f2ff; --rojo: #ff3131; --bg: #0a0a0a; --amarillo: #ffeb3b; --verde: #0f0; --gris: #333; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; justify-content: center; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; display: flex; flex-direction: column; align-items: center; }
         .container { background: #111; border: 2px solid var(--gris); border-radius: 15px; padding: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         .header { text-align: center; border-bottom: 1px solid var(--gris); padding-bottom: 5px; margin-bottom: 8px; }
         .header h1 { font-size: 1.1rem; margin: 0; color: #fff; text-transform: uppercase; font-weight: 900; }
@@ -35,6 +35,18 @@
         .btn { background: #333; color: #fff; padding: 18px 0; font-size: 1.4rem; border-radius: 5px; font-weight: bold; text-align: center; border-bottom: 3px solid #000; cursor: pointer; }
         .btn:active { background: var(--azul); color: #000; transform: translateY(2px); }
         .btn-ok { grid-column: span 6; background: var(--verde); color: #000; font-size: 1rem; padding: 15px; margin-top: 5px; font-weight: 900; text-transform: uppercase; border: none; border-radius: 8px; }
+
+        /* MODIFICACIÓN DE BOTONES DE NAVEGACIÓN */
+        .nav-footer { margin-top: 20px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 40px; }
+        .btn-nav { 
+            width: 100%; padding: 18px; border-radius: 12px; font-weight: 900; 
+            font-size: 1rem; cursor: pointer; text-transform: uppercase; 
+            letter-spacing: 1px; border: none; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .btn-reposo { background: #0080ff; color: white; border-bottom: 4px solid #005bb7; }
+        .btn-btu { background: transparent; color: #ff8c00; border: 2px solid #ff8c00; }
+        .btn-nav:active { transform: scale(0.98); opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -85,6 +97,20 @@
         <div class="btn" onclick="press(9)">9</div><div class="btn" onclick="press(0)">0</div><div class="btn" style="color:var(--rojo)" onclick="press('C')">C</div>
         <button class="btn-ok" onclick="closeKeys()">PROCESAR DATOS</button>
     </div>
+</div>
+
+<div class="nav-footer">
+    <button class="btn-nav btn-reposo" onclick="window.location.href='reposo.html'">
+        🧪 DIAGNÓSTICO DE REPOSO
+    </button>
+
+    <button class="btn-nav btn-btu" onclick="window.location.href='dimensiones.html'">
+        📐 CALCULADORA VOLUMÉTRICA (BTU)
+    </button>
+    
+    <p style="color: #444; font-size: 0.7rem; text-align: center; margin-top: 10px; font-weight: bold;">
+        S.M.G. ENGINEERING TOOLS • V36.2
+    </p>
 </div>
 
 <script>
@@ -184,7 +210,6 @@
         let g = all.find(x => x.n === gName);
         
         if(g) {
-            // CÁLCULO DINÁMICO REPOTENCIADO
             idB = Math.round(g.bBase + (temp - 30) * g.b);
             idA = Math.round((temp + 17) * g.h);
             
@@ -216,22 +241,5 @@
     }
     setCat('aire', document.querySelector('.tab'));
 </script>
-</body>
-</html>
-<hr style="border: 1px solid #333; margin: 40px 0; width: 80%;">
-
-    <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; padding-bottom: 50px;">
-        
-        <button onclick="window.location.href='reposo.html'" style="width: 90%; max-width: 400px; background: #0080ff; color: white; border: none; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 4px 15px rgba(0,128,255,0.4); text-transform: uppercase; letter-spacing: 1px;">
-            🧪 DIAGNÓSTICO DE REPOSO
-        </button>
-
-        <button onclick="window.location.href='dimensiones.html'" style="width: 90%; max-width: 400px; background: transparent; color: #ff8c00; border: 2px solid #ff8c00; padding: 20px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 1.1em; box-shadow: 0 0 10px rgba(255,140,0,0.2); text-transform: uppercase; letter-spacing: 1px;">
-            📐 CALCULADORA VOLUMÉTRICA (BTU)
-        </button>
-
-        <p style="color: #444; font-size: 0.8em; margin-top: 20px;">S.M.G. ENGINEERING TOOLS • V36.2</p>
-    </div>
-
 </body>
 </html>
